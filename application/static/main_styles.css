@@ -2,6 +2,26 @@
 
 /* LAYOUT.HTML */
 
+html, body {
+    height: 100%;
+}
+
+body {
+    padding-top: 100px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+    color: black;
+    text-align: center;
+    font-size: 12;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    }
+
+main {
+    flex: 1;
+}
+
 title {
     text-transform: capitalize;
     }
@@ -15,14 +35,7 @@ h1 {
     background-color: white;
     }
 
-body {
-    font-family: 'Quicksand', sans-serif;
-    font-weight: 400;
-    color: black;
-    text-align: center;
-    font-size: 12;
-    background-color: white;
-    }
+
 
 footer {
     font-family: 'Quicksand', sans-serif;
