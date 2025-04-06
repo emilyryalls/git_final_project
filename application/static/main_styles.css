@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Quicksand:wght@300..700&display=swap');
+
+/* LAYOUT.HTML */
+
+title {
+    text-transform: capitalize;
+    }
+
+h1 {
+    font-family: 'DM Serif Display', serif;
+    font-weight: 400;
+    color: black;
+    text-align: center;
+    font-size: 18;
+    background-color: white;
+    }
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+    color: black;
+    text-align: center;
+    font-size: 12;
+    background-color: white;
+    }
+
+footer {
+    font-family: 'Quicksand', sans-serif;
+    padding: 10px 10px;
+    font-size: 10;
+    background-color: white;
+    color: black;
+    }
+
+
+
+/* Logo */
+.navbar-brand img {
+    height: 50px;
+    width: auto;
+    }
+
+
+
+/* Navigation bar */
+.navbar {
+}
+
+
+
+
+
+
+
+/* Sign-in button */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* HOME PAGE */
+.parallax {
+    min-height: 600px;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    }
+
+.parallax h1 {
+    font-size: 22;
+    }
+
+.parallax-img-section {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 400px;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* PROFILE PAGE */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* WORKOUTS PAGE */
+
+
+
+
+
+
+
+
+
+
+
+/* BLOG PAGE */
+
+
+
+
+
+
+
+
+
+
+
+
+/* SIGN IN PAGE */
