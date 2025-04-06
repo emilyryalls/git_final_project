@@ -1,16 +1,121 @@
 {% extends "layout.html" %}
+{% set body_class = "home-page" %}
 {% block body_content %}
-<p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin elementum nisl cursus nisi pretium, eu pretium est tempus. Aliquam consectetur nisi quam, eu cursus neque iaculis id. Nunc venenatis imperdiet lobortis. Cras varius consequat elit, at dapibus augue venenatis et. Mauris volutpat metus metus, ac mattis dui finibus vitae. Proin non nisi id ipsum pretium hendrerit id quis est. Vivamus tristique augue non eros posuere condimentum. Proin pellentesque libero erat, nec ultricies lectus egestas ut. Nunc varius velit sed tortor laoreet, sed sodales sem lobortis. Fusce laoreet ante at bibendum interdum. Quisque justo lectus, porttitor quis rhoncus ac, accumsan non ante. Donec velit sapien, volutpat a auctor vitae, pulvinar in augue. Donec pretium euismod metus at posuere. Phasellus finibus ex a sollicitudin maximus. Quisque feugiat sed nunc non ultricies. Pellentesque tincidunt varius purus non hendrerit.
 
-Maecenas malesuada efficitur leo eget placerat. Vestibulum non mollis tortor, a molestie lorem. Nulla eu mollis dui. Ut vel consequat mauris, eu sagittis neque. Fusce mi ante, luctus eu porttitor id, auctor at ipsum. Nulla non erat lectus. Sed tristique dictum ante, vitae suscipit metus rhoncus ac. Mauris in libero eget mauris sodales accumsan eu at enim. Phasellus ornare est ac mi pulvinar, sit amet dapibus urna elementum. Integer quis varius est. Suspendisse in sollicitudin urna.
+<div class="parallax" style="background-image: url('{{ url_for('static', filename='images/home_banner1.webp') }}');">
+    <h1>Own Your Journey: RISE with Us</h1>
+</div>
 
-Vestibulum a turpis urna. Curabitur viverra nunc vel consectetur suscipit. Integer suscipit ipsum nec felis maximus, sed ullamcorper dui pretium. Praesent dui magna, porta vitae felis tincidunt, tincidunt congue lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vivamus in lectus varius neque cursus hendrerit. Praesent porttitor auctor quam sit amet pellentesque. Quisque commodo tellus quis sapien vulputate pretium. Curabitur leo tellus, vulputate pulvinar porttitor in, feugiat non dui. Integer eget augue tellus. Integer ut orci vitae lorem ornare iaculis. Etiam eleifend lorem sed sagittis iaculis.
+<div class="section-divider"></div>
 
-Duis at nunc neque. Nunc eget dolor vel lectus vulputate euismod. Fusce quis orci leo. Vestibulum magna nunc, vestibulum a nisl tempor, ornare tristique augue. Integer dapibus eleifend odio, vel feugiat lectus volutpat vitae. Vivamus pretium at tortor semper accumsan. Aenean convallis varius quam varius placerat. Quisque sit amet urna vel magna tincidunt imperdiet sit amet in arcu. Donec est felis, mollis sed massa a, commodo dictum urna. Aenean at lobortis enim. Sed sed placerat erat. Duis varius mi in elit commodo, non aliquam felis egestas. Nunc ornare dolor ut maximus finibus. Donec felis dui, ornare eget ante in, finibus venenatis nisl. In bibendum neque sed urna blandit mattis.
+<section>
+    <h2>Join the Movement</h2>
+    <p>Be part of a supportive fitness community. Create your free profile to unlock your personalised dashboard, track progress, access meal plans, and save your favourite workouts.</p>
+        <form action="/sign-up" method="get" style="display:inline;">
+            <button type="submit" class="cta-button">Get Started</button>
+        </form>
+</section>
 
-Proin molestie, eros nec pharetra cursus, nibh metus accumsan dolor, et semper ex mi at odio. Sed mollis dui iaculis sagittis mollis. Curabitur bibendum accumsan ipsum sed pellentesque. Nulla sed egestas ex, id varius felis. Phasellus suscipit nulla ut molestie interdum. Vivamus accumsan dolor at mi aliquam sodales. Aliquam at fringilla nibh, non accumsan ligula. Pellentesque vitae cursus urna. Aliquam tristique eu neque ac pellentesque. Vivamus volutpat lorem quis metus hendrerit, eu cursus erat venenatis. Aliquam eu laoreet velit.
-        </p>
+<div class="section-divider"></div>
 
+<section class="feature-highlight mb-5" style="background-color: #ffe3dd;">
+  <h2>Why R.I.S.E.?</h2>
+    <br>
+  <div class="row text-center">
+    <div class="col-md-4">
+      <img src="{{ url_for('static', filename='images/home_icon_empowerment.png') }}" alt="Empowerment icon" width="80">
+      <p class="body-copy"><strong>Empowering Workouts</strong><br>Designed for every body, at every level.</p>
+    </div>
+    <div class="col-md-4">
+      <img src="{{ url_for('static', filename='images/home_icon_nutrition.png') }}" alt="Nutrition icon" width="80">
+      <p class="body-copy"><strong>Balanced Nutrition</strong><br>Realistic, flexible meal planning support.</p>
+    </div>
+    <div class="col-md-4">
+      <img src="{{ url_for('static', filename='images/home_icon_wellbeing.png') }}" alt="Wellbeing icon" width="80">
+      <p class="body-copy"><strong>Mind & Body Wellness</strong><br>Mindful living tools and uplifting blogs.</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<div class="parallax" style="background-image: url('{{ url_for('static', filename='images/home_banner2.jpg') }}');">
+    <h1>Grace in Grit</h1>
+</div>
+
+<div class="section-divider"></div>
+
+<section>
+    <h2>Workouts That Work for You</h2>
+    <p>From beginner to advanced, explore our library of empowering workouts designed to fit your lifestyle. Whether it’s strength training, cardio, or a quick 15-minute stretch — we’ve got you covered.</p>
+    <form action="/sign-up" method="get" style="display:inline;">
+        <button type="submit" class="cta-button">Explore workouts</button>
+    </form>
+</section>
+
+<div class="section-divider"></div>
+
+<div class="parallax" style="background-image: url('{{ url_for('static', filename='images/home_banner3.jpeg') }}');">
+    <h1>The Rhythm of Resilience</h1>
+</div>
+
+<div class="section-divider"></div>
+
+<section>
+    <h2>Healthy Living Blog</h2>
+    <p>Your go-to space for tips on nutrition, mental wellness, motivation, and more. We believe in a balanced approach to fitness — one that uplifts your body and your mind.</p>
+    <form action="/sign-up" method="get" style="display:inline;">
+        <button type="submit" class="cta-button">Explore our Blog</button>
+    </form>
+</section>
+
+<div class="section-divider"></div>
+
+<section class="testimonial-carousel mt-4 mb-0">
+  <h2>What Our Members Say</h2>
+    <br><br>
+  <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+
+      <div class="carousel-item active">
+        <div class="testimonial-slide" style="background-image: url('{{ url_for('static', filename='images/carousel_1_anna.webp') }}');">
+          <div class="testimonial-overlay">
+            <p class="testimonial-quote">“R.I.S.E. gave me the confidence to start my fitness journey and stick with it.”</p>
+            <small class="testimonial-name">– Anna</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <div class="testimonial-slide" style="background-image: url('{{ url_for('static', filename='images/carousel_2_sara.webp') }}');">
+          <div class="testimonial-overlay">
+            <p class="testimonial-quote">“Being able to track meal plans and the gentle approach helped me feel balanced, not pressured.”</p>
+            <small class="testimonial-name">– Sara</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+          <div class="testimonial-slide" style="background-image: url('{{ url_for('static', filename='images/carousel_3_jasmine.webp') }}');">
+            <div class="testimonial-overlay">
+              <p class="testimonial-quote">“The trainers genuinely care. R.I.S.E. helped me push past my limits safely.”</p>
+              <small class="testimonial-name">– Jasmine</small>
+            </div>
+          </div>
+      </div>
+
+    </div>
+
+    <!-- Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</section>
 
 {% endblock %}
