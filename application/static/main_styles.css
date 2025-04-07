@@ -45,6 +45,12 @@ footer {
     color: black;
     }
 
+@media (min-width: 768px) {
+    .navbar-expand-md {
+        flex-wrap: wrap;
+    }
+}
+
 
 
 /* Logo */

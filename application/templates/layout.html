@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/main_styles.css">
 
     <title>R.I.S.E Fitness</title>
@@ -42,12 +44,21 @@
               </li>
             </ul>
           </div>
+<!--          <div class="text-end">-->
+<!--              <button type="button" class="btn btn-outline-light me-2">Sign-in</button>-->
+<!--              &lt;!&ndash; <button type="button" class="btn btn-warning">Sign-in</button> &ndash;&gt;-->
+<!--          </div>-->
           <div class="text-end">
-              <button type="button" class="btn btn-outline-light me-2">Sign-in</button>
-              <!-- <button type="button" class="btn btn-warning">Sign-in</button> -->
+                <!-- Sign In Button visible on larger screens -->
+                <button type="button" class="btn btn-outline-light me-2 d-none d-md-block">Sign In</button>
+
+                <!-- Login Icon visible on smaller screens  -->
+                <button type="button" class="btn btn-outline-light me-2 d-md-none">
+                    <i class="bi bi-person-lock"></i>
+                </button>
           </div>
         </div>
-      </nav>
+    </nav>
     <main>
         <div  class="container">
             {% block body_content %}
@@ -55,19 +66,18 @@
         </div>
     </main>
 
-    <footer class="sticky-bottom d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <div class="container">
+    <footer class="sticky-bottom d-flex flex-wrap justify-content-center align-items-center py-3 my-4 border-top">
             <div class="col-md-4 d-flex align-items-center">
               <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
                 <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
               </a>
               <span class="mb-3 mb-md-0 text-body-secondary">&copy; 2025 R.I.S.E. Fitness</span>
             </div>
-<!--    <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">-->
-<!--            <li><a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none" aria-label="Bootstrap">-->
-<!--instagram      </a>-->
-<!--          </li> </ul>-->
-        </div>
+            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                <li><a href="#" class="ms-3 text-body-secondary"><i class="bi bi-twitter"></i></a></li>
+                <li><a href="#" class="ms-3 text-body-secondary"><i class="bi bi-instagram"></i></a></li>
+                <li><a href="#" class="ms-3 text-body-secondary"><i class="bi bi-facebook"></i></a></li>
+            </ul>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
