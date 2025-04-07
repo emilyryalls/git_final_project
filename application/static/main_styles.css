@@ -1,25 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Quicksand:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Quicksand:wght@300..700&display=swap');
 
 /* LAYOUT.HTML */
 
 html, body {
-    height: 100%;
-}
-
-body {
-    padding-top: 100px;
-    font-family: 'Quicksand', sans-serif;
-    font-weight: 400;
-    color: black;
-    text-align: center;
-    font-size: 12;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    }
-
-main {
-    flex: 1;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 title {
@@ -27,75 +13,200 @@ title {
     }
 
 h1 {
-    font-family: 'DM Serif Display', serif;
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    font-size: 60px;
+    text-shadow: 0 0 8px black;
+    }
+
+body {
+    font-family: 'Quicksand', sans-serif;
     font-weight: 400;
     color: black;
     text-align: center;
-    font-size: 18;
-    background-color: white;
+    font-size: 16px;
+    background-color: #fec196;
     }
 
+/* gradient line separating sections */
+.section-divider {
+    height: 4px;
+    background: linear-gradient(to right, #f25c54, #f4845f, #fec196);
+    border-radius: 4px;
+    margin: 60px auto;
+    width: 80%;
+    }
 
+/* CTA buttons */
+.cta-button {
+    background-color: #F25C54;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+    }
 
+.cta-button:hover {
+    background-color: #F4845F;
+    }
+
+/* footer */
 footer {
     font-family: 'Quicksand', sans-serif;
     padding: 10px 10px;
-    font-size: 10;
-    background-color: white;
-    color: black;
+    margin-bottom: 0;
+    font-size: 14px;
+    background-color: black;
+    color: white;
     }
 
-@media (min-width: 768px) {
-    .navbar-expand-md {
-        flex-wrap: wrap;
+
+/* Adjust for smaller screens */
+@media (max-width: 768px) {
+    .site-container {
+        padding: 20px 30px;
     }
 }
 
+@media (max-width: 480px) {
+    .site-container {
+        padding: 15px 15px;
+    }
+}
 
 
 /* Logo */
 .navbar-brand img {
-    height: 50px;
-    width: auto;
-    }
-
-
-
-/* Navigation bar */
-.navbar {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+  vertical-align: middle;
 }
 
 
+/* Navigation bar */
+/* TO DO: create burger for menu */
 
+.navbar {
+  background-color: #121212; /* custom dark shade */
+  padding: 20px 40px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+  border-bottom: 2px solid #ff6b6b; /* red accent underline */
+}
 
+.navbar-brand {
+  font-weight: bold;
+  color: #ffffff;
+  letter-spacing: 1px;
+}
 
+.navbar-nav {
+  gap: 30px; /* or whatever space you like */
+}
 
+/* Nav links */
+.nav-link {
+  color: #f0f0f0 !important;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
 
-/* Sign-in button */
+.nav-link:hover,
+.nav-link.active {
+  color: #ff6b6b !important; /* coral red accent */
+}
 
+/* Dropdown menu styling */
+.dropdown-menu {
+  background-color: #1f1f1f;
+  border: none;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.5);
+  border-radius: 8px;
+}
 
+.dropdown-item {
+  color: #f0f0f0;
+  padding: 10px 20px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
 
+.dropdown-item:hover {
+  background-color: #292929;
+  color: #ff6b6b;
+}
 
+/* Sign in button */
+.sign-in-btn {
+  display: inline-block;
+  white-space: nowrap;
+  padding: 8px 18px;
+  border: 2px solid #ff6b6b;
+  border-radius: 6px;
+  color: #ff6b6b;
+  background-color: transparent;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.sign-in-btn:hover {
+  background-color: #ff6b6b;
+  color: white;
+}
 
 
 /* HOME PAGE */
-.parallax {
+
+body.home-page h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    font-size: 70px;
+    text-shadow:
+     0 0 4px rgba(0, 0, 0, 0.5),
+     0 0 8px rgba(0, 0, 0, 0.4),
+     0 0 12px rgba(0, 0, 0, 0.3);
+    }
+
+body.home-page h2 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 45px;
+    color: #333;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+body.home-page p {
+    font-family: 'Quicksand', sans-serif;
+      font-size: 24px;
+      font-weight: 400;
+      color: #333333;
+      line-height: 1.8;
+      text-align: center;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+
+body.home-page section {
+  padding: 100px 30px; /* Increase top/bottom padding */
+}
+
+body.home-page .parallax {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    padding-left: 0;
+    padding-right: 0;
     min-height: 600px;
     background-attachment: fixed;
     background-position: center;
@@ -108,88 +219,78 @@ footer {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
     }
 
-.parallax h1 {
+body.home-page .parallax h1 {
     font-size: 22;
     }
 
-.parallax-img-section {
+/*
+body.home-page .parallax-img-section {
+    top:0;
+    max-width: 1500px;;
     background-attachment: fixed;
-    background-position: center;
+    background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
     height: 400px;
-    }
+    } */
 
+.feature-highlight {
+  background-color: #fff5ec;
+  padding: 100px 30px;
+  margin-bottom: 60px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+}
 
+/* Carousel */
+/* Make the carousel section full width
+.testimonial-carousel.full-width {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+}*/
 
+.testimonial-slide {
+  height: 650px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.testimonial-overlay {
+  background-color: rgba(0, 0, 0, 0.5); /* dark overlay for readability */
+  color: white;
+  padding: 30px;
+  max-width: 700px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
 
+body.home-page .testimonial-quote {
+  color: white;
+  font-size: 1.5rem;
+  font-style: italic;
+  margin-bottom: 10px;
+}
 
-
-
-
-
-
-
-
-
-
-
+body.home-page .testimonial-name {
+  font-size: 1rem;
+  font-weight: bold;
+}
 
 
 
 
 /* PROFILE PAGE */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* WORKOUTS PAGE */
 
-
-
-
-
-
-
-
-
-
-
 /* BLOG PAGE */
-
-
-
-
-
-
-
-
-
-
-
 
 /* SIGN IN PAGE */
