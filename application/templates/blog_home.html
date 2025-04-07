@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+
+{% block body_content %}
+
+<!-- Container for the page content -->
+<div class="container mt-5">
+    <h1 class="text-center mb-4">R.I.S.E Fitness Blog</h1>
+    <p class="lead text-center mb-5">Welcome to the R.I.S.E Fitness Blog – your go-to hub for all things health, wellness, and motivation. Whether you're looking for clean eating tips, mindset shifts, killer workout ideas, or just a little extra inspiration to fuel your fitness journey, you’ve come to the right place. Here, we dive deep into everything that helps you Rise—physically, mentally, and emotionally. Our blog is packed with expert insights, real-life stories, and actionable advice to help you show up as your strongest self, inside and out. Let’s grow, sweat, and thrive—together.</p>
+
+    <!-- All blogs section -->
+    <h2 class="text-center mt-5 mb-4">All Blogs</h2>
+
+    <!-- Filter to pick category for blogs -->
+    <div class="container">
+        <form method="GET" action="{{ url_for('blogs') }}">
+            <div class="row">
+                <div class="col-md-6">
+                   <select name="category" class="form-select" aria-label="Select category">
+                        <option value="">🏋️‍♀️ Select a category 🏋️‍♀️</option>
+                        <option value="Workout Routines"> 🏋️‍♂️ Workout Routines</option>
+                        <option value="Nutrition"> 🥗 Nutrition</option>
+                        <option value="Mindset & Motivation"> 🧠 Mindset & Motivation</option>
+                        <option value="Weight Loss"> ⚖️ Weight Loss</option>
+                        <option value="Fitness for Beginners"> 👟 Fitness for Beginners</option>
+                        <option value="Recovery & Injury Prevention">💪 Recovery & Injury Prevention</option>
+                        <option value="Health & Wellness">🌿 Health & Wellness</option>
+                        <option value="Fitness Challenges">🏆 Fitness Challenges</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-primary">Filter Your Next Read! 🔥</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Blog cards -->
+    <div class="row">
+        <!-- Loop over all blog objects using a Jinja template loop -->
+        {% for blog in blogs %}
+        <div class="col-md-4 mb-4">
+            <!-- Blog card with flexible height and vertical layout -->
+            <div class="card h-100 d-flex flex-column shadow-lg border-0">
+                <!-- Blog image at the top of the card -->
+                <img src="{{ blog.image }}" class="card-img-top" alt="{{ blog.title }}">
+                <!-- Card body that holds the blog title, summary, and button -->
+                <div class="card-body d-flex flex-column">
+                    <!-- Blog title -->
+                    <h5 class="card-title text-center">{{ blog.title }}</h5>
+                    <!-- Short summary of the blog -->
+                    <p class="card-text">{{ blog.summary }}</p>
+                    <!-- "Read more" button that links to the full blog post -->
+                    <a href="{{ url_for('blog_detail', blog_id=blog.id) }}" class="btn btn-primary mt-auto d-block mx-auto">Read more</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Sign up for regular blog updates -->
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <h5 class="font-weight-bold text-warning mb-3">Sign up for Exclusive Updates and tips!</h5>
+            <form action="#" method="POST" class="d-flex justify-content-center">
+                <input type="email" class="form-control w-50" placeholder="Enter your email..." required>
+                <button type="submit" class="btn btn-success ml-2">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <p class="font-weight-bold text-info">Keep pushing yourself to R.I.S.E, stronger each day!</p>
+    </div>
+</div>
+
+{% endblock %}

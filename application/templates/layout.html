@@ -12,7 +12,7 @@
 <body>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">R.I.S.E. WOMEN'S FITNESS
+          <a class="navbar-brand" href="/home">R.I.S.E. FITNESS
         </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -20,7 +20,7 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                <a class="nav-link active" aria-current="page" href="/home">Home</a>
               </li>
               <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="/profile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -36,7 +36,7 @@
                 <a class="nav-link" href="/workouts">Workouts</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/blog">Healthy Living</a>
+                <a class="nav-link" href="/blog_home">R.I.S.E Blog</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/membership">Become a Member</a>
@@ -55,22 +55,41 @@
         {% block body_content %}
         {% endblock %}
     </section>
-    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <div class="col-md-4 d-flex align-items-center">
-          <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
-            <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
-          </a>
-          <span class="mb-3 mb-md-0 text-body-secondary">&copy; 2025 R.I.S.E. Fitness</span>
-        </div>
 
-        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-          <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
-          <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
-          <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
+<!--    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">-->
+<!--        <div class="col-md-4 d-flex align-items-center">-->
+<!--          <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">-->
+<!--            <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"/></svg>-->
+<!--          </a>-->
+<!--          <span class="mb-3 mb-md-0 text-body-secondary">&copy; 2025 R.I.S.E. Fitness</span>-->
+<!--        </div>-->
+
+<!--        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">-->
+<!--          <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>-->
+<!--          <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>-->
+<!--          <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>-->
+<!--        </ul>-->
+
+<!--      </footer>-->
+
+    <footer class="d-flex flex-wrap py-3 my-4 border-top">
+    <!-- Left-aligned Logo and Text -->
+    <div class="col-12 col-md-6 d-flex align-items-center justify-content-start">
+        <span class="mb-3 mb-md-0 text-body-secondary">
+            &copy; 2025 R.I.S.E Fitness. All rights reserved. Designed with passion 💖 by the R.I.S.E Team.
+        </span>
+    </div>
+
+    <!-- Right-aligned Social Media Icons -->
+    <div class="col-12 col-md-6 d-flex justify-content-end">
+        <ul class="nav list-unstyled d-flex">
+            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"/></svg></a></li>
+            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"/></svg></a></li>
+            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"/></svg></a></li>
         </ul>
+    </div>
+</footer>
 
-
-      </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block body_content %}
+    <!-- Heading for the create blog page with some styling -->
+    <h1 class="text-center mb-5">Create a New Blog Post</h1>
+
+    <!-- The form that submits blog data via POST method to the 'create_blog' route -->
+    <form method="POST" action="{{ url_for('create_blog') }}" enctype="multipart/form-data">
+
+        <!-- Title Input Section -->
+        <div class="mb-4">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Enter the blog title" required>
+        </div>
+
+        <!-- Author Input Section -->
+        <div class="mb-4">
+            <label for="author" class="form-label">Author</label>
+            <input type="text" class="form-control" id="author" name="author" placeholder="Enter the author's name" required>
+        </div>
+
+        <!-- Image URL Input Section -->
+        <div class="mb-4">
+            <label for="image" class="form-label">Image URL</label>
+            <input type="text" class="form-control" id="image" name="image" placeholder="Enter the image URL (optional)" required>
+        </div>
+
+        <!-- Summary Input Section -->
+        <div class="mb-4">
+            <label for="summary" class="form-label">Summary</label>
+            <textarea class="form-control" id="summary" name="summary" rows="3" placeholder="Provide a brief summary of the blog" required></textarea>
+        </div>
+
+        <!-- Content Input Section -->
+        <div class="mb-4">
+            <label for="content" class="form-label">Content</label>
+            <textarea class="form-control" id="content" name="content" rows="5" placeholder="Write your blog content here" required></textarea>
+        </div>
+
+        <!-- Category Dropdown Section -->
+        <div class="mb-4">
+            <label for="category" class="form-label">Category</label>
+            <select class="form-control" id="category" name="category" required>
+                <option value="" disabled selected>Select Category</option>
+                <option value="Workout Routines">Workout Routines</option>
+                <option value="Nutrition">Nutrition</option>
+                <option value="Mindset & Motivation">Mindset & Motivation</option>
+                <option value="Weight Loss">Weight Loss</option>
+                <option value="Fitness for Beginners">Fitness for Beginners</option>
+                <option value="Recovery & Injury Prevention">Recovery & Injury Prevention</option>
+                <option value="Health & Wellness">Health & Wellness</option>
+                <option value="Fitness Challenges">Fitness Challenges</option>
+            </select>
+        </div>
+
+        <!-- Submit Button to create the blog -->
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg">Create Blog</button>
+        </div>
+    </form>
+{% endblock %}
