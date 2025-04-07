@@ -2,6 +2,7 @@
 {% set body_class = "home-page" %}
 {% block body_content %}
 
+<!--move to layout if we want an img like this one every page-->
 <div class="parallax" style="background-image: url('{{ url_for('static', filename='images/home_banner1.webp') }}');">
     <h1>Own Your Journey: RISE with Us</h1>
 </div>
@@ -71,7 +72,7 @@
 
 <div class="section-divider"></div>
 
-<section class="testimonial-carousel mt-4 mb-0">
+<section class="testimonial-carousel full-width mt-4 mb-0">
   <h2>What Our Members Say</h2>
     <br><br>
   <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">

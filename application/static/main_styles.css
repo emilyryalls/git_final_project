@@ -2,6 +2,12 @@
 
 /* LAYOUT.HTML */
 
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 title {
     text-transform: capitalize;
     }
@@ -24,35 +30,43 @@ body {
     background-color: #fec196;
     }
 
+/* gradient line separating sections */
+.section-divider {
+    height: 4px;
+    background: linear-gradient(to right, #f25c54, #f4845f, #fec196);
+    border-radius: 4px;
+    margin: 60px auto;
+    width: 80%;
+    }
+
 /* CTA buttons */
 .cta-button {
-  background-color: #F25C54;
-  color: white;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  font-size: 18px;
-  transition: background-color 0.3s ease;
-}
+    background-color: #F25C54;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+    }
 
 .cta-button:hover {
-  background-color: #F4845F;
-}
+    background-color: #F4845F;
+    }
 
+/* footer */
 footer {
     font-family: 'Quicksand', sans-serif;
     padding: 10px 10px;
+    margin-bottom: 0;
     font-size: 14px;
     background-color: black;
     color: white;
     }
 
-.site-container {
-    padding: 40px 80px; /* generous space on top/bottom and left/right */
-}
 
-/* Optional: adjust for smaller screens */
+/* Adjust for smaller screens */
 @media (max-width: 768px) {
     .site-container {
         padding: 20px 30px;
@@ -66,8 +80,6 @@ footer {
 }
 
 
-
-
 /* Logo */
 .navbar-brand img {
   height: 50px;
@@ -77,11 +89,11 @@ footer {
 }
 
 
-
-
 /* Navigation bar */
+/* TO DO: create burger for menu */
+
 .navbar {
-  background-color: #121212 !important; /* custom dark shade */
+  background-color: #121212; /* custom dark shade */
   padding: 20px 40px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.6);
   border-bottom: 2px solid #ff6b6b; /* red accent underline */
@@ -89,7 +101,7 @@ footer {
 
 .navbar-brand {
   font-weight: bold;
-  color: #ffffff !important;
+  color: #ffffff;
   letter-spacing: 1px;
 }
 
@@ -189,16 +201,12 @@ body.home-page section {
   padding: 100px 30px; /* Increase top/bottom padding */
 }
 
-
-body.home-page .section-divider {
-  height: 4px;
-  background: linear-gradient(to right, #f25c54, #f4845f, #fec196);
-  border-radius: 4px;
-  margin: 60px auto;
-  width: 80%;
-}
-
 body.home-page .parallax {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    padding-left: 0;
+    padding-right: 0;
     min-height: 600px;
     background-attachment: fixed;
     background-position: center;
@@ -215,13 +223,16 @@ body.home-page .parallax h1 {
     font-size: 22;
     }
 
+/*
 body.home-page .parallax-img-section {
+    top:0;
+    max-width: 1500px;;
     background-attachment: fixed;
-    background-position: center;
+    background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
     height: 400px;
-    }
+    } */
 
 .feature-highlight {
   background-color: #fff5ec;
@@ -232,9 +243,18 @@ body.home-page .parallax-img-section {
 }
 
 /* Carousel */
+/* Make the carousel section full width
+.testimonial-carousel.full-width {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+}*/
+
 .testimonial-slide {
   height: 650px;
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-position: center;
   position: relative;
   display: flex;
