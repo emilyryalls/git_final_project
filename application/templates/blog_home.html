@@ -4,7 +4,7 @@
 
 <!-- Container for the page content -->
 <div class="container mt-5">
-    <h1 class="text-center mb-4">R.I.S.E Fitness Blog</h1>
+    <h1 class="text-center mb-4">R.I.S.E. Fitness Blog</h1>
     <p class="lead text-center mb-5">Welcome to the R.I.S.E Fitness Blog – your go-to hub for all things health, wellness, and motivation. Whether you're looking for clean eating tips, mindset shifts, killer workout ideas, or just a little extra inspiration to fuel your fitness journey, you’ve come to the right place. Here, we dive deep into everything that helps you Rise—physically, mentally, and emotionally. Our blog is packed with expert insights, real-life stories, and actionable advice to help you show up as your strongest self, inside and out. Let’s grow, sweat, and thrive—together.</p>
 
     <!-- All blogs section -->
@@ -37,18 +37,18 @@
     <!-- Blog cards -->
     <div class="row">
         <!-- Loop over all blog objects using a Jinja template loop -->
-        {% for blog in blogs %}
+        {% for blogs in blog_list %}
         <div class="col-md-4 mb-4">
             <!-- Blog card with flexible height and vertical layout -->
             <div class="card h-100 d-flex flex-column shadow-lg border-0">
                 <!-- Blog image at the top of the card -->
-                <img src="{{ blog.image }}" class="card-img-top" alt="{{ blog.title }}">
+                <img src="{{ blogs.image }}" class="card-img-top" alt="{{ blog.title }}">
                 <!-- Card body that holds the blog title, summary, and button -->
                 <div class="card-body d-flex flex-column">
                     <!-- Blog title -->
-                    <h5 class="card-title text-center">{{ blog.title }}</h5>
+                    <h5 class="card-title text-center">{{ blogs.title }}</h5>
                     <!-- Short summary of the blog -->
-                    <p class="card-text">{{ blog.summary }}</p>
+                    <p class="card-text">{{ blogs.summary }}</p>
                     <!-- "Read more" button that links to the full blog post -->
                     <a href="{{ url_for('blog_detail', blog_id=blog.id) }}" class="btn btn-primary mt-auto d-block mx-auto">Read more</a>
                 </div>
