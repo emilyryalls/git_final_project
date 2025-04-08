@@ -67,7 +67,8 @@ footer {
     padding: 10px 10px;
     margin-bottom: 0;
     font-size: 14px;
-    background-color:#121212; /* custom dark shade */
+    background-color: #121212; /* custom dark shade */
+    border-top: 2px solid #ff6b6b; /* red accent underline - this isnt working */
     color: white;
     }
 
