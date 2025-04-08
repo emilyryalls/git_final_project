@@ -66,7 +66,7 @@ def get_blog_by_id(blog_id):
     conn = get_db_connection()
     cursor = conn.cursor()
     # Execute the query to get the blog based on the blog ID
-    cursor.execute("SELECT id, title, summary, image, content FROM blogs WHERE id = %s", (blog_id,))
+    cursor.execute("SELECT id, title, summary, image, content, author, created_at FROM blogs WHERE id = %s", (blog_id,))
 
     # Fetch the result
     blog = cursor.fetchone()
@@ -77,10 +77,5 @@ def get_blog_by_id(blog_id):
     if blog is None:
         return None
     # Return the blog details as a dictionary
-    return {
-        'id': blog[0],
-        'title': blog[1],
-        'summary': blog[2],
-        'image': blog[3],
-        'content': blog[4]
+    return {'id': blog[0], 'title': blog[1], 'summary': blog[2], 'image': blog[3], 'content': blog[4], 'author' : blog[5], 'created_at': blog[6].date().strftime('%B %d, %Y')
     }
