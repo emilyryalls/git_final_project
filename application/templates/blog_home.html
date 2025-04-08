@@ -14,6 +14,7 @@
     <div class="container mb-5">
         <form method="GET" action="{{ url_for('blogs') }}">
             <div class="row">
+                <!-- Dropdown for selecting a category -->
                 <div class="col-md-6">
                    <select name="category" class="form-select" aria-label="Select category">
                         <option value="">🏋️‍♀️ Select a category 🏋️‍♀️</option>
@@ -27,6 +28,7 @@
                         <option value="Fitness Challenges">🏆 Fitness Challenges</option>
                     </select>
                 </div>
+                <!-- Submit button for the filter form -->
                 <div class="col-md-6">
                     <button type="submit" class="btn btn-primary">Filter Your Next Read! 🔥</button>
                 </div>
@@ -36,20 +38,19 @@
 
     <!-- Blog cards -->
     <div class="row">
-        <!-- Loop over all blog objects using a Jinja template loop -->
+        <!-- Loop over all blog objects and display them using a Jinja  loop -->
         {% for blogs in blog_list %}
         <div class="col-md-4 mb-4">
             <!-- Blog card with flexible height and vertical layout -->
             <div class="card h-100 d-flex flex-column shadow-lg border-0">
                 <!-- Blog image at the top of the card -->
                 <img src="{{ url_for('static', filename=blogs.image) }}" class="card-img-top" style="height: 300px; object-fit: cover;">
-                <!-- Card body that holds the blog title, summary, and button -->
+                <!-- Card body that holds the blog title, summary -->
                 <div class="card-body d-flex flex-column">
                     <!-- Blog title -->
                     <h5 class="card-title text-center">{{ blogs.title }}</h5>
                     <!-- Short summary of the blog -->
                     <p class="card-text">{{ blogs.summary }}</p>
-                    <!-- "Read more" button that links to the full blog post -->
 
                 </div>
             </div>
@@ -60,16 +61,18 @@
     <!-- Sign up for regular blog updates -- Could this perhaps be a feature for all the members? instead of signing up just for the blogs, once they have signed up they will receive blog's updates? -->
     <div class="row mt-4">
         <div class="col-12 text-center">
-            <h5 class="font-weight-bold text-warning mb-3">Sign up for Exclusive Updates and tips!</h5>
+             <!-- Section header for the sign-up prompt -->
+            <h5 class="font-weight-bold mb-3">Sign up for Exclusive Updates and tips!</h5>
             <form action="#" method="POST" class="d-flex justify-content-center">
                 <input type="email" class="form-control w-50" placeholder="Enter your email..." required>
+                <!-- Submit button for the form -->
                 <button type="submit" class="btn btn-success ml-2">Sign Up</button>
             </form>
         </div>
     </div>
 
     <div class="text-center mt-5">
-        <p class="font-weight-bold text-info">Keep pushing yourself to R.I.S.E, stronger each day!</p>
+        <p class="font-weight-bold ">Keep pushing yourself to R.I.S.E, stronger each day!</p>
     </div>
 </div>
 
