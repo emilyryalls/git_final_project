@@ -36,27 +36,32 @@
         </form>
     </div>
 
-    <!-- Blog cards -->
-    <div class="row">
-        <!-- Loop over all blog objects and display them using a Jinja  loop -->
-        {% for blogs in blog_list %}
-        <div class="col-md-4 mb-4">
-            <!-- Blog card with flexible height and vertical layout -->
-            <div class="card h-100 d-flex flex-column shadow-lg border-0">
-                <!-- Blog image at the top of the card -->
-                <img src="{{ url_for('static', filename=blogs.image) }}" class="card-img-top" style="height: 300px; object-fit: cover;">
-                <!-- Card body that holds the blog title, summary -->
-                <div class="card-body d-flex flex-column">
-                    <!-- Blog title -->
-                    <h5 class="card-title text-center">{{ blogs.title }}</h5>
-                    <!-- Short summary of the blog -->
-                    <p class="card-text">{{ blogs.summary }}</p>
-
-                </div>
+   <!-- Separate container for the Blog cards -->
+    <div class="container mb-5">
+        <div class="row">
+            <!-- Loop over all blog objects and display them using a Jinja loop -->
+            {% for blogs in blog_list %}
+            <div class="col-md-4 mb-4">
+                <!-- Wrap the entire card with a link to the view_blog page -->
+                <a href="{{ url_for('view_blog', blog_id=blogs.id) }}" class="text-decoration-none">
+                    <!-- Blog card with flexible height and vertical layout -->
+                    <div class="card h-100 d-flex flex-column shadow-lg border-0">
+                        <!-- Blog image at the top of the card -->
+                        <img src="{{ url_for('static', filename=blogs.image) }}" class="card-img-top" style="height: 300px; object-fit: cover;">
+                        <!-- Card body that holds the blog title, summary -->
+                        <div class="card-body d-flex flex-column">
+                            <!-- Blog title -->
+                            <h5 class="card-title text-center">{{ blogs.title }}</h5>
+                            <!-- Short summary of the blog -->
+                            <p class="card-text">{{ blogs.summary }}</p>
+                        </div>
+                    </div>
+                </a>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
+
 
     <!-- Sign up for regular blog updates -- Could this perhaps be a feature for all the members? instead of signing up just for the blogs, once they have signed up they will receive blog's updates? -->
     <div class="row mt-4">

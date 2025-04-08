@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block body_content %}
+<!-- Container for the individual blog post -->
+<div class="container mt-5">
+    <!-- Blog Title -->
+    <h1 class="text-center mb-4">{{ blog.title }}</h1>
+
+    <!-- Blog Image -->
+    <div class="text-center mb-4">
+        <img src="{{ url_for('static', filename=blog.image) }}" class="img-fluid" alt="{{ blog.title }}" style="max-height: 500px; object-fit: cover;">
+    </div>
+
+    <!-- Blog Summary -->
+    <p class="lead text-center">{{ blog.summary }}</p>
+
+    <!-- Blog Content -->
+    <div class="blog-content">
+        <!-- Loop through each paragraph and display it in its own paragraph -->
+        {% for paragraph in blog.content.split('\n') %}
+            <p>{{ paragraph }}</p>
+        {% endfor %}
+    </div>
+
+    <!-- Author Information -- this isnt working properly and im not sure why-->
+    <div class="text-center mt-4">
+        <p>Written by: {{ blog.author }}</p>
+    </div>
+
+    <!-- Back to Blogs Button -->
+    <div class="text-center mt-4">
+        <a href="{{ url_for('blogs') }}" class="btn btn-secondary">Back to All Blogs</a>
+    </div>
+</div>
+
+{% endblock %}
