@@ -11,7 +11,7 @@
     <h2 class="text-center mt-5 mb-4">All Blogs</h2>
 
     <!-- Filter to pick category for blogs -->
-    <div class="container">
+    <div class="container mb-5">
         <form method="GET" action="{{ url_for('blogs') }}">
             <div class="row">
                 <div class="col-md-6">
@@ -42,7 +42,7 @@
             <!-- Blog card with flexible height and vertical layout -->
             <div class="card h-100 d-flex flex-column shadow-lg border-0">
                 <!-- Blog image at the top of the card -->
-                <img src="{{ url_for('static', filename=blogs.image) }}" class="card-img-top" alt="{{ blogs.title }}">
+                <img src="{{ url_for('static', filename=blogs.image) }}" class="card-img-top" style="height: 300px; object-fit: cover;">
                 <!-- Card body that holds the blog title, summary, and button -->
                 <div class="card-body d-flex flex-column">
                     <!-- Blog title -->
