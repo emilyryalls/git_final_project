@@ -13,7 +13,7 @@ def home():
 @app.route('/blog_home', methods=['GET'])
 def blogs():
     blog_database = get_all_blogs()
-    return render_template('blog_home.html', blog_home=blog_database)
+    return render_template('blog_home.html', blog_list=blog_database)
 
 
 

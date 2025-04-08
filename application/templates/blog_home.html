@@ -42,7 +42,7 @@
             <!-- Blog card with flexible height and vertical layout -->
             <div class="card h-100 d-flex flex-column shadow-lg border-0">
                 <!-- Blog image at the top of the card -->
-                <img src="{{ blogs.image }}" class="card-img-top" alt="{{ blog.title }}">
+                <img src="{{ url_for('static', filename=blogs.image) }}" class="card-img-top" alt="{{ blogs.title }}">
                 <!-- Card body that holds the blog title, summary, and button -->
                 <div class="card-body d-flex flex-column">
                     <!-- Blog title -->
@@ -50,14 +50,14 @@
                     <!-- Short summary of the blog -->
                     <p class="card-text">{{ blogs.summary }}</p>
                     <!-- "Read more" button that links to the full blog post -->
-                    <a href="{{ url_for('blog_detail', blog_id=blog.id) }}" class="btn btn-primary mt-auto d-block mx-auto">Read more</a>
+
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
 
-    <!-- Sign up for regular blog updates -->
+    <!-- Sign up for regular blog updates -- Could this perhaps be a feature for all the members? instead of signing up just for the blogs, once they have signed up they will receive blog's updates? -->
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h5 class="font-weight-bold text-warning mb-3">Sign up for Exclusive Updates and tips!</h5>
