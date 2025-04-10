@@ -3,15 +3,36 @@ from flask import render_template, request, redirect, url_for
 
 from application.data_access import get_all_blogs
 from application.data_access import get_blog_by_id
-
 import os
 import json
 from datetime import datetime, timedelta
 
+
 @app.route('/')
 @app.route('/home')
 def home():
+    # session['SignIn'] = False
     return render_template('home.html', title='Home')
+
+
+@app.route('/membership', methods=['GET'])
+def signup_form():
+    return render_template('membership.html', title='Membership')
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup_submit():
+    error = ""
+    if request.method == 'POST':
+        useremail = request.form.get('userEmail')
+        userpassword = request.form.get('userPassword')
+        print('received')
+
+        if len(useremail) == 0 or len(userpassword) == 0:
+            error = 'Please supply both an email and password'
+        else:
+            add_member(useremail, userpassword)
+            return render_template('signedup.html')
+    return render_template('membership.html', title='Sign Up', message=error)
 
 
 #              <---- Blogs ---->

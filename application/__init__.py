@@ -5,3 +5,5 @@ from mysql.connector import Error
 app = Flask(__name__)
 
 from application import routes
+
+
