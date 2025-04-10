@@ -67,15 +67,20 @@
                     <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body p-5 pt-0">
-                    <form class="">
+                    <form class="" action="signup" method="POST">
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control rounded-3" id="floatingInput" placeholder="name@example.com">
-                            <label for="floatingInput">Email address</label>
+                            <input type="email" class="form-control rounded-3" id="userEmail" name="userEmail" placeholder="name@example.com">
+                            <label for="userEmail">Email address</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control rounded-3" id="floatingPassword" placeholder="Password">
-                            <label for="floatingPassword">Password</label>
+                            <input type="password" class="form-control rounded-3" id="userPassword" name="userPassword" placeholder="Password">
+                            <label for="userPassword">Password</label>
                         </div>
+                        {% if message %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endif %}
                         <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" id="signupButton" type="submit">Sign Up</button>
                         <small class="text-body">By clicking Sign up, you agree to the terms of use.</small>
                     </form>
