@@ -1,0 +1,48 @@
+{
+    "user_id": "user123",
+    "name": "07-04-25",
+    "week": {
+        "Monday": {
+            "breakfast": "",
+            "lunch": "",
+            "dinner": "",
+            "snacks": ""
+        },
+        "Tuesday": {
+            "breakfast": "",
+            "lunch": "",
+            "dinner": "",
+            "snacks": ""
+        },
+        "Wednesday": {
+            "breakfast": "",
+            "lunch": "",
+            "dinner": "",
+            "snacks": ""
+        },
+        "Thursday": {
+            "breakfast": "",
+            "lunch": "",
+            "dinner": "",
+            "snacks": ""
+        },
+        "Friday": {
+            "breakfast": "",
+            "lunch": "",
+            "dinner": "",
+            "snacks": ""
+        },
+        "Saturday": {
+            "breakfast": "",
+            "lunch": "",
+            "dinner": "",
+            "snacks": ""
+        },
+        "Sunday": {
+            "breakfast": "",
+            "lunch": "",
+            "dinner": "",
+            "snacks": ""
+        }
+    }
+}

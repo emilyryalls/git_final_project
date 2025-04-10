@@ -1,7 +1,10 @@
 import mysql.connector
 import sys
+import os
+import json
 
 from unicodedata import category
+
 
 if sys.platform == "win32":
     mysql_password = "password"
@@ -15,22 +18,6 @@ def get_db_connection():
       password= mysql_password,
       database="blog_db")
     return mydb
-
-# <----- Orignal get all blogs. We no longer need this ----->
-# def get_all_blogs():
-#     # establishing a connection with the database
-#     conn = get_db_connection()
-#     # cursor is a method that gives ability to interact with database
-#     cursor = conn.cursor()
-#     sql_get_all_blogs = "SELECT title, summary, image FROM blogs"
-#     # equivalent of clicking lightning bolt
-#     cursor.execute(sql_get_all_blogs)
-#     result = cursor.fetchall()
-#     blog_list = []
-#
-#     for item in result:
-#         blog_list.append({'title': item[0],'summary': item[1],'image': item[2]})
-#     return blog_list
 
 
 # <----- Get all blog function ----->
@@ -53,8 +40,10 @@ def get_all_blogs(category=None):
     # Fetch all results from the executed query
     result = cursor.fetchall()
 
+    blog_list = []
     # Convert raw DB rows into a list of blog dictionaries
-    blog_list = [{'id': item[0], 'title': item[1], 'summary': item[2], 'image': item[3]} for item in result]
+    for item in result:
+        blog_list.append({'id': item[0], 'title': item[1], 'summary': item[2], 'image': item[3]})
 
     # Return the list
     return blog_list
@@ -79,3 +68,23 @@ def get_blog_by_id(blog_id):
     # Return the blog details as a dictionary
     return {'id': blog[0], 'title': blog[1], 'summary': blog[2], 'image': blog[3], 'content': blog[4], 'author' : blog[5], 'created_at': blog[6].date().strftime('%B %d, %Y')
     }
+
+
+# <---Meal planner --->
+def get_user_meal_plans(user_id):
+    # Mocking meal plans for testing
+    return [
+        {
+            'user_id': user_id,
+            'name': '05-04-2023',  # Example plan name
+            'week': {
+                'Monday': {'breakfast': 'Pancakes', 'lunch': 'Chicken Sandwich', 'dinner': 'Steak', 'snacks': 'Chips'},
+                'Tuesday': {'breakfast': 'Oatmeal', 'lunch': 'Salad', 'dinner': 'Pizza', 'snacks': 'Fruit'},
+                'Wednesday': {'breakfast': 'Eggs', 'lunch': 'Soup', 'dinner': 'Pasta', 'snacks': 'Nuts'},
+                'Thursday': {'breakfast': 'Toast', 'lunch': 'Burger', 'dinner': 'Chicken Curry', 'snacks': 'Cookies'},
+                'Friday': {'breakfast': 'Cereal', 'lunch': 'Tacos', 'dinner': 'Fish', 'snacks': 'Chips'},
+                'Saturday': {'breakfast': 'Bagel', 'lunch': 'Pizza', 'dinner': 'BBQ', 'snacks': 'Granola'},
+                'Sunday': {'breakfast': 'Waffles', 'lunch': 'Grilled Cheese', 'dinner': 'Roast Chicken', 'snacks': 'Fruit'}
+            }
+        }
+    ]

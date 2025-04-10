@@ -67,8 +67,9 @@ footer {
     padding: 10px 10px;
     margin-bottom: 0;
     font-size: 14px;
-    background-color: #121212; /* custom dark shade */
+    background-color: #212529; /* custom dark shade */
     border-top: 2px solid #ff6b6b; /* red accent underline - this isnt working */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.6);
     color: white;
     }
 
@@ -103,7 +104,7 @@ footer {
 /* TO DO: create burger for menu */
 
 .navbar {
-  background-color: #121212; /* custom dark shade */
+  background-color: #212529; /* custom dark shade */
   padding: 20px 40px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.6);
   border-bottom: 2px solid #ff6b6b; /* red accent underline */
