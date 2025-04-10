@@ -295,7 +295,108 @@ body.home-page .testimonial-name {
 }
 
 
+/* SIGN UP PAGE */
 
+.bg-body-secondary {
+  background-color: transparent !important;
+}
+
+.modal {
+  --bs-modal-border-color: rgb(0 0 0 / 0%);
+  --bs-modal-width: 1000px;
+}
+
+.modal-content {
+  flex-direction: row;
+  background-color: #ffe3dd;
+
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+}
+
+#modal-body-one{
+  padding: 0px;
+  padding-top: 0.2rem;
+  padding-bottom: 3rem;
+}
+
+.modal-header {
+  justify-content: center;
+}
+
+#container-signup{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  /* padding-left: 0px; */
+}
+
+#modal-header-signup{
+  align-items: flex-end;
+
+}
+
+#signupText{
+  font-family: 'Quicksand';
+  color: #333333;
+  text-shadow: none;
+  font-weight: 440;
+}
+
+#signupButton{
+  background-color: #F25C54;
+  border-color: #F25C54;
+  font-weight: bold;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+}
+
+#signupButton:hover {
+  background-color: #F4845F;
+}
+
+.text-body-secondary{
+  font-family: 'Quicksand';
+  color: #333333;
+}
+
+@media (min-width: 1200px) {
+  .modal-dialog {
+    --bs-modal-width:1340px
+  }
+}
+@media (min-width: 992px) {
+  .modal-dialog {
+    --bs-modal-width:1340px
+
+  }
+}
+@media (max-width: 992px) {
+  /* .modal-dialog {
+    --bs-modal-width:1340px
+
+  } */
+
+  .modal-content{
+    flex-wrap: wrap;
+  }
+  .modal {
+    --bs-modal-width: 500px;
+}
+}
+@media (max-width: 767px) {
+  .modal-content{
+    flex-wrap: wrap;
+  }
+  .modal {
+    --bs-modal-width: 500px;
+}
+}
 
 /* PROFILE PAGE */
 

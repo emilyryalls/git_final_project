@@ -9,6 +9,9 @@ from application.data_access import get_blog_by_id
 def home():
     return render_template('home.html', title='Home')
 
+@app.route('/membership')
+def membership():
+    return render_template('membership.html', title='Membership')
 
 # Route to display all blogs and filter
 @app.route('/blog_home', methods=['GET'])
