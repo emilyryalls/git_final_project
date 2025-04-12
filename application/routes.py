@@ -1,11 +1,12 @@
 from application import app
 from flask import render_template, request, redirect, url_for
-
 from application.data_access import get_all_blogs, add_member
-from application.data_access import get_blog_by_id
+from application.data_access import get_blog_by_id # keep only one line?
 import os
 import json
 from datetime import datetime, timedelta
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 
 @app.route('/')
@@ -19,6 +20,7 @@ def home():
 def signup_form():
     return render_template('membership.html', title='Membership')
 
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup_submit():
     error = ""
@@ -26,15 +28,15 @@ def signup_submit():
     if request.method == 'POST':
         useremail = request.form.get('userEmail')
         userpassword = request.form.get('userPassword')
-        print('received')
+        hashed_password = generate_password_hash(userpassword)
+        #print('received')
 
         if len(useremail) == 0 or len(userpassword) == 0:
             error = 'Please supply both an email and password'
-        elif add_member(useremail, userpassword):
+        elif add_member(useremail, hashed_password):
             error_email_exist = 'This email address is already part of the family! Please log in to continue.'
-
         else:
-            add_member(useremail, userpassword)
+            add_member(useremail, hashed_password)
             return render_template('signedup.html')
     return render_template('membership.html', title='Sign Up', message = error, message_email_exist = error_email_exist)
 
