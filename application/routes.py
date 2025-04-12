@@ -1,7 +1,7 @@
 from application import app
 from flask import render_template, request, redirect, url_for
 
-from application.data_access import get_all_blogs
+from application.data_access import get_all_blogs, add_member
 from application.data_access import get_blog_by_id
 import os
 import json
@@ -22,6 +22,7 @@ def signup_form():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup_submit():
     error = ""
+    error_email_exist = ""
     if request.method == 'POST':
         useremail = request.form.get('userEmail')
         userpassword = request.form.get('userPassword')
@@ -29,10 +30,13 @@ def signup_submit():
 
         if len(useremail) == 0 or len(userpassword) == 0:
             error = 'Please supply both an email and password'
+        elif add_member(useremail, userpassword):
+            error_email_exist = 'This email address is already part of the family! Please log in to continue.'
+
         else:
             add_member(useremail, userpassword)
             return render_template('signedup.html')
-    return render_template('membership.html', title='Sign Up', message=error)
+    return render_template('membership.html', title='Sign Up', message = error, message_email_exist = error_email_exist)
 
 
 #              <---- Blogs ---->
@@ -62,6 +66,7 @@ def view_blog(blog_id):
 
     # Render the template for the individual blog, passing the blog data
     return render_template('view_blog.html', blog=blog)
+
 
 #           <---- Meal planner ---->
 

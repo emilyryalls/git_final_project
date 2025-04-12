@@ -74,47 +74,31 @@ def add_member(uemail, upassword):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    sql_add_member = "INSERT INTO membership (user_email, user_password) VALUES (%s, %s)"
-    val = (uemail, upassword)
+    #to be changed for real DB values
+    sql_check_email = "SELECT id FROM membership WHERE user_email = %s"
+    cursor.execute(sql_check_email, (uemail,))
 
-    try:
-        cursor.execute(sql_add_member, val)
-        conn.commit()
-        print('added to db test')
+    email_id = cursor.fetchone()
 
-    except mysql.connector.Error as err:
-        print(f"Error: {err}")
+    if email_id:
+        return True
+    else:
+        sql_add_member = "INSERT INTO membership (user_email, user_password) VALUES (%s, %s)"
+        val = (uemail, upassword)
 
-    finally:
-        cursor.close()
-        conn.close()
+    # try:
+    cursor.execute(sql_add_member, val)
+    conn.commit()
 
-# def add_member(uemail, upassword):
-#     conn = get_db_connection()
-#     cursor = conn.cursor()
-#
-#     #checkk if email exist
-#     sql_check_colour = "SELECT id FROM membership WHERE user_email = %s" # the %s the s is for string
-#     cursor.execute(sql_check_colour, (email,)) ## execute above query passing the colour to the placeholder %s
-#
-#     email_result = cursor.fetchone()
-#
-#     if email_result: # if true then save it in below variable
-#         email_id = email_result[0]
-#     else:
-#         sql_add_member = "INSERT INTO membership (user_email, user_password) VALUES (%s, %s)"
-#         val = (uemail, upassword)
-#     try:
-#         cursor.execute(sql_add_member, val)
-#         conn.commit()
-#         print('added to db test')
-#
-#     except mysql.connector.Error as err:
-#         print(f"Error: {err}")
-#
-#     finally:
-#         cursor.close()
-#         conn.close()
+    #print('added to db test')
+
+    # except mysql.connector.Error as err:
+    #     print(f"Error: {err}")
+    #
+    # finally:
+    #     cursor.close()
+    #     conn.close()
+
 
 
 # <---Meal planner --->
