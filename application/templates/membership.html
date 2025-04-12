@@ -68,7 +68,15 @@
                 </div>
                 <div class="modal-body p-5 pt-0">
                     <form class="" action="signup" method="POST">
-                        <div class="form-floating mb-3">
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control rounded-3" id="userName" name="userName" placeholder="Name">
+                            <label for="userName">Name</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control rounded-3" id="userLastname" name="userLastname" placeholder="Lastname">
+                            <label for="userLastname">Last Name</label>
+                        </div>
+                        <div class="form-floating mb-2">
                             <input type="email" class="form-control rounded-3" id="userEmail" name="userEmail" placeholder="name@example.com">
                             <label for="userEmail">Email address</label>
                         </div>
@@ -77,7 +85,7 @@
                                 {{ message_email_exist }}
                             </div>
                         {% endif %}
-                        <div class="form-floating mb-3">
+                        <div class="form-floating mb-2">
                             <input type="password" class="form-control rounded-3" id="userPassword" name="userPassword" placeholder="Password">
                             <label for="userPassword">Password</label>
                         </div>
