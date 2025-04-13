@@ -202,5 +202,23 @@ foreign key (diet_id) references diet(diet_id),
 profile_pic varchar(500)
 );
 
+
+-- password table
+create table member_password
+(
+password_id bigint not null primary key auto_increment,
+member_id bigint not null,
+hashed_password varchar(250) not null,
+foreign key (member_id) references member(member_id)
+);
+
+-- newsletter table
+create table newsletter
+(
+newsletter_id bigint not null primary key auto_increment,
+email_id bigint not null,
+foreign key (email_id) references member(email_id)
+);
+
 select *
 from member;
