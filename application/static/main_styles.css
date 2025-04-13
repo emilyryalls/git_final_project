@@ -64,8 +64,9 @@ body {
     margin-bottom: 0;
     margin-top: auto;
     font-size: 14px;
-    background-color: #121212; /* custom dark shade */
+    background-color: #212529; /* custom dark shade */
     border-top: 2px solid #ff6b6b; /* red accent underline - this isnt working */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.6);
     color: white;
     }
 
@@ -100,7 +101,7 @@ body {
 
 /* Navigation bar */
 .navbar {
-  background-color: #121212; /* custom dark shade */
+  background-color: #212529; /* custom dark shade */
   padding: 20px 40px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.6);
   border-bottom: 2px solid #ff6b6b; /* red accent underline */
@@ -311,6 +312,151 @@ body.home-page .testimonial-name {
   font-size: 1rem;
   font-weight: bold;
 }
+
+
+/* SIGN UP PAGE */
+
+
+
+.form-floating>.form-control, .form-floating>.form-control-plaintext, .form-floating>.form-select {
+    height: calc(3.1rem + calc(var(--bs-border-width) * 2));
+    min-height: calc(3.1rem + calc(var(--bs-border-width) * 2));
+
+
+}
+
+
+
+
+
+
+
+.bg-body-secondary {
+  background-color: transparent !important;
+}
+
+.modal {
+  --bs-modal-border-color: rgb(0 0 0 / 0%);
+  --bs-modal-width: 1000px;
+}
+
+.modal-content {
+  flex-direction: row;
+  background-color: #ffe3dd;
+
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+
+ /* padding-left: 0px;
+  padding-right: 3rem;*/
+}
+
+#modal-body-one{
+  padding: 0px;
+  padding-top: 0.2rem;
+  padding-bottom: 3rem;
+}
+
+.modal-header {
+  justify-content: center;
+}
+
+#container-signup{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  /* padding-left: 0px; */
+}
+
+#modal-header-signup{
+  align-items: flex-end;
+
+}
+
+#signupText{
+  font-family: 'Quicksand';
+  color: #333333;
+  text-shadow: none;
+  font-weight: 440;
+}
+
+#signupButton{
+  background-color: #F25C54;
+  border-color: #F25C54;
+  font-weight: bold;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+}
+
+#signupButton:hover {
+  background-color: #F4845F;
+}
+
+.text-body-secondary{
+  font-family: 'Quicksand';
+  color: #333333;
+}
+
+
+
+@media (min-width: 1200px) {
+  .modal-dialog {
+    --bs-modal-width:1340px
+  }
+
+}
+
+@media (min-width: 1150px) {
+  .modal-dialog {
+    --bs-modal-width:1340px
+  }
+    .modal-content {
+    padding-right: 70px;
+    }
+
+  #container-img {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  #container-signup {
+    flex: 1;
+    padding: 2rem;
+    padding-left: 0px;
+    /*background-color: red;*/
+  }
+}
+
+@media (max-width: 1150px) {
+  .modal-content{
+    flex-wrap: wrap;
+    /*background-color: yellow;*/
+    padding-right: 0px;
+
+  }
+
+  .modal-dialog {
+    --bs-modal-width: 500px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

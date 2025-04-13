@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block body_content %}
+<!-- Main container for meal planner form -->
+<div class="container mt-5">
+    <!-- Heading for the page -->
+    <h1 class="text-center mb-4">Create Your Meal Plan</h1>
+
+    <!-- Form for creating the meal plan, sends POST request to 'save_meal_plan' -->
+ <form action="{{ url_for('save_meal_plan') }}" method="POST">
+    <!-- Display the plan name -->
+    <div class="form-group">
+        <label for="plan_name">Week of Monday: {{ plan_name }}</label>
+        <!-- Store the plan name in a hidden field -->
+        <input type="hidden" id="plan_name" name="plan_name" value="{{ plan_name }}">
+    </div>
+
+    <!-- Loop through each day of the week and create input fields for meals -->
+    {% for day in days %}
+    <div class="form-group mt-3">
+        <h4>{{ day }}</h4>
+        <div class="row">
+            <!-- Input for breakfast -->
+            <div class="col">
+                <label for="{{ day }}_breakfast">Breakfast</label>
+                <input type="text" class="form-control" id="{{ day }}_breakfast" name="{{ day }}_breakfast">
+            </div>
+            <!-- Input for lunch -->
+            <div class="col">
+                <label for="{{ day }}_lunch">Lunch</label>
+                <input type="text" class="form-control" id="{{ day }}_lunch" name="{{ day }}_lunch">
+            </div>
+            <!-- Input for dinner -->
+            <div class="col">
+                <label for="{{ day }}_dinner">Dinner</label>
+                <input type="text" class="form-control" id="{{ day }}_dinner" name="{{ day }}_dinner">
+            </div>
+            <!-- Input for snacks -->
+            <div class="col">
+                <label for="{{ day }}_snacks">Snacks</label>
+                <input type="text" class="form-control" id="{{ day }}_snacks" name="{{ day }}_snacks">
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Submit button for the meal plan form -->
+    <button type="submit" class="btn btn-primary mt-4">Save Meal Plan</button>
+</form>
+</div>
+{% endblock %}
