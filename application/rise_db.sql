@@ -138,3 +138,35 @@ on v.time_id = t.time_id;
 
 select *
 from v_workout_videos;
+
+
+-- MEAL PLAN
+
+-- diet table
+create table diet
+(
+diet_id bigint not null primary key auto_increment,
+dietary_requirement varchar(30) not null
+);
+
+insert into diet(dietary_requirement)
+values
+('Vegan'),
+('No preference');
+
+select *
+from diet;
+
+-- meal plan table
+create table meal_plan
+(
+meal_plan_id bigint not null primary key auto_increment,
+image_link varchar(300) not null,
+diet_id bigint not null,
+foreign key (diet_id) references diet(diet_id),
+goal_id bigint not null,
+foreign key (goal_id) references goal(goal_id)
+);
+
+select *
+from meal_plan;
