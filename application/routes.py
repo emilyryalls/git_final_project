@@ -1,12 +1,13 @@
 from application import app
-from flask import render_template, request, redirect, url_for
-
-from application.data_access import get_all_blogs, get_workout_video
-from application.data_access import get_blog_by_id
+from flask import render_template, request, redirect, url_for, flash, session
+from application.data_access import get_all_blogs, add_member, get_password_by_email, get_blog_by_id, get_workout_video
 import os
+import re
 import json
 from datetime import datetime, timedelta
+from werkzeug.security import generate_password_hash, check_password_hash
 
+from application.user_data_access import get_user_by_id, update_profile_info
 
 @app.route('/')
 @app.route('/home')
@@ -19,20 +20,61 @@ def home():
 def signup_form():
     return render_template('membership.html', title='Membership')
 
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup_submit():
     error = ""
+    error_email_exist = ""
+    if request.method == 'POST':
+        userfirstname = request.form.get('userName')
+        userlastname = request.form.get('userLastname')
+        useremail = request.form.get('userEmail')
+        userpassword = request.form.get('userPassword')
+        hashed_password = generate_password_hash(userpassword)
+        #print('received')
+
+        if len(useremail) == 0 or len(userpassword) == 0 or len(userfirstname) == 0 or len(userlastname) == 0:
+            error = 'Please supply all fields'
+        elif add_member(userfirstname, userlastname, useremail, hashed_password):
+            error_email_exist = 'This email address is already part of the family! Please log in to continue.'
+        elif not re.match("^[A-Za-zÀ-ÿ\s'-]+$", userfirstname) or not re.match("^[A-Za-zÀ-ÿ\s'-]+$", userlastname):
+            error = 'First name and last name can only contain letters, spaces, apostrophes (\'), and hyphens (-).'
+        else:
+            add_member(userfirstname, userlastname, useremail, hashed_password)
+            return render_template('signedup.html')
+    return render_template('membership.html', title='Sign Up', message = error, message_email_exist = error_email_exist)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def signin_form():
+    return render_template('login.html', title='Login')
+
+
+@app.route('/signin', methods=['GET', 'POST'])
+def signin_submit():
+    error = ""
+    error_invalid_password = ""
+    error_email_exist = ""
+
     if request.method == 'POST':
         useremail = request.form.get('userEmail')
         userpassword = request.form.get('userPassword')
-        print('received')
 
         if len(useremail) == 0 or len(userpassword) == 0:
-            error = 'Please supply both an email and password'
+            error = 'Please supply all fields'
         else:
-            add_member(useremail, userpassword)
-            return render_template('signedup.html')
-    return render_template('membership.html', title='Sign Up', message=error)
+            saved_password = get_password_by_email(useremail)
+
+            if saved_password:
+                stored_password = saved_password[0]
+                if check_password_hash(stored_password, userpassword):
+                    return render_template('home.html')
+                else:
+                    error_invalid_password = 'Incorrect password, please try again!'
+            else:
+                error_email_exist = 'Email not found. Please sign up or try again'
+        return render_template('login.html', title='Sign In', message = error, message_email_exist = error_email_exist, message_invalid_password = error_invalid_password)
+    return render_template('login.html', title='Sign In')
 
 
 #              <---- Blogs ---->
@@ -62,6 +104,7 @@ def view_blog(blog_id):
 
     # Render the template for the individual blog, passing the blog data
     return render_template('view_blog.html', blog=blog)
+
 
 #           <---- Meal planner ---->
 
@@ -138,6 +181,7 @@ def view_meal_plan():
     with open(user_meal_plan_file, 'r') as f:
         meal_plan = json.load(f)
 
+
     # Ensure the plan name exists and is properly extracted
     plan_name = meal_plan.get('name', 'NONE')  # If no plan name is found, it will default to 'NONE'
 
@@ -145,11 +189,42 @@ def view_meal_plan():
     return render_template('view_meal_plan.html', meal_plan=meal_plan, plan_name=plan_name)
 
 
-# <-- We dont need this any more -->
-# @app.route('/create-blog', methods=['GET', 'POST'])
-# def create_blog():
-#     return render_template('create_blog.html')
+# Fitness goals list - to be removed once we have database
+fitness_goals = [
+    "Build Muscle",
+    "Improve Stamina",
+    "Lose Weight",
+    "Tone Up"
+]
 
+# Route to display the user profile
+@app.route("/profile", methods=["GET"])
+def profile():
+    # TEMP: Assume user_id = 1 for development/testing
+    user_id = 1
+    user = get_user_by_id(user_id)
+    return render_template("profile.html", user=user)
+
+
+# Route to edit profile details on settings page
+@app.route("/profile/settings", methods=["GET", "POST"])
+def update_profile():
+    # TEMP: Assume user_id = 1 for development/testing
+    user_id = 1
+    user = get_user_by_id(user_id)
+
+
+    if request.method == "POST":
+        dob = request.form.get("dob")
+        height = request.form.get("height")
+        weight = request.form.get("weight")
+        goal = request.form.get("goal")
+
+        update_profile_info(user_id, dob, height, weight, goal)
+        flash("Profile updated successfully!")
+        return redirect(url_for("profile"))
+
+    return render_template("profile_settings.html", user=user, fitness_goals=fitness_goals)
 
 
 # return all workout videos
@@ -157,4 +232,3 @@ def view_meal_plan():
 def view_workout_videos():
     workout_video = get_workout_video()
     return render_template('workout_videos.html', video=workout_video, title='Workout Videos')
-

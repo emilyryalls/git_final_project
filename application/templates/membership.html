@@ -3,9 +3,9 @@
 {% block body_content %}
 
 <div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSignin">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content rounded-4 shadow">
-            <div class="container">
+    <div class="modal-dialog modal-xl" role="document" >
+        <div class="modal-content rounded-4 shadow test" id="modal-flex-container">
+            <div class="container" id="container-img">
                 <!-- <div class="modal-header p-5 pb-4 border-bottom-0">
                     <h1 class="fw-bold mb-0">What's new</h1>
                 </div>
@@ -68,13 +68,26 @@
                 </div>
                 <div class="modal-body p-5 pt-0">
                     <form class="" action="signup" method="POST">
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control rounded-3" id="userEmail" name="userEmail" placeholder="name@example.com">
-                            <label for="userEmail">Email address</label>
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control form-control rounded-3" id="userName" name="userName" placeholder="First Name" pattern= "[A-Za-zÀ-ÿ\s'-]+" title= "Only letters, spaces, apostrophes (') and hyphens (-) are allowed" required>
+                            <label for="userName"> First Name <span class="text-danger"> * </span></label>
                         </div>
-                        <div class="form-floating mb-3">
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control rounded-3" id="userLastname" name="userLastname" placeholder="Lastname">
+                            <label for="userLastname">Last Name <span class="text-danger"> * </span></label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input type="email" class="form-control rounded-3" id="userEmail" name="userEmail" placeholder="name@example.com">
+                            <label for="userEmail">Email address <span class="text-danger"> * </span></label>
+                        </div>
+                        {% if message_email_exist %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ message_email_exist }}
+                            </div>
+                        {% endif %}
+                        <div class="form-floating mb-2">
                             <input type="password" class="form-control rounded-3" id="userPassword" name="userPassword" placeholder="Password">
-                            <label for="userPassword">Password</label>
+                            <label for="userPassword">Password <span class="text-danger"> * </span></label>
                         </div>
                         {% if message %}
                             <div class="alert alert-danger" role="alert">
@@ -89,5 +102,6 @@
         </div>
     </div>
 </div>
+
 
 {% endblock %}

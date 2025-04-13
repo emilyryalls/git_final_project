@@ -1,0 +1,118 @@
+{% extends "layout.html" %}
+{% block body_content %}
+
+<!-- Settings banner -->
+<div class="profile-banner text-white d-flex flex-column align-items-center justify-content-center">
+  <div class="profile-info text-center">
+    <h2 class="mb-1"><i class="bi bi-gear-fill me-2"></i>Profile Settings</h2>
+    <p class="text-light">Manage your account preferences below</p>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <div class="row g-4">
+
+    <!-- Column 1: Account info and security -->
+    <div class="col-md-6 d-flex flex-column gap-4">
+
+      <!-- Account Info -->
+      <div class="card shadow-sm d-flex flex-column">
+        <div class="card-body px-4 py-4 d-flex flex-column">
+          <h4 class="card-title text-center mb-4"><i class="bi bi-person-circle me-2"></i>Your Account Info</h4>
+          <form action="{{ url_for('update_profile') }}" method="post">
+            <div class="mb-3 text-start">
+              <label for="first_name" class="form-label">First Name</label>
+              <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.firstname }}">
+            </div>
+            <div class="mb-3 text-start">
+              <label for="last_name" class="form-label">Last Name</label>
+              <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.lastname }}">
+            </div>
+            <div class="mb-3 text-start">
+              <label for="email" class="form-label">Email Address</label>
+              <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+            </div>
+            <div class="mb-3 text-start">
+              <label for="dob" class="form-label">Date of Birth</label>
+              <input type="date" class="form-control" id="dob" name="dob"
+                value="{% if user.dob %}{{ user.dob.strftime('%Y-%m-%d') }}{% else %}{{ '' }}{% endif %}">
+            </div>
+            <div class="mt-3">
+              <button type="submit" class="btn btn-join-filled">Save Account Info</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Security settings -->
+      <div class="card shadow-sm">
+        <div class="card-body px-4 py-4">
+          <h4 class="card-title text-center mb-4"><i class="bi bi-shield-lock-fill me-2"></i>Security Settings</h4>
+          <div class="d-flex flex-column align-items-center">
+            <a href="#" class="btn btn-outline-secondary mb-3">Change Password</a>
+            <a href="#" class="btn btn-outline-danger">Delete Account</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 2: Body Metrics + fitness preferences -->
+    <div class="col-md-6 d-flex flex-column">
+
+      <!-- Body Metrics -->
+      <div class="card shadow-sm d-flex flex-column h-100 mb-4">
+        <div class="card-body px-4 py-4 d-flex flex-column">
+          <h4 class="card-title text-center mb-4"><i class="bi bi-rulers me-2"></i>Body Metrics</h4>
+          <form action="{{ url_for('update_profile') }}" method="post">
+            <div class="mb-3 text-start">
+              <label for="height" class="form-label">Height (cm)</label>
+              <input type="number" class="form-control" id="height" name="height" value="{{ user.height }}">
+            </div>
+            <div class="mb-3 text-start">
+              <label for="weight" class="form-label">Weight (kg)</label>
+              <input type="number" class="form-control" id="weight" name="weight" value="{{ user.weight }}">
+            </div>
+            <div class="mt-3">
+              <button type="submit" class="btn btn-join-filled">Update Measurements</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Fitness preferences -->
+      <div class="card shadow-sm d-flex flex-column h-100">
+        <div class="card-body px-4 py-4 d-flex flex-column">
+          <h4 class="card-title text-center mb-4"><i class="bi bi-activity me-2"></i>Your Fitness Preferences</h4>
+          <form action="{{ url_for('update_profile') }}" method="post">
+            <div class="mb-3 text-start">
+              <label for="goal" class="form-label">Fitness Goal</label>
+              <select class="form-select" name="goal" id="goal">
+                <option value="Build Muscle" {% if user.goal == 'Build Muscle' %}selected{% endif %}>Build Muscle</option>
+                <option value="Improve Stamina" {% if user.goal == 'Improve Stamina' %}selected{% endif %}>Improve Stamina</option>
+                <option value="Lose Weight" {% if user.goal == 'Lose Weight' %}selected{% endif %}>Lose Weight</option>
+                <option value="Improve Core Strength" {% if user.goal == 'Improve Core Strength' %}selected{% endif %}>Improve Core Strength</option>
+              </select>
+            </div>
+            <div class="mb-3 text-start">
+              <label for="experience" class="form-label">Experience Level</label>
+              <select class="form-select" name="experience" id="experience">
+                <option value="Beginner" {% if user.experience == 'Beginner' %}selected{% endif %}>Beginner</option>
+                <option value="Intermediate" {% if user.experience == 'Intermediate' %}selected{% endif %}>Intermediate</option>
+                <option value="Advanced" {% if user.experience == 'Advanced' %}selected{% endif %}>Advanced</option>
+              </select>
+            </div>
+            <div class="mt-auto d-flex justify-content-center gap-2 flex-wrap">
+              <button type="submit" class="btn btn-join-filled">Update Preferences</button>
+              <a href="#" class="btn btn-determine-goal">
+                <i class="bi bi-question-circle me-1"></i> Determine Fitness Goal
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mb-5"></div>
+
+{% endblock %}
