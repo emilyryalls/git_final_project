@@ -1,12 +1,11 @@
 from application import app
 from flask import render_template, request, redirect, url_for, flash, session
-from application.data_access import get_all_blogs, add_member, get_password_by_email, get_blog_by_id, get_workout_video
+from application.blog_data_access import get_all_blogs,  get_blog_by_id, get_workout_video, add_member, get_password_by_email
 import os
 import re
 import json
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
-
 from application.user_data_access import get_user_by_id, update_profile_info
 
 @app.route('/')
@@ -15,67 +14,67 @@ def home():
     # session['SignIn'] = False
     return render_template('home.html', title='Home')
 
-
-@app.route('/membership', methods=['GET'])
-def signup_form():
-    return render_template('membership.html', title='Membership')
-
-
-@app.route('/signup', methods=['GET', 'POST'])
-def signup_submit():
-    error = ""
-    error_email_exist = ""
-    if request.method == 'POST':
-        userfirstname = request.form.get('userName')
-        userlastname = request.form.get('userLastname')
-        useremail = request.form.get('userEmail')
-        userpassword = request.form.get('userPassword')
-        hashed_password = generate_password_hash(userpassword)
-        #print('received')
-
-        if len(useremail) == 0 or len(userpassword) == 0 or len(userfirstname) == 0 or len(userlastname) == 0:
-            error = 'Please supply all fields'
-        elif add_member(userfirstname, userlastname, useremail, hashed_password):
-            error_email_exist = 'This email address is already part of the family! Please log in to continue.'
-        elif not re.match("^[A-Za-zÀ-ÿ\s'-]+$", userfirstname) or not re.match("^[A-Za-zÀ-ÿ\s'-]+$", userlastname):
-            error = 'First name and last name can only contain letters, spaces, apostrophes (\'), and hyphens (-).'
-        else:
-            add_member(userfirstname, userlastname, useremail, hashed_password)
-            return render_template('signedup.html')
-    return render_template('membership.html', title='Sign Up', message = error, message_email_exist = error_email_exist)
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def signin_form():
-    return render_template('login.html', title='Login')
-
-
-@app.route('/signin', methods=['GET', 'POST'])
-def signin_submit():
-    error = ""
-    error_invalid_password = ""
-    error_email_exist = ""
-
-    if request.method == 'POST':
-        useremail = request.form.get('userEmail')
-        userpassword = request.form.get('userPassword')
-
-        if len(useremail) == 0 or len(userpassword) == 0:
-            error = 'Please supply all fields'
-        else:
-            saved_password = get_password_by_email(useremail)
-
-            if saved_password:
-                stored_password = saved_password[0]
-                if check_password_hash(stored_password, userpassword):
-                    return render_template('home.html')
-                else:
-                    error_invalid_password = 'Incorrect password, please try again!'
-            else:
-                error_email_exist = 'Email not found. Please sign up or try again'
-        return render_template('login.html', title='Sign In', message = error, message_email_exist = error_email_exist, message_invalid_password = error_invalid_password)
-    return render_template('login.html', title='Sign In')
-
+#
+# @app.route('/membership', methods=['GET'])
+# def signup_form():
+#     return render_template('membership.html', title='Membership')
+#
+#
+# @app.route('/signup', methods=['GET', 'POST'])
+# def signup_submit():
+#     error = ""
+#     error_email_exist = ""
+#     if request.method == 'POST':
+#         userfirstname = request.form.get('userName')
+#         userlastname = request.form.get('userLastname')
+#         useremail = request.form.get('userEmail')
+#         userpassword = request.form.get('userPassword')
+#         hashed_password = generate_password_hash(userpassword)
+#         #print('received')
+#
+#         if len(useremail) == 0 or len(userpassword) == 0 or len(userfirstname) == 0 or len(userlastname) == 0:
+#             error = 'Please supply all fields'
+#         elif add_member(userfirstname, userlastname, useremail, hashed_password):
+#             error_email_exist = 'This email address is already part of the family! Please log in to continue.'
+#         elif not re.match("^[A-Za-zÀ-ÿ\s'-]+$", userfirstname) or not re.match("^[A-Za-zÀ-ÿ\s'-]+$", userlastname):
+#             error = 'First name and last name can only contain letters, spaces, apostrophes (\'), and hyphens (-).'
+#         else:
+#             add_member(userfirstname, userlastname, useremail, hashed_password)
+#             return render_template('signedup.html')
+#     return render_template('membership.html', title='Sign Up', message = error, message_email_exist = error_email_exist)
+#
+#
+# @app.route('/login', methods=['GET', 'POST'])
+# def signin_form():
+#     return render_template('login.html', title='Login')
+#
+#
+# @app.route('/signin', methods=['GET', 'POST'])
+# def signin_submit():
+#     error = ""
+#     error_invalid_password = ""
+#     error_email_exist = ""
+#
+#     if request.method == 'POST':
+#         useremail = request.form.get('userEmail')
+#         userpassword = request.form.get('userPassword')
+#
+#         if len(useremail) == 0 or len(userpassword) == 0:
+#             error = 'Please supply all fields'
+#         else:
+#             saved_password = get_password_by_email(useremail)
+#
+#             if saved_password:
+#                 stored_password = saved_password[0]
+#                 if check_password_hash(stored_password, userpassword):
+#                     return render_template('home.html')
+#                 else:
+#                     error_invalid_password = 'Incorrect password, please try again!'
+#             else:
+#                 error_email_exist = 'Email not found. Please sign up or try again'
+#         return render_template('login.html', title='Sign In', message = error, message_email_exist = error_email_exist, message_invalid_password = error_invalid_password)
+#     return render_template('login.html', title='Sign In')
+#
 
 #              <---- Blogs ---->
 
@@ -89,7 +88,7 @@ def blogs():
     blog_database = get_all_blogs(category)
 
     # Pass the list of blogs to the 'blog_home' template
-    return render_template('blog_home.html', blog_list=blog_database)
+    return render_template('blog/blog_home.html', blog_list=blog_database)
 
 
 # <--individual blog based on the blog ID-->
@@ -103,8 +102,7 @@ def view_blog(blog_id):
         return redirect(url_for('blogs'))
 
     # Render the template for the individual blog, passing the blog data
-    return render_template('view_blog.html', blog=blog)
-
+    return render_template('blog/view_blog.html', blog=blog)
 
 #           <---- Meal planner ---->
 
@@ -127,7 +125,7 @@ def meal_planner():
     plan_name = monday.strftime('%d-%m-%y')
 
     # Pass the 'plan_name' (week's start date) to the template along with 'days'
-    return render_template('meal_planner_form.html', days=DAYS, plan_name=plan_name)
+    return render_template('meal_plan/meal_planner_form.html', days=DAYS, plan_name=plan_name)
 
 
 # <--saving the meal plan-->
@@ -163,7 +161,7 @@ def save_meal_plan():
     except Exception as e:
         return render_template('error.html', message=f"Failed to save meal plan: {e}")
 
-    return redirect(url_for('view_meal_plan'))
+    return redirect(url_for('meal_plan/view_meal_plan'))
 
 # <--view the saved meal plan-->
 @app.route('/view_meal_plan', methods=['GET'])
