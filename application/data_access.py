@@ -29,12 +29,12 @@ def get_all_blogs(category=None):
     # Check if a category was provided from the filter dropdown
     if category:
         # SQL query to fetch blogs that match the selected category
-        sql_query_category = "SELECT id, title, summary, image FROM blogs WHERE category = %s"
+        sql_query_category = "SELECT id, title, summary, image FROM blog WHERE category = %s"
         # Execute the query with category as parameter (MUST be a tuple)
         cursor.execute(sql_query_category, (category,))
     else:
         # If no category selected, fetch all blogs
-        sql_query = "SELECT id, title, summary, image FROM blogs"
+        sql_query = "SELECT id, title, summary, image FROM blog"
         cursor.execute(sql_query)
 
     # Fetch all results from the executed query
@@ -55,7 +55,7 @@ def get_blog_by_id(blog_id):
     conn = get_db_connection()
     cursor = conn.cursor()
     # Execute the query to get the blog based on the blog ID
-    cursor.execute("SELECT id, title, summary, image, content, author, created_at FROM blogs WHERE id = %s", (blog_id,))
+    cursor.execute("SELECT id, title, summary, image, content, author, created_at FROM blog WHERE id = %s", (blog_id,))
 
     # Fetch the result
     blog = cursor.fetchone()
