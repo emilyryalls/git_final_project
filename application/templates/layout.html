@@ -13,55 +13,90 @@
 </head>
 
 <body class="{{body_class | default('') }}">
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container-fluid d-flex align-items-center justify-content-between">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark py-3">
+      <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
 
-        <!-- Left: Logo -->
+        <!-- Logo (left) -->
         <a class="navbar-brand" href="/">
-          <img src="/static/images/logo_v4.png" alt="R.I.S.E. Fitness Logo">
+          <img src="/static/images/logo_v7.png" alt="R.I.S.E. Fitness Logo">
         </a>
 
-        <!-- Burger Menu Button  -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-
-    <!-- Center: Navigation links -->
-        <div class="collapse navbar-collapse justify-content-center" id="navbarCollapse">
-          <ul class="navbar-nav mb-2 mb-md-0">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="/profile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                My Profile
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Dashboard</a></li>
-                <li><a class="dropdown-item" href="#">My Workouts</a></li>
-                <li><a class="dropdown-item" href="#">My Meal Plans</a></li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/workouts">Workouts</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/blog_home">R.I.S.E. Fitness Blog</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/membership">Become a Member</a>
-            </li>
+        <!-- Nav Links (centered on desktop, hidden on mobile) -->
+        <div class="collapse navbar-collapse justify-content-center" id="mainNav">
+          <ul class="navbar-nav ms-auto me-auto">
+            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="/workouts">Workout Videos</a></li>
+            <li class="nav-item"><a class="nav-link" href="/blog_home">R.I.S.E. Fitness Blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="/membership">Become a Member</a></li>
           </ul>
         </div>
 
-    <!-- Right: Sign In -->
-        <div class="d-none d-md-block">
-          <a href="/signup" class="sign-in-btn">Sign in</a>
+        <!-- Right: Burger menu icon (mobile only) + Sign in/Profile (always visible) -->
+        <div class="d-flex align-items-center ms-auto">
+
+          <!-- Burger Menu Button (only visible below md) -->
+          <button class="navbar-toggler d-md-none me-2" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+            aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <!-- Sign in / Profile dropdown (always visible) -->
+          <div class="dropdown">
+            {% if user_authenticated %}
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+               id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{{ user_image_url }}" alt="User" width="32" height="32" class="rounded-circle me-2">
+              <div class="user-labels text-start d-none d-sm-block">
+                <div class="user-name">Hi, {{ firstname }}!</div>
+              </div>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end text-small" aria-labelledby="dropdownUser">
+              <li><a class="dropdown-item" href="/profile">Dashboard</a></li>
+              <li><a class="dropdown-item" href="/workouts">Workouts</a></li>
+              <li><a class="dropdown-item" href="/meal-plans">Meal Plans</a></li>
+              <li><a class="dropdown-item" href="/profile">Profile</a></li>
+              <li><a class="dropdown-item" href="/profile/settings">Settings</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/logout">Sign Out</a></li>
+            </ul>
+            {% else %}
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+               id="dropdownGuest" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle fs-4"></i>
+              <span class="ms-2 d-none d-sm-block"><div>Sign In</div></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end text-small text-center mx-auto" aria-labelledby="dropdownGuest">
+              <li class="px-3 py-2 small text-white" style="min-width: 200px;">
+                Join for free to get personalised workouts and meal plans and everything you need to stay on track — all in one place!
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li class="px-3 py-1"><a href="/signup" class="btn btn-join-filled w-100">Join</a></li>
+              <li class="px-3 pb-2"><a href="/signin" class="btn btn-sign-in w-100">Sign In</a></li>
+            </ul>
+            {% endif %}
+          </div>
         </div>
-        </div>
+      </div>
     </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="container mt-4">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
 
     {% block body_content %}{% endblock %}
 
-    <footer class="sticky-bottom d-flex flex-wrap justify-content-center align-items-center py-3 my-4 border-top">
+    <footer class="footer sticky-bottom d-flex flex-wrap justify-content-center align-items-center py-3 mt-auto bg-dark footer accent">
             <div class="col-md-4 d-flex align-items-center">
               <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
                 <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
