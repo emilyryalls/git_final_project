@@ -10,7 +10,7 @@ mydb = mysql.connector.connect(
   host="localhost",
   user="root",
   password=mysql_password,
-  database="rise_users"
+  database="rise_db"
 )
 
 def get_db_connection():
@@ -18,7 +18,7 @@ def get_db_connection():
         host="localhost",
         user="root",
         password=mysql_password,
-        database="rise_users"
+        database="rise_db"
     )
     return mydb
 
