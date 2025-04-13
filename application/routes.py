@@ -1,6 +1,6 @@
 from application import app
 from flask import render_template, request, redirect, url_for
-from application.data_access import get_all_blogs, add_member
+from application.data_access import get_all_blogs, add_member, get_password_by_email
 from application.data_access import get_blog_by_id # keep only one line?
 import os
 import re
@@ -54,21 +54,28 @@ def signin_form():
 @app.route('/signin', methods=['GET', 'POST'])
 def signin_submit():
     error = ""
-    error_invalid_email = ""
     error_invalid_password = ""
+    error_email_exist = ""
 
     if request.method == 'POST':
         useremail = request.form.get('userEmail')
         userpassword = request.form.get('userPassword')
-        hashed_password = generate_password_hash(userpassword)
 
         if len(useremail) == 0 or len(userpassword) == 0:
             error = 'Please supply all fields'
-        elif check_credentials(useremail, hashed_password):
-            error_email_exist = 'Invalid credentials, please try again!'
         else:
-            return render_template('home.html')
-        return render_template('home.html', title='Sign In', message=error, message_email_exist=error_invalid_email, message_email_exist= error_invalid_password)
+            saved_password = get_password_by_email(useremail)
+
+            if saved_password:
+                stored_password = saved_password[0]
+                if check_password_hash(stored_password, userpassword):
+                    return render_template('home.html')
+                else:
+                    error_invalid_password = 'Incorrect password, please try again!'
+            else:
+                error_email_exist = 'Email not found. Please sign up or try again'
+        return render_template('login.html', title='Sign In', message = error, message_email_exist = error_email_exist, message_invalid_password = error_invalid_password)
+    return render_template('login.html', title='Sign In')
 
 
 #              <---- Blogs ---->

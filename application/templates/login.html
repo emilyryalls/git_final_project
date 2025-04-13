@@ -24,6 +24,11 @@
                             <input type="password" class="form-control rounded-3" id="userPassword" name="userPassword" placeholder="Password">
                             <label for="userPassword">Password <span class="text-danger"> * </span></label>
                         </div>
+                        {% if message_invalid_password %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ message_invalid_password }}
+                            </div>
+                        {% endif %}
                         {% if message %}
                             <div class="alert alert-danger" role="alert">
                                 {{ message }}

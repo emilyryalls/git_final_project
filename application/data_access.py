@@ -69,6 +69,22 @@ def get_blog_by_id(blog_id):
     return {'id': blog[0], 'title': blog[1], 'summary': blog[2], 'image': blog[3], 'content': blog[4], 'author' : blog[5], 'created_at': blog[6].date().strftime('%B %d, %Y')
     }
 
+
+
+# <----- Login ------>
+
+def get_password_by_email(useremail):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql_get_password = "SELECT user_password FROM membership WHERE user_email = %s"
+    cursor.execute(sql_get_password, (useremail,))
+
+    saved_password_tuple = cursor.fetchone()
+    return saved_password_tuple
+
+
+
 # <----- Add Member ------>
 def add_member(fname, lname, uemail, upassword):
     conn = get_db_connection()
@@ -83,13 +99,12 @@ def add_member(fname, lname, uemail, upassword):
     if email_id:
         return True
     else:
-        sql_add_member = "INSERT INTO membership (firstname, lastname, user_email, user_password) VALUES (%s, %s, %s, %)"
+        sql_add_member = "INSERT INTO membership (firstname, lastname, user_email, user_password) VALUES (%s, %s, %s, %s)"
         val = (fname, lname, uemail, upassword)
 
     # try:
     cursor.execute(sql_add_member, val)
     conn.commit()
-
     #print('added to db test')
 
     # except mysql.connector.Error as err:
@@ -98,6 +113,28 @@ def add_member(fname, lname, uemail, upassword):
     # finally:
     #     cursor.close()
     #     conn.close()
+
+
+
+
+    def create():
+        return mysql_password
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
