@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, url_for
 from application.data_access import get_all_blogs, add_member
 from application.data_access import get_blog_by_id # keep only one line?
 import os
+import re
 import json
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -26,19 +27,48 @@ def signup_submit():
     error = ""
     error_email_exist = ""
     if request.method == 'POST':
+        userfirstname = request.form.get('userName')
+        userlastname = request.form.get('userLastname')
         useremail = request.form.get('userEmail')
         userpassword = request.form.get('userPassword')
         hashed_password = generate_password_hash(userpassword)
         #print('received')
 
-        if len(useremail) == 0 or len(userpassword) == 0:
-            error = 'Please supply both an email and password'
-        elif add_member(useremail, hashed_password):
+        if len(useremail) == 0 or len(userpassword) == 0 or len(userfirstname) == 0 or len(userlastname) == 0:
+            error = 'Please supply all fields'
+        elif add_member(userfirstname, userlastname, useremail, hashed_password):
             error_email_exist = 'This email address is already part of the family! Please log in to continue.'
+        elif not re.match("^[A-Za-zÀ-ÿ\s'-]+$", userfirstname) or not re.match("^[A-Za-zÀ-ÿ\s'-]+$", userlastname):
+            error = 'First name and last name can only contain letters, spaces, apostrophes (\'), and hyphens (-).'
         else:
-            add_member(useremail, hashed_password)
+            add_member(userfirstname, userlastname, useremail, hashed_password)
             return render_template('signedup.html')
     return render_template('membership.html', title='Sign Up', message = error, message_email_exist = error_email_exist)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def signin_form():
+    return render_template('login.html', title='Login')
+
+
+@app.route('/signin', methods=['GET', 'POST'])
+def signin_submit():
+    error = ""
+    error_invalid_email = ""
+    error_invalid_password = ""
+
+    if request.method == 'POST':
+        useremail = request.form.get('userEmail')
+        userpassword = request.form.get('userPassword')
+        hashed_password = generate_password_hash(userpassword)
+
+        if len(useremail) == 0 or len(userpassword) == 0:
+            error = 'Please supply all fields'
+        elif check_credentials(useremail, hashed_password):
+            error_email_exist = 'Invalid credentials, please try again!'
+        else:
+            return render_template('home.html')
+        return render_template('home.html', title='Sign In', message=error, message_email_exist=error_invalid_email, message_email_exist= error_invalid_password)
 
 
 #              <---- Blogs ---->

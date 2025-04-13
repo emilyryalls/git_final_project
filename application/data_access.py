@@ -70,7 +70,7 @@ def get_blog_by_id(blog_id):
     }
 
 # <----- Add Member ------>
-def add_member(uemail, upassword):
+def add_member(fname, lname, uemail, upassword):
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -83,8 +83,8 @@ def add_member(uemail, upassword):
     if email_id:
         return True
     else:
-        sql_add_member = "INSERT INTO membership (user_email, user_password) VALUES (%s, %s)"
-        val = (uemail, upassword)
+        sql_add_member = "INSERT INTO membership (firstname, lastname, user_email, user_password) VALUES (%s, %s, %s, %)"
+        val = (fname, lname, uemail, upassword)
 
     # try:
     cursor.execute(sql_add_member, val)

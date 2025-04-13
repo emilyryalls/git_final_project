@@ -298,6 +298,21 @@ body.home-page .testimonial-name {
 
 /* SIGN UP PAGE */
 
+
+
+.form-floating>.form-control, .form-floating>.form-control-plaintext, .form-floating>.form-select {
+    height: calc(3.1rem + calc(var(--bs-border-width) * 2));
+    min-height: calc(3.1rem + calc(var(--bs-border-width) * 2));
+
+
+}
+
+
+
+
+
+
+
 .bg-body-secondary {
   background-color: transparent !important;
 }
@@ -318,6 +333,9 @@ body.home-page .testimonial-name {
   flex-direction: row;
   justify-content: center;
   align-items: stretch;
+
+ /* padding-left: 0px;
+  padding-right: 3rem;*/
 }
 
 #modal-body-one{
@@ -366,38 +384,64 @@ body.home-page .testimonial-name {
   color: #333333;
 }
 
+
+
 @media (min-width: 1200px) {
   .modal-dialog {
     --bs-modal-width:1340px
   }
+
 }
-@media (min-width: 992px) {
+
+@media (min-width: 1150px) {
   .modal-dialog {
     --bs-modal-width:1340px
+  }
+    .modal-content {
+    padding-right: 70px;
+    }
 
+  #container-img {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  #container-signup {
+    flex: 1;
+    padding: 2rem;
+    padding-left: 0px;
+    /*background-color: red;*/
   }
 }
-@media (max-width: 992px) {
-  /* .modal-dialog {
-    --bs-modal-width:1340px
 
-  } */
-
+@media (max-width: 1150px) {
   .modal-content{
     flex-wrap: wrap;
+    /*background-color: yellow;*/
+    padding-right: 0px;
+
   }
-  .modal {
+
+  .modal-dialog {
     --bs-modal-width: 500px;
-}
-}
-@media (max-width: 767px) {
-  .modal-content{
-    flex-wrap: wrap;
   }
-  .modal {
-    --bs-modal-width: 500px;
 }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* PROFILE PAGE */
 
