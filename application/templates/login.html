@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block body_content %}
+
+<div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSignin">
+    <div class="modal-dialog modal-xl" role="document" >
+        <div class="modal-content rounded-4 shadow test" id="modal-flex-container">
+            <div class="container" id="container-signup">
+                <div class="modal-header p-3 pb-4 border-bottom-0" id="modal-header-signup">
+                    <h1 class="mb-0 fs-2" id="signupText">Welcome Back! Sign in to access your dashboard.</h1>
+                </div>
+                <div class="modal-body p-5 pt-0">
+                    <form class="" action="signin" method="POST">
+                        <div class="form-floating mb-2">
+                            <input type="email" class="form-control rounded-3" id="userEmail" name="userEmail" placeholder="name@example.com">
+                            <label for="userEmail">Email address <span class="text-danger"> * </span></label>
+                        </div>
+                        {% if message_email_exist %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ message_email_exist }}
+                            </div>
+                        {% endif %}
+                        <div class="form-floating mb-2">
+                            <input type="password" class="form-control rounded-3" id="userPassword" name="userPassword" placeholder="Password">
+                            <label for="userPassword">Password <span class="text-danger"> * </span></label>
+                        </div>
+                        {% if message %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endif %}
+                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" id="signupButton" type="submit">Sign In</button>
+                        <small class="text-body">Dont have an account? become a member!.</small>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
