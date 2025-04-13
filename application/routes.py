@@ -156,5 +156,5 @@ def view_meal_plan():
 @app.route('/workouts', methods=['GET'])
 def view_workout_videos():
     workout_video = get_workout_video()
-    return render_template('video_workouts.html', video=workout_video, title='Workout Videos')
+    return render_template('workout_videos.html', video=workout_video, title='Workout Videos')
 
