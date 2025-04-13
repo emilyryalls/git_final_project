@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block body_content %}
+
+<h1>Workout Videos</h1>
+
+<p>Filter for workouts based on your fitness goal, experience level, and time available!</p>
+
+<section>
+    <div class="row strong">
+        <div class="col-sm">Video Name</div>
+        <div class="col-sm">Video</div>
+        <div class="col-sm">Fitness Goal</div>
+        <div class="col-sm">Experience</div>
+        <div class="col-sm">Time</div>
+    </div>
+    <hr>
+    {% for v_workout_videos in video %}
+    <div class="row">
+        <div class="col-sm">
+
+    <p>{{v_workout_videos.video_name}}</p>
+        </div>
+        <div class="col-sm">
+    <p>{{v_workout_videos.video_link}}</p>
+        </div>
+        <div class="col-sm">
+    <p><strong>{{v_workout_videos.fitness_goal}}</strong></p>
+        </div>
+        <div class="col-sm">
+    <p>{{v_workout_videos.experience}}</p>
+        </div>
+        <div class="col-sm">
+    <p>{{v_workout_videos.time}}</p>
+        </div>
+
+       <hr>
+    </div>
+    {% endfor %}
+ </section>
+
+
+
+{% endblock %}

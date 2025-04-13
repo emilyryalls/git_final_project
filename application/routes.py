@@ -1,7 +1,7 @@
 from application import app
 from flask import render_template, request, redirect, url_for
 
-from application.data_access import get_all_blogs
+from application.data_access import get_all_blogs, get_workout_video
 from application.data_access import get_blog_by_id
 import os
 import json
@@ -149,3 +149,12 @@ def view_meal_plan():
 # @app.route('/create-blog', methods=['GET', 'POST'])
 # def create_blog():
 #     return render_template('create_blog.html')
+
+
+
+# return all workout videos
+@app.route('/workouts', methods=['GET'])
+def view_workout_videos():
+    workout_video = get_workout_video()
+    return render_template('video_workouts.html', video=workout_video, title='Workout Videos')
+
