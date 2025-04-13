@@ -170,3 +170,37 @@ foreign key (goal_id) references goal(goal_id)
 
 select *
 from meal_plan;
+
+
+-- MEMBERS
+
+-- email table
+create table email
+(
+email_id bigint not null primary key auto_increment,
+email_address varchar(250) not null unique
+);
+
+select *
+from email;
+
+-- member table
+create table member
+(
+member_id bigint not null primary key auto_increment,
+first_name varchar(50) not null,
+last_name varchar(100) not null,
+email_id bigint not null,
+foreign key (email_id) references email(email_id),
+date_of_birth date null,
+height decimal(5,2),
+weight decimal(5,2),
+goal_id bigint not null,
+foreign key (goal_id) references goal(goal_id),
+diet_id bigint null,
+foreign key (diet_id) references diet(diet_id),
+profile_pic varchar(500)
+);
+
+select *
+from member;
