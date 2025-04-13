@@ -217,7 +217,7 @@ create table newsletter
 (
 newsletter_id bigint not null primary key auto_increment,
 email_id bigint not null,
-foreign key (email_id) references member(email_id)
+foreign key (email_id) references email(email_id)
 );
 
 select *
@@ -268,13 +268,11 @@ CREATE TABLE blog (
     FOREIGN KEY (category_id) REFERENCES blog_category(category_id)
 );
 
-
-
 INSERT INTO blog (title, author_id, image, summary, content, category_id)
 VALUES (
     'The Power of Consistency in Your Workout Routine',
-    '2',
-    '/static/images/blog_images/blog_1.jpg',
+    '1',
+    'images/blog_img/blog1.jpg',
     'Consistency is the cornerstone of success in fitness. In this post, we’ll explore why making exercise a part of your daily routine is the key to lasting results.',
     'One of the biggest misconceptions in fitness is that you need to work out intensely for hours every single day to achieve results. While it’s true that consistency is critical, it doesn’t have to come with grueling intensity every time. The real power lies in showing up day after day and staying committed, even on the days when motivation is low. Whether you’re a beginner or an advanced fitness enthusiast, creating and sticking to a consistent workout routine will transform your body and mind over time.
 Why Consistency Is More Important Than Intensity It’s tempting to think that the harder you push yourself, the faster you’ll see results. But what’s often overlooked is the fact that our bodies need time to adapt to new exercises. Intense workouts might burn a lot of calories in the short term, but without consistency, those results will be fleeting. In contrast, small, consistent efforts build sustainable progress that sticks.
@@ -294,16 +292,17 @@ Stay accountable and positive through the highs and lows.',
     '1'
 );
 
+
 INSERT INTO blog (title, author_id, image, summary, content, category_id)
 VALUES (
     'Nutrition 101: How to Fuel Your Body for Optimal Performance',
-    '4',
-    '/static/images/blog_images/blog_2.jpg',
+    '2',
+    'images/blog_img/blog2.jpg',
     'Proper nutrition is essential for fueling your body, supporting muscle growth, and enhancing performance. This blog breaks down how to fuel your workouts and recovery to maximize your results.',
     'In the world of fitness, there’s a saying that’s as true as it gets: “You can’t out-train a bad diet.” No matter how hard you work at the gym, your body won’t perform at its best without the proper fuel. Your muscles need a combination of macronutrients—proteins, carbohydrates, and fats—to perform well during your workouts and recover effectively after. Let’s dive into the science behind nutrition and how you can apply it to achieve your fitness goals.
 The Basics of Macronutrients: Your body requires three main macronutrients: protein, carbohydrates, and fats. Each one plays a crucial role in supporting various aspects of your workout routine, from providing energy to helping your muscles recover. Understanding how each of these nutrients works can help you optimize your diet for peak performance.
 Protein: Protein is the building block of muscles. Without it, your body cannot repair or grow muscle fibers after exercise. When you lift weights or engage in intense activity, your muscles sustain tiny tears that need to be repaired. Protein does this job by providing the necessary amino acids to rebuild muscle tissue. Aim to include high-quality protein sources like lean meats (chicken, turkey), fish (salmon, tuna), and plant-based proteins (tofu, quinoa, lentils) in every meal.
-How much protein do you need? That depends on your fitness goals. A good rule of thumb is to consume about 1.2 to 2.0 grams of protein per kilogram of body weight, especially if youre focusing on building muscle.
+How much protein do you need? That depends on your fitness goals. A good rule of thumb is to consume about 1.2 to 2.0 grams of protein per kilogram of body weight, especially if you’re focusing on building muscle.
 Carbohydrates: Carbs are your body’s primary source of energy, especially when it comes to high-intensity workouts. Think of carbs as the fuel in your body’s engine. Complex carbohydrates, such as whole grains, vegetables, and fruits, are great because they release energy slowly, allowing for sustained performance. Simple carbs, on the other hand, provide quick energy, but they don’t keep you fueled for long.
 Before your workout, aim to consume a small serving of complex carbs like oats, sweet potatoes, or brown rice. Afterward, eating a mix of carbs and protein helps replenish glycogen stores and repair muscle damage.
 Fats: Fats often get a bad reputation, but they’re essential for hormone production and cellular health. They also help your body absorb fat-soluble vitamins (A, D, E, and K), which are critical for bone health, immune function, and overall well-being. Include healthy fats like avocado, nuts, seeds, and olive oil in your diet, and don’t shy away from them. Your body needs them for optimal performance.
@@ -321,8 +320,8 @@ Timing your meals around your workouts boosts recovery and results.',
 INSERT INTO blog (title, author_id, image, summary, content, category_id)
 VALUES (
     'Boost Your Motivation: How to Stay Driven During Your Fitness Journey',
-    '1',
-    '/static/images/blog_images/blog_3.jpg',
+    '3',
+    'images/blog_img/blog3.jpg',
     'Staying motivated on your fitness journey can be challenging. In this blog, we dive into the psychology of motivation and provide actionable tips to help you stay driven through every high and low of your fitness journey.',
     'Motivation is often described as the fuel that drives your fitness journey. But anyone who’s been on the fitness path for a while knows that motivation is fickle. There are days when it’s easy to hit the gym and crush your goals, and there are other days when you feel like you can’t get off the couch. If you’ve ever struggled with motivation, you’re not alone—and there are proven strategies to help you stay driven, even on the tough days.
 Understanding Motivation: Intrinsic vs. Extrinsic Motivation can come from two main sources: intrinsic and extrinsic. Intrinsic motivation is when you are driven by internal factors—like the feeling of accomplishment after a great workout or the desire to improve your health. On the other hand, extrinsic motivation comes from external factors, like rewards, praise, or comparison to others.
@@ -348,7 +347,7 @@ INSERT INTO blog (title, author_id, image, summary, content, category_id)
 VALUES (
     'The Science Behind Weight Loss: What You Need to Know',
     '4',
-    'images/blog4.jpg',
+    'images/blog_img/blog4.jpg',
     'Understanding the science behind weight loss can help you make informed decisions about your fitness journey. This blog explores how weight loss works and how to approach it effectively.',
     'Weight loss is a topic that’s often oversimplified. There are countless diets, fads, and quick fixes claiming to offer miraculous results. However, the science behind weight loss is much more complex and involves a deeper understanding of how the body burns fat and processes food. In this blog, we’ll explore the key principles of weight loss and how you can approach it in a healthy, sustainable way.
 The Role of Calories and Energy Balance At its core, weight loss is governed by the principle of energy balance. This means that in order to lose weight, you need to burn more calories than you consume. This is known as a calorie deficit. Your body requires a certain number of calories to maintain basic functions like breathing, digestion, and even sleeping. These are called your basal metabolic rate (BMR).
@@ -371,8 +370,8 @@ Patience and consistency are key—trust the process and focus on the journey.',
 INSERT INTO blog (title, author_id, image, summary, content, category_id)
 VALUES (
     'Fitness for Beginners: How to Start Your Fitness Journey on the Right Foot',
-    '3',
-    'images/blog5.jpg',
+    '1',
+    'images/blog_img/blog5.jpg',
     'Starting your fitness journey can feel overwhelming, but with the right approach, anyone can succeed. This blog provides a beginner-friendly guide to kickstart your fitness routine and stay on track for long-term success.',
     'Starting a fitness journey can be daunting. Whether you’ve never exercised before or have been inactive for a while, the thought of getting started can feel intimidating. But the truth is, everyone has to start somewhere. The key to success is breaking down the process into manageable steps, setting realistic expectations, and building confidence along the way. In this blog, we’ll guide you through the best practices for beginners to ensure you set off on the right foot.
 Start Slow and Build Up Gradually One of the biggest mistakes beginners make is jumping into a rigorous routine too quickly. While enthusiasm is great, overexerting yourself early on can lead to burnout, injury, or discouragement. Instead, begin with short and manageable workouts that focus on building a foundation.
@@ -382,7 +381,7 @@ Set Realistic Goals One of the most powerful ways to stay motivated as a beginne
 For example, a short-term goal could be something like "I will exercise for 30 minutes, three times a week." A long-term goal could be "I want to lose 10 pounds in three months" or "I want to be able to do 10 push-ups by the end of the month."
 Setting these small goals allows you to celebrate milestones along the way and helps you stay focused on progress, not perfection. Tracking your progress, whether through a fitness app or a journal, can provide a sense of accomplishment and motivate you to keep going.
 Focus on Form Over Speed or Weight One of the most important principles in fitness, especially as a beginner, is focusing on form. Whether you’re lifting weights, doing bodyweight exercises, or performing cardio, using proper form ensures you’re getting the maximum benefit from your workout while reducing the risk of injury.
-If youre unsure about your form, consider working with a personal trainer, even for a few sessions. They can help you learn the correct posture and movement patterns for each exercise. Many gyms also offer free form checks or classes that are beginner-friendly, so don’t be afraid to ask for help.
+If you’re unsure about your form, consider working with a personal trainer, even for a few sessions. They can help you learn the correct posture and movement patterns for each exercise. Many gyms also offer free form checks or classes that are beginner-friendly, so don’t be afraid to ask for help.
 Make It Fun and Enjoyable Fitness shouldn’t feel like a punishment—it should be something you enjoy. If you don’t like running, don’t force yourself to run. Instead, try other activities that interest you, like dancing, cycling, or group fitness classes. The more fun you have, the more likely you are to stick with it.
 Explore different types of workouts to find what excites you. Maybe you enjoy yoga for flexibility and relaxation, or perhaps weight training to build strength. You might even try a variety of activities to keep your routine fresh and exciting. When you find what you love, fitness will feel less like a chore and more like a rewarding part of your lifestyle.
 Stay Consistent and Patient As a beginner, it’s easy to expect rapid results. However, remember that real progress takes time. Be patient with yourself and focus on consistency rather than perfection. Even on days when motivation feels low, try to maintain your commitment to your routine. Even a light workout is better than no workout at all.
@@ -401,18 +400,18 @@ Patience and consistency are essential—res',
 INSERT INTO blog (title, author_id, image, summary, content, category_id)
 VALUES (
     'The Importance of Recovery and Injury Prevention in Your Fitness Routine',
-    '3',
-    'images/blog6.jpg',
+    '2',
+    'images/blog_img/blog6.jpg',
     'Recovery is just as important as your workouts. Learn the best practices for recovery and injury prevention to keep your body healthy and performing at its best.',
     'When it comes to fitness, most people focus on the workouts themselves—how hard, how long, and how much they can push their bodies. But one crucial aspect of any successful fitness journey is often overlooked: recovery. Recovery is just as important as the workout itself and is essential for muscle repair, injury prevention, and overall performance improvement.
-Why Recovery Matters When you exercise, you create tiny tears in your muscle fibers. These tears need time to repair and rebuild stronger than before. This process of muscle recovery happens during rest periods, not while youre actively working out. Inadequate recovery can lead to overuse injuries, muscle imbalances, and stalled progress. If you don’t allow your muscles to recover properly, you risk overtraining, which can result in fatigue, decreased performance, and even burnout.
+Why Recovery Matters When you exercise, you create tiny tears in your muscle fibers. These tears need time to repair and rebuild stronger than before. This process of muscle recovery happens during rest periods, not while you’re actively working out. Inadequate recovery can lead to overuse injuries, muscle imbalances, and stalled progress. If you don’t allow your muscles to recover properly, you risk overtraining, which can result in fatigue, decreased performance, and even burnout.
 Types of Recovery There are several types of recovery that contribute to your overall fitness progress. Active recovery involves low-intensity exercises that allow your muscles to move without putting too much strain on them. This could be walking, cycling, or swimming at a relaxed pace. Active recovery helps maintain blood flow to the muscles, aiding in the removal of waste products and delivering nutrients for muscle repair.
 Passive recovery is simply taking a rest day from exercise. This doesn’t mean you should stay completely inactive, but instead engage in activities like stretching, yoga, or foam rolling to promote blood flow to your muscles.
 The Role of Sleep Sleep is one of the most powerful recovery tools your body has. During deep sleep, your body produces growth hormones that help repair and build muscle tissue. Without enough sleep, your recovery is compromised, and your performance will decline. Aim for 7-9 hours of sleep each night to ensure your body has the opportunity to recover fully.
 Nutrition and Hydration for Recovery Your body needs proper nutrition to recover after a workout. Protein is essential for muscle repair, while carbohydrates help replenish glycogen stores in your muscles. Healthy fats, such as omega-3 fatty acids, play a role in reducing inflammation and promoting overall recovery.
 Post-workout nutrition is crucial. Within 30 minutes of finishing your workout, aim to consume a combination of protein and carbs. A protein shake with a banana or a turkey sandwich on whole-grain bread are great examples.
 Hydration also plays a key role in recovery. Water helps transport nutrients to your muscles and removes waste products, so be sure to drink plenty of water throughout the day. If you’ve had an intense workout, consider adding electrolytes to your water to replenish lost minerals.
-Preventing Injuries Injury prevention should be a top priority in any fitness program. Overuse injuries, like sprains, strains, and stress fractures, can derail your progress if youre not careful. To prevent these injuries, it’s important to listen to your body and avoid pushing too hard too quickly.
+Preventing Injuries Injury prevention should be a top priority in any fitness program. Overuse injuries, like sprains, strains, and stress fractures, can derail your progress if you’re not careful. To prevent these injuries, it’s important to listen to your body and avoid pushing too hard too quickly.
 Warm-up before every workout, and incorporate dynamic stretches to prepare your muscles for exercise. After your workout, cool down with static stretches to increase flexibility and reduce muscle tension. Foam rolling can also help reduce tightness and improve mobility, which can prevent injuries in the future.
 Strengthening Weak Areas A balanced workout routine is essential for injury prevention. Focus on all muscle groups, and dont neglect any area of your body. Strengthening weak areas, such as your core or stabilizing muscles, can improve your overall posture and reduce the risk of injury during more intense exercises.
 Key Takeaways:
@@ -424,12 +423,11 @@ Strengthen weak areas and maintain a balanced workout routine.',
     '6'
 );
 
-
 INSERT INTO blog (title, author_id, image, summary, content, category_id)
 VALUES (
     'Fueling Your Body: The Ultimate Nutrition Guide for Fitness Enthusiasts',
-    '4',
-    'images/blog7.jpg',
+    '3',
+    'images/blog_img/blog7.jpg',
     'Proper nutrition is a key pillar of fitness success. This blog dives deep into the foods and strategies that will help you fuel your body for maximum performance, muscle growth, and recovery.',
     'When it comes to fitness, we often focus on the intensity of our workouts and overlook an equally important factor: nutrition. The food you eat plays a pivotal role in your overall performance, muscle growth, fat loss, and recovery. Understanding how to fuel your body with the right nutrients will ensure that your hard work in the gym yields the best possible results.
 Why Nutrition Matters The relationship between exercise and nutrition is a two-way street. On one hand, physical activity requires energy, which comes from the foods you eat. On the other hand, your diet provides the nutrients necessary to repair and build muscle tissue after intense workouts. Simply put, if you’re not fueling your body properly, your fitness results will be limited.
@@ -441,13 +439,13 @@ Fats: Healthy fats are crucial for hormone regulation and joint health. They als
 Micronutrients: Vitamins and Minerals While macronutrients are the stars of the nutrition show, micronutrients—vitamins and minerals—are just as important for overall health and performance. These nutrients help with everything from immune function to muscle contraction and recovery.
 Vitamin D is essential for bone health and muscle function. Spending time in the sun and eating vitamin D-rich foods like fatty fish, eggs, and fortified dairy products can help keep your levels up.
 Magnesium is another important mineral that supports muscle function and reduces muscle cramps. Sources of magnesium include leafy greens, almonds, bananas, and dark chocolate.
-Iron is vital for transporting oxygen to muscles during exercise. Ensure youre getting enough iron from sources like red meat, spinach, lentils, and beans.
+Iron is vital for transporting oxygen to muscles during exercise. Ensure you’re getting enough iron from sources like red meat, spinach, lentils, and beans.
 Don’t forget to drink plenty of water to stay hydrated—especially during and after workouts. Dehydration can impair performance and hinder muscle recovery, so aim to drink water consistently throughout the day.
 Meal Timing for Optimal Performance When you eat is just as important as what you eat. Timing your meals around your workouts can have a big impact on performance and recovery.
 Pre-Workout: Eat a balanced meal 1-2 hours before exercise. This should include complex carbs for energy, protein for muscle support, and a small amount of healthy fat. For example, oatmeal with almond butter and a banana or a turkey sandwich on whole-grain bread.
 Post-Workout: After your workout, your muscles need nutrients to repair and grow. Aim to consume a meal or snack with both protein and carbohydrates within 30-60 minutes after exercise. This replenishes glycogen stores and supports muscle repair. A protein shake with a piece of fruit or a chicken and quinoa bowl are great options.
 The Role of Supplements While food should be your primary source of nutrition, certain supplements can help fill any gaps in your diet. Popular supplements for fitness enthusiasts include:
-Protein powder: If youre not getting enough protein through whole foods, protein powder can be an easy way to meet your needs.
+Protein powder: If you’re not getting enough protein through whole foods, protein powder can be an easy way to meet your needs.
 ',
     '2'
 );
@@ -455,10 +453,10 @@ Protein powder: If youre not getting enough protein through whole foods, protein
 INSERT INTO blog (title, author_id, image, summary, content, category_id)
 VALUES (
     'Fitness Challenges: Push Your Limits and Stay Motivated',
-    '2',
-    'images/blog8.jpg',
+    '4',
+    'images/blog_img/blog8.jpg',
     'Fitness challenges can be a fun and motivating way to level up your workouts. Learn how to create or participate in fitness challenges to push your limits and stay motivated.',
-    'Fitness challenges are an excellent way to add excitement, variety, and a sense of purpose to your fitness routine. Whether youre aiming to break personal records, build strength, or simply stay motivated, fitness challenges offer an opportunity to push your limits and test your commitment to your fitness goals. In this blog, we’ll explore the benefits of fitness challenges and how to incorporate them into your routine.
+    'Fitness challenges are an excellent way to add excitement, variety, and a sense of purpose to your fitness routine. Whether you’re aiming to break personal records, build strength, or simply stay motivated, fitness challenges offer an opportunity to push your limits and test your commitment to your fitness goals. In this blog, we’ll explore the benefits of fitness challenges and how to incorporate them into your routine.
 Why Participate in Fitness Challenges? Participating in fitness challenges can be incredibly motivating, especially when you’re feeling stuck in a workout rut. These challenges often push you outside your comfort zone and force you to aim higher, which can reignite your passion for fitness.
 There are numerous reasons why fitness challenges are beneficial:
 Accountability: A challenge holds you accountable, whether you’re doing it alone or with a group. Committing to a challenge makes you more likely to follow through on your workouts, knowing there’s a defined end goal.
@@ -487,8 +485,8 @@ Invite a friend',
 INSERT INTO blog (title, author_id, image, summary, content, category_id)
 VALUES (
     'Couch to 5K: How to Go from Couch Potato to Running 5K',
-    '3',
-    'images/blog9.jpg',
+    '1',
+    'images/blog_img/blog9.jpg',
     ' If youve ever dreamed of running a 5K but don’t know where to start, the Couch to 5K program is the perfect way to ease into running. This blog walks you through the Couch to 5K program, offering tips and motivation for those ready to go from the couch to the finish line.',
     'The idea of running a 5K can seem like an impossible goal, especially if you’ve never run before. But the Couch to 5K (C25K) program has helped thousands of people just like you go from being sedentary to crossing the finish line of their first race. It’s a gradual, structured approach designed to ease you into running, helping you build endurance without the risk of injury or burnout.
 What is Couch to 5K? Couch to 5K is a popular running program designed to get you running 3.1 miles (5 kilometers) in just nine weeks. It’s perfect for beginners or people who have never run before, as it starts with a combination of walking and jogging and gradually increases your running intervals.
@@ -520,8 +518,8 @@ Celebrate your progress, and don’t be afraid to take it one step at a time.',
 INSERT INTO blog (title, author_id, image, summary, content, category_id)
 VALUES (
     'The Truth About Weight Loss: Sustainable Strategies for Lasting Results',
-    '4',
-    'images/blog10.jpg',
+    '2',
+    'images/blog_img/blog10.jpg',
     'Losing weight can be overwhelming with all the conflicting advice out there. This blog provides realistic and sustainable strategies for weight loss that focus on a balanced lifestyle rather than quick fixes or fad diets.',
     'When it comes to weight loss, there’s no shortage of trendy diets, quick fixes, and misleading advice. But the truth is, sustainable weight loss is not about restrictive diets or extreme workouts. It’s about creating healthy habits that you can maintain in the long term.
 If you’re tired of bouncing from one fad diet to the next, this blog is for you. We’re going to break down the truth about weight loss and provide strategies that actually work for long-term success.
@@ -548,7 +546,7 @@ INSERT INTO blog (title, author_id, image, summary, content, category_id)
 VALUES (
     'Developing a Champion Mindset: How to Stay Motivated Even When You Feel Like Quitting',
     '1',
-    'images/blog11.jpg',
+    'images/blog_img/blog11.jpg',
     ' Motivation can be fleeting, but developing a champion mindset can help you push through difficult times. This blog explains how to stay motivated and focused on your fitness goals, even when obstacles arise.',
     'When you first begin a fitness journey, it’s easy to be motivated. You’re excited, full of energy, and ready to hit the gym. But over time, that initial excitement fades, and you start facing the inevitable struggles—whether it’s a lack of time, feeling tired, or simply not seeing results as quickly as you’d like. This is when developing a champion mindset becomes essential.
 What is a Champion Mindset? A champion mindset is all about resilience, focus, and mental strength. It’s the ability to stay committed to your goals even when things get tough. Whether you’re facing self-doubt, setbacks, or fatigue, a champion mindset helps you overcome obstacles and continue moving forward.
@@ -568,8 +566,8 @@ Reframe negative thoughts and surround yourself with supportive people to stay m
 INSERT INTO blog (title, author_id, image, summary, content, category_id)
 VALUES (
     'Mastering Motivation: How to Stay Committed to Your Fitness Goals',
-    '1',
-    'images/blog12.jpg',
+    '4',
+    'images/blog_img/blog12.jpg',
     'Staying motivated can be challenging, especially when you’re not seeing immediate results. In this blog, we explore strategies for staying committed to your fitness goals and maintaining motivation over time.',
     'We’ve all been there—feeling highly motivated at the start of a fitness journey, but struggling to stay on track as time goes on. The key to long-term success isn’t just about having motivation at the start, but finding ways to stay committed when motivation wanes.
 1. Define Your "Why" One of the most powerful ways to stay motivated is to connect with your deeper "why." Why do you want to get fit? Is it for better health, more energy, to look and feel your best, or something else? When you connect with your deeper motivation, you create a stronger emotional attachment to your goals, making it easier to stay committed.
@@ -589,8 +587,8 @@ Surround yourself with a supportive fitness community to keep you accountable.',
 INSERT INTO blog (title, author_id, image, summary, content, category_id)
 VALUES (
     '10 Simple Habits to Boost Your Health & Wellbeing Every Day',
-    '1',
-    'images/blog13.jpg',
+    '3',
+    'images/blog_img/blog13.jpg',
     'Small daily habits can lead to massive improvements in your overall health and wellbeing. In this blog, we explore 10 simple, sustainable habits that can help you feel your best physically and mentally.',
     'Taking care of your health and wellbeing doesn’t have to be overwhelming. In fact, the smallest changes to your daily routine can make the biggest impact over time. In this blog, we’re diving into 10 simple habits that you can incorporate into your everyday life to boost both your physical and mental health.
 1. Start Your Day with Hydration It’s easy to forget, but hydration is key to good health. After a night of sleep, your body is in need of water to kickstart its processes. Drinking a glass of water first thing in the morning helps to rehydrate your body, boosts energy levels, and supports digestion. Try adding a slice of lemon to your water for extra detox benefits.
@@ -614,7 +612,7 @@ INSERT INTO blog (title, author_id, image, summary, content, category_id)
 VALUES (
     'How to Build a Healthy Mind-Body Connection for Total Wellbeing',
     '1',
-    'images/blog14.jpg',
+    'images/blog_img/blog14.jpg',
     'Your mind and body are deeply connected, and nurturing this connection is essential for total wellbeing. This blog dives into how you can strengthen the mind-body connection to enhance both your mental and physical health.',
     'When it comes to overall wellbeing, many people focus solely on physical health or mental health, but the truth is that your mind and body are interconnected. The way you think, feel, and perceive the world directly impacts how your body functions, and vice versa. Developing a healthy mind-body connection can lead to improved mental clarity, emotional stability, and physical vitality.
 In this blog, we’ll explore the importance of the mind-body connection and offer practical tips to help you nurture this bond for a healthier, more balanced life.
@@ -634,3 +632,5 @@ Sleep, gratitude, and regular self-care are essential components of maintaining 
 Prioritize activities that promote both physical and mental health to achieve long-term wellbeing.',
     '7'
     );
+
+select * from blog
