@@ -230,5 +230,12 @@ def update_profile():
 # return all workout videos
 @app.route('/workouts', methods=['GET'])
 def view_workout_videos():
-    workout_video = get_workout_video()
+    # request is a special object in flask that gives you access to data sent by the client (browser)
+    # request.args is a dictionary-like object that holds all of the querey paramteres from the URL
+    # .get(goal) retrieves the value of the goal parameter from the URL
+    # goal is a parameter defined in data_access.py
+    goal = request.args.get('goal')
+    experience = request.args.get('experience')
+    time = request.args.get('time')
+    workout_video = get_workout_video(goal, experience, time)
     return render_template('workout_videos.html', video=workout_video, title='Workout Videos')

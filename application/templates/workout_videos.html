@@ -6,6 +6,44 @@
 
 <p>Filter for workouts based on your fitness goal, experience level, and time available!</p>
 <br>
+
+<form method="GET" action="/workouts" class="mb-4">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="goal">Fitness Goal</label>
+            <select class="form-control" name="goal" id="goal">
+                <option value="">All</option>
+                <option value="Build muscle">Build muscle</option>
+                <option value="Improve stamina">Improve Stamina</option>
+                <option value="Lose weight">Lose Weight</option>
+                <option value="Improve core strength">Improve Core Strength</option>
+                <!-- Add more goals as needed -->
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="experience">Experience</label>
+            <select class="form-control" name="experience" id="experience">
+                <option value="">All</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="time">Time (Minutes)</label>
+            <select class="form-control" name="time" id="time">
+                <option value="">All</option>
+                <option value="15 mins">15 mins</option>
+                <option value="30 mins">30 mins</option>
+                <option value="Over 30 mins">Over 30 mins</option>
+            </select>
+        </div>
+        <div class="col-md-3 align-self-end">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+</form>
+
 <section>
     <div class="row strong">
         <div class="col-sm">Video Name</div>
@@ -21,9 +59,11 @@
 
     <p>{{v_workout_videos.video_name}}</p>
         </div>
-        <div class="col-sm">
-    <p>{{v_workout_videos.video_link}}</p>
-        </div>
+            <div class="col-sm">
+            {% if v_workout_videos.video_link %}
+            <iframe width="240" height="135" src="{{ v_workout_videos.video_link }}"</iframe>
+            {% endif %}
+            </div>
         <div class="col-sm">
     <p><strong>{{v_workout_videos.fitness_goal}}</strong></p>
         </div>

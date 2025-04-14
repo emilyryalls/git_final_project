@@ -100,7 +100,7 @@ values
 ('Full Body Workout - 45 mins', 'https://www.youtube.com/watch?v=ILodiqpiUsc', 3, 2, 3),
 ('Killer HIIT Full Body Workout - 15 mins', 'https://www.youtube.com/watch?v=L0Ji6oTAovo', 3, 3, 1),
 ('High Intensity Full Body Workout - 30 mins', 'https://www.youtube.com/watch?v=aaU3U1hYAo4', 3, 3, 2),
-('Super Sweaty HIIT Special - 1 hour', 'https://youtube.com/watch?v=yrNU9Q1XHYw', 3, 3, 3),
+('Super Sweaty HIIT Special - 1 hour', 'https://www.youtube.com/watch?v=yrNU9Q1XHYw', 3, 3, 3),
 ('Pilates Workout for Beginners - 15 mins', 'https://www.youtube.com/watch?v=tov0o3mi5h8', 4, 1, 1),
 ('Beginner Pilates at Home - 30 mins', 'https://www.youtube.com/watch?v=2mkR5LPhOC4', 4, 1, 2),
 ('Full Body Pilates Workout for Beginners - 45 mins', 'https://www.youtube.com/watch?v=2e0byzM5zkQ', 4, 1, 3),
