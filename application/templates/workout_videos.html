@@ -30,7 +30,7 @@
             </select>
         </div>
         <div class="col-md-3">
-            <label for="time">Time (Minutes)</label>
+            <label for="time">Time</label>
             <select class="form-control" name="time" id="time">
                 <option value="">All</option>
                 <option value="15 mins">15 mins</option>
@@ -61,11 +61,11 @@
         </div>
             <div class="col-sm">
             {% if v_workout_videos.video_link %}
-            <iframe width="240" height="135" src="{{ v_workout_videos.video_link }}"</iframe>
+            <iframe width="240" height="135" src="{{ v_workout_videos.video_link }}"></iframe>
             {% endif %}
             </div>
         <div class="col-sm">
-    <p><strong>{{v_workout_videos.fitness_goal}}</strong></p>
+    <p>{{v_workout_videos.fitness_goal}}</p>
         </div>
         <div class="col-sm">
     <p>{{v_workout_videos.experience}}</p>
