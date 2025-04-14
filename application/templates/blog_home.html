@@ -1,84 +1,151 @@
 {% extends "layout.html" %}
 
+<!--&lt;!&ndash; Container for the page content &ndash;&gt;-->
+<!--<div class="container mt-5">-->
+<!--    <h1 class="text-center mb-4">R.I.S.E. Fitness Blog</h1>-->
+<!--    <p class="lead text-center mb-5">Welcome to the R.I.S.E Fitness Blog – your go-to hub for all things health, wellness, and motivation. Whether you're looking for clean eating tips, mindset shifts, killer workout ideas, or just a little extra inspiration to fuel your fitness journey, you’ve come to the right place. Here, we dive deep into everything that helps you Rise—physically, mentally, and emotionally. Our blog is packed with expert insights, real-life stories, and actionable advice to help you show up as your strongest self, inside and out. Let’s grow, sweat, and thrive—together.</p>-->
+
+<!--    &lt;!&ndash; All blogs section &ndash;&gt;-->
+<!--    <h2 class="text-center mt-5 mb-4">Explore our Blogposts</h2>-->
+
+<!--    &lt;!&ndash; Filter to pick category for blogs &ndash;&gt;-->
+<!--    <div class="container mb-5">-->
+<!--        <form method="GET" action="{{ url_for('blogs') }}">-->
+<!--            <div class="row">-->
+<!--                &lt;!&ndash; Dropdown for selecting a category &ndash;&gt;-->
+<!--                <div class="col-md-6">-->
+<!--                   <select name="category" class="form-select" aria-label="Select category">-->
+<!--                        <option value="">🏋️‍♀️ Select a category 🏋️‍♀️</option>-->
+<!--                        <option value="Workout Routines"> 🏋️‍♂️ Workout Routines</option>-->
+<!--                        <option value="Nutrition"> 🥗 Nutrition</option>-->
+<!--                        <option value="Mindset & Motivation"> 🧠 Mindset & Motivation</option>-->
+<!--                        <option value="Weight Loss"> ⚖️ Weight Loss</option>-->
+<!--                        <option value="Fitness for Beginners"> 👟 Fitness for Beginners</option>-->
+<!--                        <option value="Recovery & Injury Prevention">💪 Recovery & Injury Prevention</option>-->
+<!--                        <option value="Health & Wellness">🌿 Health & Wellness</option>-->
+<!--                        <option value="Fitness Challenges">🏆 Fitness Challenges</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; Submit button for the filter form &ndash;&gt;-->
+<!--                <div class="col-md-6">-->
+<!--                    <button type="submit" class="btn btn-primary">Filter Your Next Read! 🔥</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+
+<!--   &lt;!&ndash; Separate container for the Blog cards &ndash;&gt;-->
+<!--    <div class="container mb-5">-->
+<!--        <div class="row">-->
+<!--            &lt;!&ndash; Loop over all blog objects and display them using a Jinja loop &ndash;&gt;-->
+<!--            {% for blogs in blog_list %}-->
+<!--            <div class="col-md-4 mb-4">-->
+<!--                &lt;!&ndash; Wrap the entire card with a link to the view_blog page &ndash;&gt;-->
+<!--                <a href="{{ url_for('view_blog', blog_id=blogs.id) }}" class="text-decoration-none">-->
+<!--                    &lt;!&ndash; Blog card with flexible height and vertical layout &ndash;&gt;-->
+<!--                    <div class="card h-100 d-flex flex-column shadow-lg border-0">-->
+<!--                        &lt;!&ndash; Blog image at the top of the card &ndash;&gt;-->
+<!--                        <img src="{{ url_for('static', filename=blogs.image) }}" class="card-img-top" style="height: 300px; object-fit: cover;">-->
+<!--                        &lt;!&ndash; Card body that holds the blog title, summary &ndash;&gt;-->
+<!--                        <div class="card-body d-flex flex-column">-->
+<!--                            &lt;!&ndash; Blog title &ndash;&gt;-->
+<!--                            <h5 class="card-title text-center">{{ blogs.title }}</h5>-->
+<!--                            &lt;!&ndash; Short summary of the blog &ndash;&gt;-->
+<!--                            <p class="card-text">{{ blogs.summary }}</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </a>-->
+<!--            </div>-->
+<!--            {% endfor %}-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+<!--    &lt;!&ndash; Sign up for regular blog updates &#45;&#45; Could this perhaps be a feature for all the members? instead of signing up just for the blogs, once they have signed up they will receive blog's updates? &ndash;&gt;-->
+<!--    <div class="row mt-4">-->
+<!--        <div class="col-12 text-center">-->
+<!--             &lt;!&ndash; Section header for the sign-up prompt &ndash;&gt;-->
+<!--            <h5 class="font-weight-bold mb-3">Sign up for Exclusive Updates and Tips!</h5>-->
+<!--            <form action="#" method="POST" class="d-flex justify-content-center">-->
+<!--                <input type="email" class="form-control w-50" placeholder="Enter your email..." required>-->
+<!--                &lt;!&ndash; Submit button for the form &ndash;&gt;-->
+<!--                <button type="submit" class="btn btn-success ml-2">Sign Up</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="text-center mt-5">-->
+<!--        <p class="font-weight-bold ">Keep pushing yourself to RISE, and be stronger each day!</p>-->
+<!--    </div>-->
+<!--</div>-->
+
+
 {% block body_content %}
+<div class="container py-5">
+    <!-- Page intro -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">R.I.S.E. Fitness Blog</h1>
+        <p class="lead mx-auto" style="max-width: 800px;">
+            Your go-to hub for all things health, wellness, and motivation. From clean eating and mindset shifts to killer workouts and self-growth, find everything you need to RISE – physically, mentally, and emotionally.
+        </p>
+    </div>
 
-<!-- Container for the page content -->
-<div class="container mt-5">
-    <h1 class="text-center mb-4">R.I.S.E. Fitness Blog</h1>
-    <p class="lead text-center mb-5">Welcome to the R.I.S.E Fitness Blog – your go-to hub for all things health, wellness, and motivation. Whether you're looking for clean eating tips, mindset shifts, killer workout ideas, or just a little extra inspiration to fuel your fitness journey, you’ve come to the right place. Here, we dive deep into everything that helps you Rise—physically, mentally, and emotionally. Our blog is packed with expert insights, real-life stories, and actionable advice to help you show up as your strongest self, inside and out. Let’s grow, sweat, and thrive—together.</p>
-
-    <!-- All blogs section -->
-    <h2 class="text-center mt-5 mb-4">All Blogs</h2>
-
-    <!-- Filter to pick category for blogs -->
-    <div class="container mb-5">
+    <!-- Category filter -->
+    <div class="row justify-content-center mb-5">
+    <div class="col-md-6 text-center">
         <form method="GET" action="{{ url_for('blogs') }}">
-            <div class="row">
-                <!-- Dropdown for selecting a category -->
-                <div class="col-md-6">
-                   <select name="category" class="form-select" aria-label="Select category">
-                        <option value="">🏋️‍♀️ Select a category 🏋️‍♀️</option>
-                        <option value="Workout Routines"> 🏋️‍♂️ Workout Routines</option>
-                        <option value="Nutrition"> 🥗 Nutrition</option>
-                        <option value="Mindset & Motivation"> 🧠 Mindset & Motivation</option>
-                        <option value="Weight Loss"> ⚖️ Weight Loss</option>
-                        <option value="Fitness for Beginners"> 👟 Fitness for Beginners</option>
-                        <option value="Recovery & Injury Prevention">💪 Recovery & Injury Prevention</option>
-                        <option value="Health & Wellness">🌿 Health & Wellness</option>
-                        <option value="Fitness Challenges">🏆 Fitness Challenges</option>
-                    </select>
-                </div>
-                <!-- Submit button for the filter form -->
-                <div class="col-md-6">
-                    <button type="submit" class="btn btn-primary">Filter Your Next Read! 🔥</button>
-                </div>
+            <!-- Category dropdown -->
+            <div class="mb-3">
+                <select name="category" class="form-select w-75 mx-auto" aria-label="Select category">
+                    <option value="" disabled selected hidden>🏋️‍♀️ Filter by Category</option>
+                    <option value="Workout Routines">🏋️‍♂️ Workout Routines</option>
+                    <option value="Nutrition">🥗 Nutrition</option>
+                    <option value="Mindset & Motivation">🧠 Mindset & Motivation</option>
+                    <option value="Weight Loss">⚖️ Weight Loss</option>
+                    <option value="Fitness for Beginners">👟 Fitness for Beginners</option>
+                    <option value="Recovery & Injury Prevention">💪 Recovery & Injury Prevention</option>
+                    <option value="Health & Wellness">🌿 Health & Wellness</option>
+                    <option value="Fitness Challenges">🏆 Fitness Challenges</option>
+                </select>
             </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="cta-button">Show Blogs</button>
         </form>
-    </div>
-
-   <!-- Separate container for the Blog cards -->
-    <div class="container mb-5">
-        <div class="row">
-            <!-- Loop over all blog objects and display them using a Jinja loop -->
-            {% for blogs in blog_list %}
-            <div class="col-md-4 mb-4">
-                <!-- Wrap the entire card with a link to the view_blog page -->
-                <a href="{{ url_for('view_blog', blog_id=blogs.id) }}" class="text-decoration-none">
-                    <!-- Blog card with flexible height and vertical layout -->
-                    <div class="card h-100 d-flex flex-column shadow-lg border-0">
-                        <!-- Blog image at the top of the card -->
-                        <img src="{{ url_for('static', filename=blogs.image) }}" class="card-img-top" style="height: 300px; object-fit: cover;">
-                        <!-- Card body that holds the blog title, summary -->
-                        <div class="card-body d-flex flex-column">
-                            <!-- Blog title -->
-                            <h5 class="card-title text-center">{{ blogs.title }}</h5>
-                            <!-- Short summary of the blog -->
-                            <p class="card-text">{{ blogs.summary }}</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-
-
-    <!-- Sign up for regular blog updates -- Could this perhaps be a feature for all the members? instead of signing up just for the blogs, once they have signed up they will receive blog's updates? -->
-    <div class="row mt-4">
-        <div class="col-12 text-center">
-             <!-- Section header for the sign-up prompt -->
-            <h5 class="font-weight-bold mb-3">Sign up for Exclusive Updates and tips!</h5>
-            <form action="#" method="POST" class="d-flex justify-content-center">
-                <input type="email" class="form-control w-50" placeholder="Enter your email..." required>
-                <!-- Submit button for the form -->
-                <button type="submit" class="btn btn-success ml-2">Sign Up</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="text-center mt-5">
-        <p class="font-weight-bold ">Keep pushing yourself to R.I.S.E, stronger each day!</p>
     </div>
 </div>
 
+    <!-- Blog cards -->
+    <h2 class="text-center mb-4">Explore Our Latest Posts</h2>
+    <div class="row g-4">
+        {% for blogs in blog_list %}
+        <div class="col-md-4">
+            <a href="{{ url_for('view_blog', blog_id=blogs.id) }}" class="text-decoration-none text-dark">
+                <div class="card h-100 shadow border-0">
+                    <img src="{{ url_for('static', filename=blogs.image) }}" class="card-img-top" style="height: 250px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-center fw-semibold">{{ blogs.title }}</h5>
+                        <p class="card-text small text-muted">{{ blogs.summary }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Subscribe section -->
+    <div class="rounded p-5 mt-5 text-center shadow-sm" style="background-color: #ffe3dd;">
+        <h4 class="fw-bold mb-3">Stay Inspired with Exclusive Updates!</h4>
+        <p class="text-muted mb-4">Join the R.I.S.E. community to receive motivation, tips, and blog updates directly in your inbox.</p>
+        <form action="{{ url_for('subscribe') }}" method="POST" class="d-flex justify-content-center flex-wrap gap-3">
+            <input type="email" name="email" class="form-control w-50" placeholder="Enter your email" required>
+            <button type="submit" class="cta-button">Subscribe</button>
+        </form>
+    </div>
+
+    <!-- Motivational footer quote -->
+    <div class="text-center mt-5">
+        <p class="fw-semibold fst-italic">Keep showing up. Keep rising. Stronger every day. 💪🏾</p>
+    </div>
+</div>
 {% endblock %}

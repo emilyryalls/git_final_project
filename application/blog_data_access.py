@@ -3,9 +3,6 @@ import sys
 import os
 import json
 
-from unicodedata import category
-
-
 if sys.platform == "win32":
     mysql_password = "password"
 else:
@@ -21,41 +18,77 @@ def get_db_connection():
 
 
 # <----- Get all blog function ----->
-def get_all_blogs(category=None):
-    # Connect to the MySQL database
+# def get_all_blogs(category_id=None):
+#     # Connect to the MySQL database
+#     conn = get_db_connection()
+#     cursor = conn.cursor()
+#
+#     # Check if a category was provided from the filter dropdown
+#     if category_id:
+#         # SQL query to fetch blogs that match the selected category
+#         sql_query_category = "SELECT blog_id, title, summary, image FROM blog WHERE category_id = %s"
+#         # Execute the query with category as parameter (MUST be a tuple)
+#         cursor.execute(sql_query_category, (category_id,))
+#     else:
+#         # If no category selected, fetch all blogs
+#         sql_query = "SELECT blog_id, title, summary, image FROM blog"
+#         cursor.execute(sql_query)
+#
+#     # Fetch all results from the executed query
+#     result = cursor.fetchall()
+#
+#     blog_list = []
+#     # Convert raw DB rows into a list of blog dictionaries
+#     for item in result:
+#         blog_list.append({'id': item[0], 'title': item[1], 'summary': item[2], 'image': item[3]})
+#
+#     # Return the list
+#     return blog_list
+
+def get_all_blogs(category_name=None):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # Check if a category was provided from the filter dropdown
-    if category:
-        # SQL query to fetch blogs that match the selected category
-        sql_query_category = "SELECT id, title, summary, image FROM blog WHERE category = %s"
-        # Execute the query with category as parameter (MUST be a tuple)
-        cursor.execute(sql_query_category, (category,))
+    if category_name:
+        # First, get the category_id that matches the given name
+        cursor.execute("SELECT category_id FROM blog_category WHERE category = %s", (category_name,))
+        result = cursor.fetchone()
+
+        # If category doesn't exist, return an empty list
+        if result is None:
+            return []
+
+        category_id = result[0]
+
+        # Now use that ID to fetch the blogs
+        sql_query = "SELECT blog_id, title, summary, image FROM blog WHERE category_id = %s"
+        cursor.execute(sql_query, (category_id,))
     else:
-        # If no category selected, fetch all blogs
-        sql_query = "SELECT id, title, summary, image FROM blog"
+        # If no category is selected, fetch all blogs
+        sql_query = "SELECT blog_id, title, summary, image FROM blog"
         cursor.execute(sql_query)
 
-    # Fetch all results from the executed query
     result = cursor.fetchall()
 
     blog_list = []
-    # Convert raw DB rows into a list of blog dictionaries
     for item in result:
         blog_list.append({'id': item[0], 'title': item[1], 'summary': item[2], 'image': item[3]})
 
-    # Return the list
     return blog_list
-
 
 # <----- Get singular blog ------>
 def get_blog_by_id(blog_id):
     # Establish a connection to the database
     conn = get_db_connection()
     cursor = conn.cursor()
-    # Execute the query to get the blog based on the blog ID
-    cursor.execute("SELECT id, title, summary, image, content, author, created_at FROM blog WHERE id = %s", (blog_id,))
+    # Execute the query to get the blog based on the blog ID, and join to get the author's name
+    sql = """
+        SELECT b.blog_id, b.title, b.summary, b.image, b.content, a.author_name, b.created_at
+        FROM blog b
+        JOIN blog_author a ON b.author_id = a.author_id
+        WHERE b.blog_id = %s
+    """
+    cursor.execute(sql, (blog_id,))
 
     # Fetch the result
     blog = cursor.fetchone()
@@ -91,7 +124,7 @@ def add_member(fname, lname, uemail, upassword):
     cursor = conn.cursor()
 
     #to be changed for real DB values
-    sql_check_email = "SELECT id FROM membership WHERE user_email = %s"
+    sql_check_email = "SELECT member_id FROM membership WHERE user_email = %s"
     cursor.execute(sql_check_email, (uemail,))
 
     email_id = cursor.fetchone()

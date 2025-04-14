@@ -181,6 +181,8 @@ email_id bigint not null primary key auto_increment,
 email_address varchar(250) not null unique
 );
 
+INSERT INTO email (email_id, email_address) VALUES (1, 'zara.smith@example.com');
+
 select *
 from email;
 
@@ -199,8 +201,18 @@ goal_id bigint not null,
 foreign key (goal_id) references goal(goal_id),
 diet_id bigint null,
 foreign key (diet_id) references diet(diet_id),
-profile_pic varchar(500)
+experience_id bigint,
+foreign key (experience_id) references experience(experience_id),
+profile_pic varchar(500),
+member_since timestamp default current_timestamp
 );
+
+INSERT INTO member (first_name, last_name, email_id, date_of_birth, height, weight, goal_id, diet_id, experience_id, profile_pic)
+VALUES ('Zara', 'Smith', 1, '1995-08-12', 165.00, 60.50, 1, 1, 1, 'static/images/zara.jpeg'
+);
+
+select *
+from member;
 
 
 -- password table

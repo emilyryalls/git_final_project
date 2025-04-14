@@ -1,13 +1,16 @@
 from application import app
+import mysql.connector
 from flask import render_template, request, redirect, url_for, flash, session
-from application.data_access import get_all_blogs, add_member, get_password_by_email, get_blog_by_id, get_workout_video
+from application.blog_data_access import get_db_connection, add_member, get_password_by_email, get_all_blogs, get_blog_by_id, get_workout_video
 import os
 import re
 import json
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from application.user_data_access import get_user_by_id, update_profile_info
+from application.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences
+
+
 
 @app.route('/')
 @app.route('/home')
@@ -15,7 +18,7 @@ def home():
     # session['SignIn'] = False
     return render_template('home.html', title='Home')
 
-
+# <---- Sign up / membership ---->
 @app.route('/membership', methods=['GET'])
 def signup_form():
     return render_template('membership.html', title='Membership')
@@ -45,6 +48,7 @@ def signup_submit():
     return render_template('membership.html', title='Sign Up', message = error, message_email_exist = error_email_exist)
 
 
+# <---- Login.logout ---->
 @app.route('/login', methods=['GET', 'POST'])
 def signin_form():
     return render_template('login.html', title='Login')
@@ -77,8 +81,7 @@ def signin_submit():
     return render_template('login.html', title='Sign In')
 
 
-#              <---- Blogs ---->
-
+# <---- Blogs ---->
 # <-- all blogs and filter-->
 @app.route('/blog_home', methods=['GET'])
 def blogs():
@@ -106,7 +109,51 @@ def view_blog(blog_id):
     return render_template('view_blog.html', blog=blog)
 
 
-#           <---- Meal planner ---->
+# <--Newsletter subscription-->
+@app.route('/subscribe', methods=['POST'])
+def subscribe():
+    email = request.form.get('email')
+
+    if not email:
+        flash("Please enter a valid email address.")
+        return redirect(url_for('blogs'))  # Redirect back to blogs page
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        # Check if the email already exists
+        cursor.execute("SELECT email_id FROM email WHERE email_address = %s", (email,))
+        existing = cursor.fetchone()
+
+        if existing:
+            email_id = existing[0]
+        else:
+            # Add to email table
+            cursor.execute("INSERT INTO email (email_address) VALUES (%s)", (email,))
+            conn.commit()
+            email_id = cursor.lastrowid
+
+        # Insert into newsletter table (if not already subscribed)
+        cursor.execute("SELECT * FROM newsletter WHERE email_id = %s", (email_id,))
+        already_subscribed = cursor.fetchone()
+
+        if not already_subscribed:
+            cursor.execute("INSERT INTO newsletter (email_id) VALUES (%s)", (email_id,))
+            conn.commit()
+
+        flash("🎉 Thanks for subscribing!")
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        flash("❌ Something went wrong. Please try again.")
+    finally:
+        cursor.close()
+        conn.close()
+
+    return redirect(url_for('blogs'))  # Go back to the blog page after subscribing
+
+
+# <---- Meal planner ---->
 
 # Directory to store user meal plans
 USER_MEAL_PLANS_DIR = os.path.join(os.path.dirname(__file__), 'user_meal_plans')
@@ -189,13 +236,7 @@ def view_meal_plan():
     return render_template('view_meal_plan.html', meal_plan=meal_plan, plan_name=plan_name)
 
 
-# Fitness goals list - to be removed once we have database
-fitness_goals = [
-    "Build Muscle",
-    "Improve Stamina",
-    "Lose Weight",
-    "Tone Up"
-]
+# <---- Profile and profile settings ---->
 
 # Route to display the user profile
 @app.route("/profile", methods=["GET"])
@@ -206,27 +247,47 @@ def profile():
     return render_template("profile.html", user=user)
 
 
-# Route to edit profile details on settings page
+# Route to get profile settings page as well as to edit the profile details on it
 @app.route("/profile/settings", methods=["GET", "POST"])
-def update_profile():
-    # TEMP: Assume user_id = 1 for development/testing
-    user_id = 1
+def profile_settings():
+    user_id = 1  # TEMP: until login system is in place
     user = get_user_by_id(user_id)
 
+    fitness_goals = get_all_goals()
+    experiences = get_all_experience_levels()
+    diets = get_all_diets()
 
     if request.method == "POST":
-        dob = request.form.get("dob")
-        height = request.form.get("height")
-        weight = request.form.get("weight")
-        goal = request.form.get("goal")
+        form_type = request.form.get("form_type")
 
-        update_profile_info(user_id, dob, height, weight, goal)
-        flash("Profile updated successfully!")
-        return redirect(url_for("profile"))
+        if form_type == "account_info":
+            # Just for future expansion (currently not updating these fields)
+            dob = request.form.get("dob")
+            update_dob(user_id, dob)  # Optional: make this function
 
-    return render_template("profile_settings.html", user=user, fitness_goals=fitness_goals)
+        elif form_type == "body_metrics":
+            height = request.form.get("height")
+            weight = request.form.get("weight")
+            update_height_weight(user_id, height, weight)
 
+        elif form_type == "preferences":
+            goal = request.form.get("goal")
+            experience = request.form.get("experience")
+            diet = request.form.get("diet")
+            update_fitness_preferences(user_id, goal, experience, diet)
 
+        flash("Profile updated successfully!", "success")
+        return redirect(url_for("profile_settings"))
+
+    return render_template(
+        "profile_settings.html",
+        user=user,
+        fitness_goals=fitness_goals,
+        experiences=experiences,
+        diets=diets
+    )
+
+# <---- Workout videos ---->
 # return all workout videos
 @app.route('/workouts', methods=['GET'])
 def view_workout_videos():
