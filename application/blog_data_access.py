@@ -21,20 +21,20 @@ def get_db_connection():
 
 
 # <----- Get all blog function ----->
-# def get_all_blogs(category=None):
+# def get_all_blogs(category_id=None):
 #     # Connect to the MySQL database
 #     conn = get_db_connection()
 #     cursor = conn.cursor()
 #
 #     # Check if a category was provided from the filter dropdown
-#     if category:
+#     if category_id:
 #         # SQL query to fetch blogs that match the selected category
-#         sql_query_category = "SELECT id, title, summary, image FROM blogs WHERE category = %s"
+#         sql_query_category = "SELECT blog_id, title, summary, image FROM blog WHERE category_id = %s"
 #         # Execute the query with category as parameter (MUST be a tuple)
-#         cursor.execute(sql_query_category, (category,))
+#         cursor.execute(sql_query_category, (category_id,))
 #     else:
 #         # If no category selected, fetch all blogs
-#         sql_query = "SELECT id, title, summary, image FROM blogs"
+#         sql_query = "SELECT blog_id, title, summary, image FROM blog"
 #         cursor.execute(sql_query)
 #
 #     # Fetch all results from the executed query
@@ -47,27 +47,63 @@ def get_db_connection():
 #
 #     # Return the list
 #     return blog_list
-#
-#
-# # <----- Get singular blog ------>
-# def get_blog_by_id(blog_id):
-#     # Establish a connection to the database
-#     conn = get_db_connection()
-#     cursor = conn.cursor()
-#     # Execute the query to get the blog based on the blog ID
-#     cursor.execute("SELECT id, title, summary, image, content, author, created_at FROM blogs WHERE id = %s", (blog_id,))
-#
-#     # Fetch the result
-#     blog = cursor.fetchone()
-#     # Close the connection to the database
-#     conn.close()
-#
-#     # If no blog is found, return None
-#     if blog is None:
-#         return None
-#     # Return the blog details as a dictionary
-#     return {'id': blog[0], 'title': blog[1], 'summary': blog[2], 'image': blog[3], 'content': blog[4], 'author' : blog[5], 'created_at': blog[6].date().strftime('%B %d, %Y')
-#     }
+
+def get_all_blogs(category_name=None):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    if category_name:
+        # First, get the category_id that matches the given name
+        cursor.execute("SELECT category_id FROM blog_category WHERE category = %s", (category_name,))
+        result = cursor.fetchone()
+
+        # If category doesn't exist, return an empty list
+        if result is None:
+            return []
+
+        category_id = result[0]
+
+        # Now use that ID to fetch the blogs
+        sql_query = "SELECT blog_id, title, summary, image FROM blog WHERE category_id = %s"
+        cursor.execute(sql_query, (category_id,))
+    else:
+        # If no category is selected, fetch all blogs
+        sql_query = "SELECT blog_id, title, summary, image FROM blog"
+        cursor.execute(sql_query)
+
+    result = cursor.fetchall()
+
+    blog_list = []
+    for item in result:
+        blog_list.append({'id': item[0], 'title': item[1], 'summary': item[2], 'image': item[3]})
+
+    return blog_list
+
+# <----- Get singular blog ------>
+def get_blog_by_id(blog_id):
+    # Establish a connection to the database
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    # Execute the query to get the blog based on the blog ID, and join to get the author's name
+    sql = """
+        SELECT b.blog_id, b.title, b.summary, b.image, b.content, a.author_name, b.created_at
+        FROM blog b
+        JOIN blog_author a ON b.author_id = a.author_id
+        WHERE b.blog_id = %s
+    """
+    cursor.execute(sql, (blog_id,))
+
+    # Fetch the result
+    blog = cursor.fetchone()
+    # Close the connection to the database
+    conn.close()
+
+    # If no blog is found, return None
+    if blog is None:
+        return None
+    # Return the blog details as a dictionary
+    return {'id': blog[0], 'title': blog[1], 'summary': blog[2], 'image': blog[3], 'content': blog[4], 'author' : blog[5], 'created_at': blog[6].date().strftime('%B %d, %Y')
+    }
 
 
 

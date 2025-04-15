@@ -2,68 +2,70 @@
 {% block body_content %}
 
 <!-- Settings banner -->
-<div class="profile-banner text-white d-flex flex-column align-items-center justify-content-center">
-  <div class="profile-info text-center">
-    <h2 class="mb-1"><i class="bi bi-gear-fill me-2"></i>Profile Settings</h2>
-    <p class="text-light">Manage your account preferences below</p>
-  </div>
+<div class="w-100 text-center py-5">
+  <h2 class="mb-1 text-dark"><i class="bi bi-gear-fill me-2"></i>Profile Settings</h2>
+  <p class="text-muted">Manage your account preferences below</p>
 </div>
 
 <div class="container mt-5">
   <div class="row g-4">
 
-    <!-- Column 1: Account info and security -->
-    <div class="col-md-6 d-flex flex-column gap-4">
+    <!-- Left column -->
+    <div class="col-md-6 d-flex flex-column">
+      <div class="d-flex flex-column h-100 justify-content-between">
 
-      <!-- Account Info -->
-      <div class="card shadow-sm d-flex flex-column">
-        <div class="card-body px-4 py-4 d-flex flex-column">
-          <h4 class="card-title text-center mb-4"><i class="bi bi-person-circle me-2"></i>Your Account Info</h4>
-          <form action="{{ url_for('update_profile') }}" method="post">
-            <div class="mb-3 text-start">
-              <label for="first_name" class="form-label">First Name</label>
-              <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.firstname }}">
-            </div>
-            <div class="mb-3 text-start">
-              <label for="last_name" class="form-label">Last Name</label>
-              <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.lastname }}">
-            </div>
-            <div class="mb-3 text-start">
-              <label for="email" class="form-label">Email Address</label>
-              <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
-            </div>
-            <div class="mb-3 text-start">
-              <label for="dob" class="form-label">Date of Birth</label>
-              <input type="date" class="form-control" id="dob" name="dob"
-                value="{% if user.dob %}{{ user.dob.strftime('%Y-%m-%d') }}{% else %}{{ '' }}{% endif %}">
-            </div>
-            <div class="mt-3">
-              <button type="submit" class="btn btn-join-filled">Save Account Info</button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <!-- Security settings -->
-      <div class="card shadow-sm">
-        <div class="card-body px-4 py-4">
-          <h4 class="card-title text-center mb-4"><i class="bi bi-shield-lock-fill me-2"></i>Security Settings</h4>
-          <div class="d-flex flex-column align-items-center">
-            <a href="#" class="btn btn-outline-secondary mb-3">Change Password</a>
-            <a href="#" class="btn btn-outline-danger">Delete Account</a>
+        <!-- Account info (fills top half) -->
+        <div class="card shadow-sm flex-fill mb-4">
+          <div class="card-body px-4 py-4 d-flex flex-column">
+            <h4 class="card-title text-center mb-4"><i class="bi bi-person-circle me-2"></i>Your Account Info</h4>
+            <form action="{{ url_for('profile_settings') }}" method="post">
+              <input type="hidden" name="form_type" value="account_info">
+              <div class="mb-3 text-start">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.firstname }}">
+              </div>
+              <div class="mb-3 text-start">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.lastname }}">
+              </div>
+              <div class="mb-3 text-start">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+              </div>
+              <div class="mb-3 text-start">
+                <label for="dob" class="form-label">Date of Birth</label>
+                <input type="date" class="form-control" id="dob" name="dob"
+                  value="{% if user.dob %}{{ user.dob.strftime('%Y-%m-%d') }}{% else %}{{ '' }}{% endif %}">
+              </div>
+              <div class="mt-3">
+                <button type="submit" class="btn btn-join-filled">Save Account Info</button>
+              </div>
+            </form>
           </div>
         </div>
+
+        <!-- Security settings (fills bottom half) -->
+        <div class="card shadow-sm flex-fill">
+          <div class="card-body px-4 py-4">
+            <h4 class="card-title text-center mb-4"><i class="bi bi-shield-lock-fill me-2"></i>Security Settings</h4>
+            <div class="d-flex flex-column align-items-center">
+              <a href="#" class="btn btn-outline-secondary mb-3">Change Password</a>
+              <a href="#" class="btn btn-outline-danger">Delete Account</a>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- Column 2: Body Metrics + fitness preferences -->
+    <!-- Right column -->
+    <!-- Body metrics (fills top half) -->
     <div class="col-md-6 d-flex flex-column">
-
-      <!-- Body Metrics -->
-      <div class="card shadow-sm d-flex flex-column h-100 mb-4">
+      <div class="card shadow-sm mb-4 flex-fill">
         <div class="card-body px-4 py-4 d-flex flex-column">
           <h4 class="card-title text-center mb-4"><i class="bi bi-rulers me-2"></i>Body Metrics</h4>
-          <form action="{{ url_for('update_profile') }}" method="post">
+          <form action="{{ url_for('profile_settings') }}" method="post">
+            <input type="hidden" name="form_type" value="body_metrics">
             <div class="mb-3 text-start">
               <label for="height" class="form-label">Height (cm)</label>
               <input type="number" class="form-control" id="height" name="height" value="{{ user.height }}">
@@ -79,11 +81,12 @@
         </div>
       </div>
 
-      <!-- Fitness preferences -->
-      <div class="card shadow-sm d-flex flex-column h-100">
+      <!-- Fitness preferences (fills bottom half) -->
+      <div class="card shadow-sm flex-fill">
         <div class="card-body px-4 py-4 d-flex flex-column">
           <h4 class="card-title text-center mb-4"><i class="bi bi-activity me-2"></i>Your Fitness Preferences</h4>
-          <form action="{{ url_for('update_profile') }}" method="post">
+          <form action="{{ url_for('profile_settings') }}" method="post">
+            <input type="hidden" name="form_type" value="preferences">
             <div class="mb-3 text-start">
               <label for="goal" class="form-label">Fitness Goal</label>
               <select class="form-select" name="goal" id="goal">
@@ -93,6 +96,7 @@
                 <option value="Improve Core Strength" {% if user.goal == 'Improve Core Strength' %}selected{% endif %}>Improve Core Strength</option>
               </select>
             </div>
+
             <div class="mb-3 text-start">
               <label for="experience" class="form-label">Experience Level</label>
               <select class="form-select" name="experience" id="experience">
@@ -101,18 +105,151 @@
                 <option value="Advanced" {% if user.experience == 'Advanced' %}selected{% endif %}>Advanced</option>
               </select>
             </div>
+
+            <div class="mb-3 text-start">
+              <label for="diet" class="form-label">Dietary Requirement</label>
+              <select class="form-select" name="diet" id="diet">
+                <option value="No preference" {% if user.diet == 'No preference' %}selected{% endif %}>No preference</option>
+                <option value="Vegan" {% if user.diet == 'Vegan' %}selected{% endif %}>Vegan</option>
+              </select>
+            </div>
+
             <div class="mt-auto d-flex justify-content-center gap-2 flex-wrap">
               <button type="submit" class="btn btn-join-filled">Update Preferences</button>
-              <a href="#" class="btn btn-determine-goal">
+              <a href="#" class="btn btn-determine-goal" data-bs-toggle="modal" data-bs-target="#fitnessGoalModal">
                 <i class="bi bi-question-circle me-1"></i> Determine Fitness Goal
               </a>
             </div>
           </form>
         </div>
       </div>
+
     </div>
   </div>
 </div>
+
+
+<!-- Fitness Goal Quiz Modal -->
+<div class="modal fade" id="fitnessGoalModal" tabindex="-1" aria-labelledby="fitnessGoalModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-4 position-relative overflow-hidden">
+
+      <!-- Close button in top-right corner -->
+      <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title" id="fitnessGoalModalLabel">Figure out your fitness goal!</h5>
+      </div>
+
+      <div class="modal-body">
+        <form id="goalQuizForm">
+          <div class="mb-3">
+            <label class="form-label">What's your main motivation for starting (or continuing) your fitness journey?</label>
+            <select class="form-select" name="q1" required>
+              <option value="" disabled selected>Select an option</option>
+              <option value="strength">I want to feel stronger and more toned</option>
+              <option value="endurance">I want more energy and endurance for daily activities</option>
+              <option value="weightloss">I want to lose excess weight and feel lighter</option>
+              <option value="core">I want to improve posture and reduce back pain</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Which of these outcomes excites you the most?</label>
+            <select class="form-select" name="q2" required>
+              <option value="" disabled selected>Select an option</option>
+              <option value="strength">Gaining visible muscle definition</option>
+              <option value="endurance">Running longer distances without fatigue</option>
+              <option value="weightloss">Seeing the number on the scale go down</option>
+              <option value="core">Holding a plank or balancing exercises with ease</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">What type of workouts do you think you'd enjoy the most?</label>
+            <select class="form-select" name="q3" required>
+              <option value="" disabled selected>Select an option</option>
+              <option value="strength">Lifting weights or resistance training</option>
+              <option value="endurance">Cardio like running, cycling, or HIIT</option>
+              <option value="weightloss">Dance, walking, or circuit training</option>
+              <option value="core">Pilates, yoga, or mobility-focused workouts</option>
+            </select>
+          </div>
+          <div class="text-center">
+            <button type="button" class="btn btn-join-filled" onclick="evaluateQuiz()">Show Suggested Goal</button>
+          </div>
+        </form>
+
+        <!-- Result Overlay -->
+        <div id="quizResult" class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center bg-primary text-white d-none" style="z-index: 10;">
+          <div class="text-center px-4">
+            <h5 class="fw-bold mb-3">🎯 Your Suggested Fitness Goal</h5>
+              <p id="quizGoalText" class="fs-4 fw-semibold mb-4"></p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                  <button class="btn btn-light" onclick="retryQuiz()">Retry</button>
+                  <button class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
+                </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="mb-5"></div>
+
+<!-- Have an easy way to go back to the profile -->
+
+<script>
+function evaluateQuiz() {
+  const form = document.getElementById("goalQuizForm");
+  const q1 = form.q1.value;
+  const q2 = form.q2.value;
+  const q3 = form.q3.value;
+
+  if (!q1 || !q2 || !q3) {
+    alert("Please answer all questions.");
+    return;
+  }
+
+  const answers = [q1, q2, q3];
+  const frequency = {};
+  answers.forEach(ans => {
+    frequency[ans] = (frequency[ans] || 0) + 1;
+  });
+
+  const sorted = Object.entries(frequency).sort((a, b) => b[1] - a[1]);
+  const mostCommon = sorted[0][0];
+
+  const goalMap = {
+    strength: "Build Muscle",
+    endurance: "Improve Stamina",
+    weightloss: "Lose Weight",
+    core: "Improve Core Strength"
+  };
+
+  const goalText = goalMap[mostCommon];
+
+  // Display result in overlay
+  const resultOverlay = document.getElementById("quizResult");
+  document.getElementById("quizGoalText").textContent = goalText;
+  resultOverlay.classList.remove("d-none");
+
+  // Set the main goal select
+  const goalSelect = document.getElementById("goal");
+  if (goalSelect) {
+    goalSelect.value = goalText;
+    goalSelect.classList.add("bg-success", "text-white");
+    setTimeout(() => {
+      goalSelect.classList.remove("bg-success", "text-white");
+    }, 2000);
+  }
+
+  resultOverlay.scrollIntoView({ behavior: "smooth" });
+}
+
+function retryQuiz() {
+  document.getElementById("quizResult").classList.add("d-none");
+  document.getElementById("goalQuizForm").reset();
+}
+</script>
 
 {% endblock %}
