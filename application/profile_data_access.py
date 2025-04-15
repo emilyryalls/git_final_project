@@ -16,6 +16,10 @@ mydb = mysql.connector.connect(
 )
 
 
+def main():
+    return None
+
+
 def get_db_connection():
     mydb = mysql.connector.connect(
         host="localhost",
@@ -172,3 +176,7 @@ def update_dob(user_id, dob):
     conn.commit()
     cursor.close()
     conn.close()
+
+
+if __name__ == "__main__":
+    main()
