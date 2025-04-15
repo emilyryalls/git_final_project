@@ -3,7 +3,6 @@ import sys
 import os
 import json
 
-from unicodedata import category
 
 
 if sys.platform == "win32":
