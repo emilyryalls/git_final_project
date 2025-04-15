@@ -31,16 +31,15 @@
 
     <div class="tab-content" id="dashboardTabsContent">
         <!-- View Current Plan -->
-    <div class="tab-pane fade show active" id="view" role="tabpanel">
-        {% if selected_meal_plan %}
-            {% if selected_meal_plan.meals %}
+        <div class="tab-pane fade show active" id="view" role="tabpanel">
+            {% if current_meal_plan %}
                 <div class="card shadow-sm mb-4">
                     <div class="card-body">
-                        <h3>{{ selected_meal_plan.name }}</h3>
-                        <p><strong>📅 Created At:</strong> {{ selected_meal_plan.created_at }}</p>
-                        <p><strong>🗒️ Description:</strong> {{ selected_meal_plan.description }}</p>
+                        <h3>{{ current_meal_plan.name }}</h3>
+                        <p><strong>📅 Created At:</strong> {{ current_meal_plan.created_at }}</p>
+                        <p><strong>🗒️ Description:</strong> {{ current_meal_plan.description }}</p>
 
-                        {% for day, meals in selected_meal_plan.meals.items() %}
+                        {% for day, meals in current_meal_plan.meals.items() %}
                         <div class="mt-4">
                             <h5 class="fw-bold">{{ day }}</h5>
                             <ul class="list-unstyled">
@@ -54,12 +53,9 @@
                     </div>
                 </div>
             {% else %}
-                <div class="alert alert-warning">This meal plan doesn't have any meals data.</div>
+                <div class="alert alert-info">No current meal plan available.</div>
             {% endif %}
-        {% else %}
-            <div class="alert alert-info">No current meal plan selected.</div>
-        {% endif %}
-    </div>
+        </div>
 
         <!-- Create New Plan -->
         <div class="tab-pane fade" id="create" role="tabpanel">
@@ -119,13 +115,13 @@
                 </div>
                 <div class="btn-group">
                     <!-- View Button -->
-                    <a href="{{ url_for('view_meal_plan', timestamp=plan.timestamp) }}" class="btn btn-outline-info btn-sm">View</a>
+                    <a href="{{ url_for('view_meal_plan', timestamp=plan['created_at']) }}" class="btn btn-outline-info btn-sm">View</a>
 
-                    <!-- Edit Button -->
-                    <a href="{{ url_for('edit_meal_plan', timestamp=plan.timestamp) }}" class="btn btn-warning btn-sm mx-2">Edit</a>
+<!--                    &lt;!&ndash; Edit Button &ndash;&gt;-->
+<!--                    <a href="{{ url_for('edit_meal_plan', timestamp=plan.created_at) }}" class="btn btn-warning btn-sm mx-2">Edit</a>-->
 
-                    <!-- Clone Button -->
-                    <a href="{{ url_for('clone_meal_plan', timestamp=plan.timestamp) }}" class="btn btn-secondary btn-sm">Clone</a>
+<!--                    &lt;!&ndash; Clone Button &ndash;&gt;-->
+<!--                    <a href="{{ url_for('clone_meal_plan', timestamp=plan['created_at']) }}" class="btn btn-secondary btn-sm">Clone</a>-->
                 </div>
             </li>
             {% endfor %}
@@ -134,4 +130,5 @@
         <div class="alert alert-secondary mt-3">No previous meal plans found.</div>
         {% endif %}
     </div>
-    {% endblock %}
+</div>
+{% endblock %}

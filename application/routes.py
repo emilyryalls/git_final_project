@@ -4,7 +4,7 @@ from application.data_access.blog_data_access import get_all_blogs,  get_blog_by
 from application.data_access.user_data_access import update_profile_info
 from application.data_access.data_access import add_member, get_details_by_email
 from application.data_access.workout_data_access import get_workout_video
-from application.data_access.meal_plan_data_access import save_plan_to_file, load_latest_plan, get_user_id, get_user_plan_files, generate_plan_filename, get_week_start_date, find_meal_plan_by_timestamp
+from application.data_access.meal_plan_data_access import get_user_id, get_week_start_date, find_meal_plan_by_timestamp, get_db_connection
 import os
 import re
 import json
@@ -118,9 +118,7 @@ def view_blog(blog_id):
 #                                           <---- Meal planner ---->
 
 # Config
-USER_MEAL_PLANS_DIR = os.path.join(os.path.dirname(__file__), 'user_meal_plans')
 DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-MAX_MEAL_PLANS = 6
 
 @app.route('/meal_planner_form')
 def meal_planner():
@@ -147,7 +145,7 @@ def save_meal_plan():
         } for day in DAYS
     }
 
-    created_at = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    created_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     meal_plan = {
         'user_id': user_id,
         'name': plan_name,
@@ -156,7 +154,23 @@ def save_meal_plan():
         'created_at': created_at
     }
 
-    save_plan_to_file(user_id, meal_plan)
+    # Save meal plan to the database
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO meal_plans (member_id, name, description, meals, created_at)
+        VALUES (%s, %s, %s, %s, %s)
+    """, (
+        meal_plan['user_id'],
+        meal_plan['name'],
+        meal_plan['description'],
+        json.dumps(meal_plan['week']),  # Properly serializing the week as JSON
+        meal_plan['created_at']
+    ))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
     flash("Meal Plan Saved!", "success")
     return redirect(url_for('meal_plan_dashboard', timestamp=created_at))
 
@@ -167,79 +181,63 @@ def meal_plan_dashboard():
     if not user_id:
         return redirect(url_for('signin_form'))
 
-    # Calculate default plan name
     monday = get_week_start_date()
     plan_name = f"Week of {monday.strftime('%d-%m-%y')}"
 
-    # Load plans (newest first)
-    user_files = get_user_plan_files(user_id)
-    meal_plans = []
-    for filename in sorted(user_files, reverse=True):
-        with open(os.path.join(USER_MEAL_PLANS_DIR, filename), 'r') as f:
-            data = json.load(f)
-            meal_plans.append({
-                'name': data.get('name'),
-                'created_at': data.get('created_at'),
-                'timestamp': data.get('created_at'),
-                'description': data.get('description'),
-                'meals': data.get('meals', data.get('week'))
-            })
+    # Load meal plans from the database
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM meal_plans WHERE member_id = %s ORDER BY created_at DESC", (user_id,))
+    meal_plans = cursor.fetchall()
+    cursor.close()
+    conn.close()
 
+    # Parse meals from JSON string to dict for each plan
+    for plan in meal_plans:
+        if isinstance(plan['meals'], str):
+            try:
+                plan['meals'] = json.loads(plan['meals'])
+            except json.JSONDecodeError:
+                plan['meals'] = {}
+
+    current_meal_plan = meal_plans[0] if meal_plans else None
     timestamp = request.args.get('timestamp')
-    selected_meal_plan = next((plan for plan in meal_plans if plan['timestamp'] == timestamp), None)
 
-    print(f"Selected Meal Plan: {selected_meal_plan}")  # Add this
+    selected_meal_plan = None
+    if timestamp:
+        selected_meal_plan = next((plan for plan in meal_plans if plan['created_at'] == timestamp), None)
+
     return render_template('meal_plan_dashboard.html',
                            meal_plans=meal_plans,
+                           current_meal_plan=selected_meal_plan or current_meal_plan,
                            selected_meal_plan=selected_meal_plan,
                            plan_name=plan_name,
                            days=DAYS)
 
-
 # <-- View a Specific Meal Plan -->
 @app.route('/meal_plan_view/<timestamp>', methods=['GET'])
 def view_meal_plan(timestamp):
-    # Load the meal plan corresponding to the timestamp
     user_id = get_user_id()
-    user_files = get_user_plan_files(user_id)
 
-    # Find the meal plan with the matching timestamp
-    selected_meal_plan = None
-    for filename in user_files:
-        with open(os.path.join(USER_MEAL_PLANS_DIR, filename), 'r') as f:
-            data = json.load(f)
-            if data.get('created_at') == timestamp:
-                selected_meal_plan = data
-                break
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM meal_plans WHERE member_id = %s AND created_at = %s", (user_id, timestamp))
+    selected_meal_plan = cursor.fetchone()
+    cursor.close()
+    conn.close()
 
-    if selected_meal_plan is None:
+    if not selected_meal_plan:
         flash("Meal plan not found", "danger")
         return redirect(url_for('meal_plan_dashboard'))
 
-    # Render the view for the selected meal plan
-    return render_template('meal_plan/view_meal_plan.html', selected_meal_plan=selected_meal_plan)
-
-
-def load_user_meal_plans(user_id):
-    """Load meal plans for a user."""
-    user_files = get_user_plan_files(user_id)
-    meal_plans = []
-
-    for filename in reversed(user_files[:4]):  # Limit to the 4 most recent plans
+    # Convert meals from string to dict
+    if isinstance(selected_meal_plan['meals'], str):
         try:
-            with open(os.path.join(USER_MEAL_PLANS_DIR, filename), 'r') as f:
-                data = json.load(f)
-                meal_plans.append({
-                    'name': data.get('name'),
-                    'created_at': data.get('created_at'),
-                    'timestamp': data.get('created_at'),  # For URL linking
-                    'filename': filename
-                })
-        except Exception as e:
-            print(f"Error reading {filename}: {e}")
+            selected_meal_plan['meals'] = json.loads(selected_meal_plan['meals'])
+        except json.JSONDecodeError:
+            selected_meal_plan['meals'] = {}
 
-    return meal_plans
-
+    return render_template('meal_plan/view_meal_plan.html', selected_meal_plan=selected_meal_plan)
 
 @app.route('/edit_meal_plan/<timestamp>', methods=['GET', 'POST'])
 def edit_meal_plan(timestamp):
@@ -253,7 +251,6 @@ def edit_meal_plan(timestamp):
         return redirect(url_for('meal_plan_dashboard'))
 
     if request.method == 'POST':
-        # Preserve original timestamp and update content
         description = request.form.get('meal_plan_description')
         plan_name = f"Week of {get_week_start_date().strftime('%d-%m-%y')}"
 
@@ -266,20 +263,25 @@ def edit_meal_plan(timestamp):
             } for day in DAYS
         }
 
-        updated_plan = {
-            'user_id': user_id,
-            'name': plan_name,
-            'description': description,
-            'created_at': selected_meal_plan['created_at'],  # maintain original
-            'meals': meals
-        }
-
-        filename = f"{user_id}_meal_plan_{selected_meal_plan['created_at']}.json"
-        with open(os.path.join(USER_MEAL_PLANS_DIR, filename), 'w') as f:
-            json.dump(updated_plan, f)
+        # Update the database
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            UPDATE meal_plans
+            SET name = %s, description = %s, meals = %s
+            WHERE member_id = %s AND created_at = %s
+        """, (
+            plan_name,
+            description,
+            json.dumps(meals),  # Properly serializing meals as JSON
+            user_id,
+            timestamp
+        ))
+        conn.commit()
+        conn.close()
 
         flash("Meal Plan Updated!", "success")
-        return redirect(url_for('meal_plan_dashboard', timestamp=selected_meal_plan['created_at']))
+        return redirect(url_for('meal_plan_dashboard', timestamp=timestamp))
 
     return render_template(
         'edit_meal_plan.html',
@@ -301,7 +303,7 @@ def clone_meal_plan(timestamp):
         monday = get_week_start_date()
         plan_name = f"Week of {monday.strftime('%d-%m-%y')}"
         description = request.form.get('meal_plan_description')
-        timestamp_new = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        timestamp_new = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         meals = {
             day: {
@@ -312,24 +314,25 @@ def clone_meal_plan(timestamp):
             } for day in DAYS
         }
 
-        cloned_plan = {
-            'user_id': user_id,
-            'name': plan_name,
-            'description': description,
-            'created_at': timestamp_new,
-            'meals': meals
-        }
-
-        filename = f"{user_id}_meal_plan_{timestamp_new}.json"
-        with open(os.path.join(USER_MEAL_PLANS_DIR, filename), 'w') as f:
-            json.dump(cloned_plan, f)
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO meal_plans (member_id, name, description, created_at, meals)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (
+            user_id,
+            plan_name,
+            description,
+            timestamp_new,
+            json.dumps(meals)
+        ))
+        conn.commit()
+        conn.close()
 
         flash("Meal Plan Cloned!", "success")
         return redirect(url_for('meal_plan_dashboard', timestamp=timestamp_new))
 
     return render_template('edit_meal_plan.html', selected_meal_plan=selected_meal_plan, days=DAYS)
-
-
 
 
 # -------------------------------------------------------------------------------------------------------------- #

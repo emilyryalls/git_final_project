@@ -5,94 +5,132 @@ import json
 from flask import session
 from datetime import datetime, timedelta
 
-
+# Handle MySQL password based on platform
 if sys.platform == "win32":
     mysql_password = "password"
 else:
     mysql_password = ""
 
+# MySQL connection
 def get_db_connection():
-    mydb = mysql.connector.connect(
-      host="localhost",
-      user="root",
-      password= mysql_password,
-      database="rise_db")
-    return mydb
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password=mysql_password,
+        database="rise_db1"
+    )
 
-# Directory to store user meal plans
-USER_MEAL_PLANS_DIR = r'C:\Code\project\git_final_project\application\user_meal_plans'
-MAX_MEAL_PLANS = 6
-
-
+# Get current user's ID from session
 def get_user_id():
     return session.get('user_id')
 
-
-def generate_plan_filename(user_id, created_at):
-    """Generate a filename for a user's meal plan based on the user_id and timestamp."""
-    return f'{user_id}_meal_plan_{created_at}.json'
-
-
+# Week start calculation
 def get_week_start_date(date=None):
-    """Get the Monday of the week for the given date or today."""
     if not date:
         date = datetime.now()
-    return date - timedelta(days=date.weekday())  # Monday is weekday 0
+    return date - timedelta(days=date.weekday())
 
+# Load the 4 most recent meal plans from DB
+def load_user_meal_plans(user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
 
+    cursor.execute("""
+        SELECT name, created_at, description, meals
+        FROM meal_plans
+        WHERE member_id = %s
+        ORDER BY created_at DESC
+        LIMIT 4
+    """, (user_id,))
+
+    results = cursor.fetchall()
+    conn.close()
+
+    meal_plans = []
+    for row in results:
+        meal_plans.append({
+            'name': row['name'],
+            'created_at': row['created_at'],
+            'timestamp': row['created_at'],  # for URL usage
+            'description': row['description'],
+            'meals': json.loads(row['meals']) if isinstance(row['meals'], str) else row['meals']
+        })
+
+    return meal_plans
+
+# Find a specific meal plan by timestamp from DB
 def find_meal_plan_by_timestamp(user_id, timestamp):
-    for filename in get_user_plan_files(user_id):
-        with open(os.path.join(USER_MEAL_PLANS_DIR, filename), 'r') as f:
-            data = json.load(f)
-            if data.get('created_at') == timestamp:
-                return data
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT name, created_at, description, meals
+        FROM meal_plans
+        WHERE member_id = %s AND created_at = %s
+        LIMIT 1
+    """, (user_id, timestamp))
+
+    result = cursor.fetchone()
+    conn.close()
+
+    if result:
+        # Convert meals from JSON string to Python dict
+        meals_data = result['meals']
+        if isinstance(meals_data, str):
+            try:
+                meals_data = json.loads(meals_data)
+            except json.JSONDecodeError:
+                meals_data = {}  # fallback if it's broken
+
+        return {
+            'user_id': user_id,
+            'name': result['name'],
+            'created_at': result['created_at'],
+            'description': result['description'],
+            'meals': meals_data
+        }
+
     return None
 
+# Save a new meal plan to the database
+def save_meal_plan_to_db(user_id, plan):
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
-def get_user_plan_files(user_id):
-    """Return a sorted list of meal plan filenames for a given user."""
-    return sorted([
-        f for f in os.listdir(USER_MEAL_PLANS_DIR)
-        if f.startswith(f'{user_id}_meal_plan')
-    ], key=lambda x: os.path.getctime(os.path.join(USER_MEAL_PLANS_DIR, x)))
+    meals_json = json.dumps(plan['meals']) if 'meals' in plan else json.dumps(plan['week'])
 
+    cursor.execute("""
+        INSERT INTO meal_plans (member_id, name, description, meals, created_at)
+        VALUES (%s, %s, %s, %s, %s)
+    """, (
+        user_id,
+        plan['name'],
+        plan.get('description', ''),
+        meals_json,
+        plan['created_at']
+    ))
 
-def save_plan_to_file(user_id, plan):
-    """Save the user's meal plan to a file. Automatically cleans up old files if more than MAX_MEAL_PLANS."""
-    created_at = plan['created_at']
-    filename = generate_plan_filename(user_id, created_at)
-    filepath = os.path.join(USER_MEAL_PLANS_DIR, filename)
+    conn.commit()
+    conn.close()
 
-    # Save meal plan to file
-    with open(filepath, 'w') as f:
-        json.dump(plan, f, indent=6)
+# Update an existing meal plan
+def update_meal_plan_in_db(user_id, timestamp, updated_plan):
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
-    # Cleanup old meal plans if more than MAX_MEAL_PLANS
-    user_files = get_user_plan_files(user_id)
-    if len(user_files) > MAX_MEAL_PLANS:
-        oldest_file = os.path.join(USER_MEAL_PLANS_DIR, user_files[0])
-        os.remove(oldest_file)
+    meals_json = json.dumps(updated_plan['meals'])
 
-    return filepath
+    cursor.execute("""
+        UPDATE meal_plans
+        SET name = %s, description = %s, meals = %s
+        WHERE member_id = %s AND created_at = %s
+    """, (
+        updated_plan['name'],
+        updated_plan.get('description', ''),
+        meals_json,
+        user_id,
+        timestamp
+    ))
 
-
-def load_latest_plan(user_id):
-    """Load the most recent meal plan for a user."""
-    user_files = get_user_plan_files(user_id)
-    if not user_files:
-        return None
-
-    latest_file = os.path.join(USER_MEAL_PLANS_DIR, user_files[-1])
-    with open(latest_file, 'r') as f:
-        return json.load(f)
-
-
-def load_plan_by_timestamp(user_id, timestamp):
-    """Load a specific meal plan by its timestamp."""
-    user_files = get_user_plan_files(user_id)
-    for filename in user_files:
-        if timestamp in filename:  # If the filename contains the timestamp, load it
-            filepath = os.path.join(USER_MEAL_PLANS_DIR, filename)
-            with open(filepath, 'r') as f:
-                return json.load(f)
-    return None
+    conn.commit()
+    conn.close()

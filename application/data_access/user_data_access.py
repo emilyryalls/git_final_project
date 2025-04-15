@@ -14,7 +14,7 @@ mydb = mysql.connector.connect(
   host="localhost",
   user="root",
   password=mysql_password,
-  database="rise_db"
+  database="rise_db1"
 )
 
 def get_db_connection():

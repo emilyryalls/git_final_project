@@ -16,7 +16,7 @@ def get_db_connection():
       host="localhost",
       user="root",
       password= mysql_password,
-      database="rise_db")
+      database="rise_db1")
     return mydb
 
 

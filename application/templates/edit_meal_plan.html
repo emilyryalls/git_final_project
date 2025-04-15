@@ -4,7 +4,7 @@
 <div class="container mt-5">
     <h1>Edit Meal Plan</h1>
 
-    <form action="{{ url_for('edit_meal_plan', timestamp=selected_meal_plan.timestamp) }}" method="POST">
+    <form method="POST" action="{{ url_for('edit_meal_plan', timestamp=selected_meal_plan.created_at | urlencode) }}">
         <div class="mb-3">
             <label for="meal_plan_description" class="form-label">Plan Description</label>
             <input type="text" class="form-control" id="meal_plan_description" name="meal_plan_description" value="{{ selected_meal_plan.description }}">
