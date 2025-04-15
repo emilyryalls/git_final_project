@@ -3,12 +3,20 @@
 {% block body_content %}
 <!-- Main container for displaying the saved meal plan -->
 <div class="container mt-5">
+
+    <!-- Top Back Button -->
+    <div class="text-end mb-3">
+        <a href="{{ url_for('meal_plan_dashboard', timestamp=selected_meal_plan.created_at) }}" class="btn btn-outline-primary">
+            ← Back to Dashboard
+        </a>
+    </div>
+
     <!-- Meal Plan Title (name of the plan) -->
-    <h1 class="text-center mb-4"> Meal Plan for the week starting: {{ plan_name }} </h1>
+    <h1 class="text-center mb-4"> Meal Plan for the week starting: {{ selected_meal_plan.name }} </h1>
 
     <div class="row">
         <!-- Loop through each day in the meal plan and display the meals -->
-        {% for day, meals in meal_plan.week.items() %}
+        {% for day, meals in selected_meal_plan.meals.items() %}
         <div class="col-md-6 mb-4">
             <!-- Display the day of the week -->
             <div class="card">
@@ -30,6 +38,13 @@
         </div><div class="row">
         {% endif %}
         {% endfor %}
+    </div>
+
+    <!-- Bottom Back Button -->
+    <div class="text-end mt-4">
+        <a href="{{ url_for('meal_plan_dashboard', timestamp=selected_meal_plan.created_at) }}" class="btn btn-outline-primary">
+            ← Back to Dashboard
+        </a>
     </div>
 </div>
 {% endblock %}
