@@ -95,5 +95,9 @@ def get_youtube_video_id(url):
     return video_id
 
 
+
+def main():
+    return None
+
 if __name__ == "__main__":
     main()
