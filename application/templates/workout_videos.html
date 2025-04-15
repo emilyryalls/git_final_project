@@ -2,7 +2,9 @@
 
 {% block body_content %}
 <div class="container mt-5">
-<h1>Workout Videos</h1>
+<div class="workout-video-title">
+    <p>Workout Videos</p>
+</div>
 
 <p>Filter for workouts based on your fitness goal, experience level, and time available!</p>
 <br>
@@ -17,7 +19,6 @@
                 <option value="Improve stamina">Improve Stamina</option>
                 <option value="Lose weight">Lose Weight</option>
                 <option value="Improve core strength">Improve Core Strength</option>
-                <!-- Add more goals as needed -->
             </select>
         </div>
         <div class="col-md-3">
@@ -39,46 +40,41 @@
             </select>
         </div>
         <div class="col-md-3 align-self-end">
-            <button type="submit" class="btn btn-primary">Filter</button>
+            <button type="submit" class="btn cta-button">Filter</button>
         </div>
     </div>
 </form>
 
+<div class="section-divider"></div>
+
 <section>
-    <div class="row strong">
-        <div class="col-sm">Video Name</div>
-        <div class="col-sm">Video</div>
-        <div class="col-sm">Fitness Goal</div>
-        <div class="col-sm">Experience</div>
-        <div class="col-sm">Time</div>
-    </div>
-    <hr>
-    {% for v_workout_videos in video %}
-    <div class="row">
-        <div class="col-sm">
-
-    <p>{{v_workout_videos.video_name}}</p>
-        </div>
-            <div class="col-sm">
-            {% if v_workout_videos.video_link %}
-            <iframe width="240" height="135" src="{{ v_workout_videos.video_link }}"></iframe>
-            {% endif %}
+  <div class="container">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      {% for v_workout_videos in video %}
+      <div class="col">
+        <div class="card h-100 workout-card">
+          {% if v_workout_videos.video_link %}
+          <div class="ratio ratio-16x9">
+            <iframe class="card-img-top" src="{{ v_workout_videos.video_link }}" allowfullscreen></iframe>
+          </div>
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title text-center">{{ v_workout_videos.video_name }}</h5>
+            <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
+              <span class="badge tag-goal">{{ v_workout_videos.fitness_goal }}</span>
+              <span class="badge tag-experience">{{ v_workout_videos.experience }}</span>
+              <span class="badge tag-time">{{ v_workout_videos.time }}</span>
             </div>
-        <div class="col-sm">
-    <p>{{v_workout_videos.fitness_goal}}</p>
+          </div>
         </div>
-        <div class="col-sm">
-    <p>{{v_workout_videos.experience}}</p>
-        </div>
-        <div class="col-sm">
-    <p>{{v_workout_videos.time}}</p>
-        </div>
-
-       <hr>
+      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
- </section>
+  </div>
+</section>
+
+
 
 </div>
-
+<br>
 {% endblock %}
