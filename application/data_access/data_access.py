@@ -22,61 +22,57 @@ def get_db_connection():
 
 #                                               <----- Login ------>
 
-def get_password_by_email(useremail):
+def get_details_by_email(useremail):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    sql_get_password = "SELECT user_password FROM member WHERE user_email = %s"
-    cursor.execute(sql_get_password, (useremail,))
+    sql_get_password_name = "SELECT hashed_password, first_name, email_address, member_id FROM v_login_details WHERE email_address = %s"
+    cursor.execute(sql_get_password_name, (useremail,))
 
-    saved_password_tuple = cursor.fetchone()
-    return saved_password_tuple
-
+    saved_tuple = cursor.fetchone()
+    return saved_tuple
 
 
 #                                               <----- Add Member ------>
 
-def add_member(fname, lname, uemail, upassword):
+# <----- Add Member ------>
+def add_member(fname, lname, uemail, hpassword):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    try:
-        # Step 1. Check if the email already exists in the email table.
-        sql_check_email = "SELECT email_id FROM email WHERE email_address = %s"
-        cursor.execute(sql_check_email, (uemail,))
-        email_row = cursor.fetchone()
+    # Check if email already exists
+    sql_check_email = "SELECT email_id FROM email WHERE email_address = %s"
+    val_check = (uemail,)
+    cursor.execute(sql_check_email, val_check)
 
-        if email_row:
-            email_id = email_row[0]
-        else:
-            # If email does not exist, insert it
-            sql_add_email = "INSERT INTO email (email_address) VALUES (%s)"
-            cursor.execute(sql_add_email, (uemail,))
-            conn.commit()  # Commit to generate auto_increment value
-            email_id = cursor.lastrowid
+    email_id = cursor.fetchone()
 
-        # Step 2. Check if a member with this email_id already exists in the member table.
-        sql_check_member = "SELECT member_id FROM member WHERE email_id = %s"
-        cursor.execute(sql_check_member, (email_id,))
-        member_row = cursor.fetchone()
-
-        if member_row:
-            # Member already exists
-            return True  # or return an appropriate flag/value
-
-        # Step 3. Insert the new member using the obtained email_id.
-        # first_name, last_name, email_id, user_password
-        sql_add_member = """
-            INSERT INTO member (first_name, last_name, email_id, user_password)
-            VALUES (%s, %s, %s, %s)
-        """
-        member_values = (fname, lname, email_id, upassword)
-        cursor.execute(sql_add_member, member_values)
+    if email_id:
+        return True # Return true if email exist
+    else:
+        # Insert the input data into their tables executing the SQL queries
+        sql_add_email = "INSERT INTO email (email_address) VALUES (%s)"
+        val_email = (uemail,)
+        cursor.execute(sql_add_email, val_email)
         conn.commit()
 
-        return False  # Signify that the member was added successfully
+        # Get new user email_id
+        cursor.execute(sql_check_email, (uemail,))
+        new_email_id = cursor.fetchone()[0]
 
-    finally:
-        cursor.close()
-        conn.close()
+
+        sql_add_full_name = "INSERT INTO member (first_name, last_name, email_id) VALUES (%s, %s, %s)"
+        val_full_name = (fname, lname, new_email_id)
+        cursor.execute(sql_add_full_name, val_full_name)
+
+        # Get new member_id
+        sql_get_member_id = "SELECT member_id FROM member WHERE email_id = %s"
+        val_member_id = (new_email_id,)
+        cursor.execute(sql_get_member_id, val_member_id)
+        new_member_id = cursor.fetchone()[0]
+
+        sql_add_password = "INSERT INTO member_password (hashed_password, member_id) VALUES (%s, %s)"
+        val_password = (hpassword, new_member_id)
+        cursor.execute(sql_add_password, val_password)
+        conn.commit()
 
