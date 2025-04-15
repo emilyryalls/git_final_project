@@ -21,104 +21,120 @@ def get_db_connection():
 
 
 # <----- Get all blog function ----->
-def get_all_blogs(category=None):
-    # Connect to the MySQL database
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    # Check if a category was provided from the filter dropdown
-    if category:
-        # SQL query to fetch blogs that match the selected category
-        sql_query_category = "SELECT id, title, summary, image FROM blogs WHERE category = %s"
-        # Execute the query with category as parameter (MUST be a tuple)
-        cursor.execute(sql_query_category, (category,))
-    else:
-        # If no category selected, fetch all blogs
-        sql_query = "SELECT id, title, summary, image FROM blogs"
-        cursor.execute(sql_query)
-
-    # Fetch all results from the executed query
-    result = cursor.fetchall()
-
-    blog_list = []
-    # Convert raw DB rows into a list of blog dictionaries
-    for item in result:
-        blog_list.append({'id': item[0], 'title': item[1], 'summary': item[2], 'image': item[3]})
-
-    # Return the list
-    return blog_list
-
-
-# <----- Get singular blog ------>
-def get_blog_by_id(blog_id):
-    # Establish a connection to the database
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    # Execute the query to get the blog based on the blog ID
-    cursor.execute("SELECT id, title, summary, image, content, author, created_at FROM blogs WHERE id = %s", (blog_id,))
-
-    # Fetch the result
-    blog = cursor.fetchone()
-    # Close the connection to the database
-    conn.close()
-
-    # If no blog is found, return None
-    if blog is None:
-        return None
-    # Return the blog details as a dictionary
-    return {'id': blog[0], 'title': blog[1], 'summary': blog[2], 'image': blog[3], 'content': blog[4], 'author' : blog[5], 'created_at': blog[6].date().strftime('%B %d, %Y')
-    }
+# def get_all_blogs(category=None):
+#     # Connect to the MySQL database
+#     conn = get_db_connection()
+#     cursor = conn.cursor()
+#
+#     # Check if a category was provided from the filter dropdown
+#     if category:
+#         # SQL query to fetch blogs that match the selected category
+#         sql_query_category = "SELECT id, title, summary, image FROM blogs WHERE category = %s"
+#         # Execute the query with category as parameter (MUST be a tuple)
+#         cursor.execute(sql_query_category, (category,))
+#     else:
+#         # If no category selected, fetch all blogs
+#         sql_query = "SELECT id, title, summary, image FROM blogs"
+#         cursor.execute(sql_query)
+#
+#     # Fetch all results from the executed query
+#     result = cursor.fetchall()
+#
+#     blog_list = []
+#     # Convert raw DB rows into a list of blog dictionaries
+#     for item in result:
+#         blog_list.append({'id': item[0], 'title': item[1], 'summary': item[2], 'image': item[3]})
+#
+#     # Return the list
+#     return blog_list
+#
+#
+# # <----- Get singular blog ------>
+# def get_blog_by_id(blog_id):
+#     # Establish a connection to the database
+#     conn = get_db_connection()
+#     cursor = conn.cursor()
+#     # Execute the query to get the blog based on the blog ID
+#     cursor.execute("SELECT id, title, summary, image, content, author, created_at FROM blogs WHERE id = %s", (blog_id,))
+#
+#     # Fetch the result
+#     blog = cursor.fetchone()
+#     # Close the connection to the database
+#     conn.close()
+#
+#     # If no blog is found, return None
+#     if blog is None:
+#         return None
+#     # Return the blog details as a dictionary
+#     return {'id': blog[0], 'title': blog[1], 'summary': blog[2], 'image': blog[3], 'content': blog[4], 'author' : blog[5], 'created_at': blog[6].date().strftime('%B %d, %Y')
+#     }
 
 
 
 # <----- Login ------>
 
-def get_password_by_email(useremail):
+def get_password_email_by_email(useremail):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    sql_get_password = "SELECT user_password FROM membership WHERE user_email = %s"
-    cursor.execute(sql_get_password, (useremail,))
+    # sql_get_password = "SELECT user_password FROM membership WHERE user_email = %s"
+    # cursor.execute(sql_get_password, (useremail,))
+    #
+    # saved_password_tuple = cursor.fetchone()
+    # return saved_password_tuple
 
-    saved_password_tuple = cursor.fetchone()
-    return saved_password_tuple
+
+    sql_get_password_name = "SELECT hashed_password, first_name, email_address FROM v_login_details WHERE email_address = %s"
+    cursor.execute(sql_get_password_name, (useremail,))
+
+    saved_tuple = cursor.fetchone()
+    return saved_tuple
 
 
 
 # <----- Add Member ------>
-def add_member(fname, lname, uemail, upassword):
+def add_member(fname, lname, uemail, hpassword):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    #to be changed for real DB values
-    sql_check_email = "SELECT id FROM membership WHERE user_email = %s"
-    cursor.execute(sql_check_email, (uemail,))
+    # Check if email already exists
+    sql_check_email = "SELECT email_id FROM email WHERE email_address = %s"
+    val_check = (uemail,)
+    cursor.execute(sql_check_email, val_check)
 
     email_id = cursor.fetchone()
 
     if email_id:
-        return True
+        return True # Return true if email exist
     else:
-        sql_add_member = "INSERT INTO membership (firstname, lastname, user_email, user_password) VALUES (%s, %s, %s, %s)"
-        val = (fname, lname, uemail, upassword)
+        # Insert the input data into their tables executing the SQL queries
+        sql_add_email = "INSERT INTO email (email_address) VALUES (%s)"
+        val_email = (uemail,)
+        cursor.execute(sql_add_email, val_email)
+        conn.commit()
 
-    # try:
-    cursor.execute(sql_add_member, val)
-    conn.commit()
-    #print('added to db test')
-
-    # except mysql.connector.Error as err:
-    #     print(f"Error: {err}")
-    #
-    # finally:
-    #     cursor.close()
-    #     conn.close()
+        # Get new user email_id
+        cursor.execute(sql_check_email, (uemail,))
+        new_email_id = cursor.fetchone()[0]
 
 
+        sql_add_full_name = "INSERT INTO member (first_name, last_name, email_id) VALUES (%s, %s, %s)"
+        val_full_name = (fname, lname, new_email_id)
+        cursor.execute(sql_add_full_name, val_full_name)
+
+        # Get new member_id
+        sql_get_member_id = "SELECT member_id FROM member WHERE email_id = %s"
+        val_member_id = (new_email_id,)
+        cursor.execute(sql_get_member_id, val_member_id)
+        new_member_id = cursor.fetchone()[0]
+
+        sql_add_password = "INSERT INTO member_password (hashed_password, member_id) VALUES (%s, %s)"
+        val_password = (hpassword, new_member_id)
+        cursor.execute(sql_add_password, val_password)
+        conn.commit()
 
 
-    def create():
-        return mysql_password
+
 
 
 

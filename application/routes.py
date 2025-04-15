@@ -1,6 +1,8 @@
 from application import app
 from flask import render_template, request, redirect, url_for, flash, session
-from application.data_access import get_all_blogs, add_member, get_password_by_email, get_blog_by_id, get_workout_video
+from application.data_access import add_member, get_password_email_by_email, get_workout_video
+#from application.data_access import get_all_blogs, get_blog_by_id
+
 import os
 import re
 import json
@@ -12,7 +14,9 @@ from application.user_data_access import get_user_by_id, update_profile_info
 @app.route('/')
 @app.route('/home')
 def home():
-    # session['SignIn'] = False
+    session['SignIn'] = False
+    session['email'] = stored_email
+    session['user'] = stored_name
     return render_template('home.html', title='Home')
 
 
@@ -36,8 +40,8 @@ def signup_submit():
         if len(useremail) == 0 or len(userpassword) == 0 or len(userfirstname) == 0 or len(userlastname) == 0:
             error = 'Please supply all fields'
         elif add_member(userfirstname, userlastname, useremail, hashed_password):
-            error_email_exist = 'This email address is already part of the family! Please log in to continue.'
-        elif not re.match("^[A-Za-zÀ-ÿ\s'-]+$", userfirstname) or not re.match("^[A-Za-zÀ-ÿ\s'-]+$", userlastname):
+            error_email_exist = 'Already part of the family! Log in instead 😊'
+        elif not re.match(r"^[A-Za-zÀ-ÿ\s'-]+$", userfirstname) or not re.match(r"^[A-Za-zÀ-ÿ\s'-]+$", userlastname):
             error = 'First name and last name can only contain letters, spaces, apostrophes (\'), and hyphens (-).'
         else:
             add_member(userfirstname, userlastname, useremail, hashed_password)
@@ -53,8 +57,7 @@ def signin_form():
 @app.route('/signin', methods=['GET', 'POST'])
 def signin_submit():
     error = ""
-    error_invalid_password = ""
-    error_email_exist = ""
+    error_invalid_credentials = ""
 
     if request.method == 'POST':
         useremail = request.form.get('userEmail')
@@ -63,48 +66,50 @@ def signin_submit():
         if len(useremail) == 0 or len(userpassword) == 0:
             error = 'Please supply all fields'
         else:
-            saved_password = get_password_by_email(useremail)
+            saved_details = get_password_email_by_email(useremail)
 
-            if saved_password:
-                stored_password = saved_password[0]
+            if saved_details: #if email exist
+                stored_password = saved_details[0]
+                stored_name = saved_details[1]
+                stored_email = saved_details[2]
                 if check_password_hash(stored_password, userpassword):
                     return render_template('home.html')
                 else:
-                    error_invalid_password = 'Incorrect password, please try again!'
+                    error_invalid_credentials = 'Incorrect email or password. Please try again!'
             else:
-                error_email_exist = 'Email not found. Please sign up or try again'
-        return render_template('login.html', title='Sign In', message = error, message_email_exist = error_email_exist, message_invalid_password = error_invalid_password)
+                error_invalid_credentials = 'Incorrect email or password. Please try again!'
+        return render_template('login.html', title='Sign In', message = error, message_invalid_credentials = error_invalid_credentials)
     return render_template('login.html', title='Sign In')
 
 
-#              <---- Blogs ---->
-
-# <-- all blogs and filter-->
-@app.route('/blog_home', methods=['GET'])
-def blogs():
-    # Retrieve the 'category' parameter
-    category = request.args.get('category')
-
-    # If no category is selected, it fetches all blogs
-    blog_database = get_all_blogs(category)
-
-    # Pass the list of blogs to the 'blog_home' template
-    return render_template('blog_home.html', blog_list=blog_database)
-
-
-# <--individual blog based on the blog ID-->
-@app.route('/blog/<int:blog_id>', methods=['GET'])
-def view_blog(blog_id):
-    # Call the data access function to get the blog details
-    blog = get_blog_by_id(blog_id)
-
-    if blog is None:
-        # If no blog is found, redirect to the blog home page
-        return redirect(url_for('blogs'))
-
-    # Render the template for the individual blog, passing the blog data
-    return render_template('view_blog.html', blog=blog)
-
+# #              <---- Blogs ---->
+#
+# # <-- all blogs and filter-->
+# @app.route('/blog_home', methods=['GET'])
+# def blogs():
+#     # Retrieve the 'category' parameter
+#     category = request.args.get('category')
+#
+#     # If no category is selected, it fetches all blogs
+#     blog_database = get_all_blogs(category)
+#
+#     # Pass the list of blogs to the 'blog_home' template
+#     return render_template('blog_home.html', blog_list=blog_database)
+#
+#
+# # <--individual blog based on the blog ID-->
+# @app.route('/blog/<int:blog_id>', methods=['GET'])
+# def view_blog(blog_id):
+#     # Call the data access function to get the blog details
+#     blog = get_blog_by_id(blog_id)
+#
+#     if blog is None:
+#         # If no blog is found, redirect to the blog home page
+#         return redirect(url_for('blogs'))
+#
+#     # Render the template for the individual blog, passing the blog data
+#     return render_template('view_blog.html', blog=blog)
+#
 
 #           <---- Meal planner ---->
 

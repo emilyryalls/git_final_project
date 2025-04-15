@@ -195,7 +195,7 @@ foreign key (email_id) references email(email_id),
 date_of_birth date null,
 height decimal(5,2),
 weight decimal(5,2),
-goal_id bigint not null,
+goal_id bigint null,
 foreign key (goal_id) references goal(goal_id),
 diet_id bigint null,
 foreign key (diet_id) references diet(diet_id),
@@ -208,7 +208,7 @@ create table member_password
 (
 password_id bigint not null primary key auto_increment,
 member_id bigint not null,
-hashed_password varchar(250) not null,
+hashed_password text not null,
 foreign key (member_id) references member(member_id)
 );
 
@@ -217,8 +217,23 @@ create table newsletter
 (
 newsletter_id bigint not null primary key auto_increment,
 email_id bigint not null,
-foreign key (email_id) references member(email_id)
+foreign key (email_id) references email(email_id)
 );
+
+-- login view for internal code only
+create view v_login_details
+as
+select
+	m.first_name,
+	e.email_address,
+    p.hashed_password
+from email as e
+JOIN
+member as m
+on m.email_id = e.email_id
+JOIN
+member_password as p
+on p.member_id = m.member_id;
 
 select *
 from member;
