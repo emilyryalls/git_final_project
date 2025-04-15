@@ -1,6 +1,6 @@
 from application import app
 from flask import render_template, request, redirect, url_for, flash, session
-from application.data_access import add_member, get_password_email_by_email, get_workout_video
+from application.data_access import add_member, get_details_by_email, get_workout_video
 #from application.data_access import get_all_blogs, get_blog_by_id
 
 import os
@@ -14,9 +14,8 @@ from application.user_data_access import get_user_by_id, update_profile_info
 @app.route('/')
 @app.route('/home')
 def home():
-    session['SignIn'] = False
-    session['email'] = stored_email
-    session['user'] = stored_name
+    session['loggedIn'] = False
+
     return render_template('home.html', title='Home')
 
 
@@ -66,14 +65,17 @@ def signin_submit():
         if len(useremail) == 0 or len(userpassword) == 0:
             error = 'Please supply all fields'
         else:
-            saved_details = get_password_email_by_email(useremail)
+            saved_details = get_details_by_email(useremail)
 
             if saved_details: #if email exist
                 stored_password = saved_details[0]
-                stored_name = saved_details[1]
-                stored_email = saved_details[2]
+                session['email'] = saved_details[2]
+                session['user'] = saved_details[1]
+                session['user_id'] = saved_details[3]
+                session['loggedIn'] = True
+
                 if check_password_hash(stored_password, userpassword):
-                    return render_template('home.html')
+                    return redirect(url_for('profile'))
                 else:
                     error_invalid_credentials = 'Incorrect email or password. Please try again!'
             else:
@@ -205,31 +207,40 @@ fitness_goals = [
 # Route to display the user profile
 @app.route("/profile", methods=["GET"])
 def profile():
-    # TEMP: Assume user_id = 1 for development/testing
-    user_id = 1
-    user = get_user_by_id(user_id)
-    return render_template("profile.html", user=user)
+    if 'loggedIn' in session and session['loggedIn']:
+        user = session['user']
 
+    # TEMP: Assume user_id = 1 for development/testing
+    # user_id = 1
+    # user = get_user_by_id(user_id)
+        return render_template("profile.html", user=user)
+    else:
+        return redirect(url_for('signin_form'))  # Redirect to signin if not logged in
 
 # Route to edit profile details on settings page
 @app.route("/profile/settings", methods=["GET", "POST"])
 def update_profile():
     # TEMP: Assume user_id = 1 for development/testing
-    user_id = 1
-    user = get_user_by_id(user_id)
+    # user_id = 1
+    # user = get_user_by_id(user_id)
+    if 'loggedIn' not in session:
+        return redirect(url_for('signin_form'))
+    else:
+        user = session['user']
+        user_id = session['user_id']
 
+        if request.method == "POST":
+            dob = request.form.get("dob")
+            height = request.form.get("height")
+            weight = request.form.get("weight")
+            goal = request.form.get("goal")
 
-    if request.method == "POST":
-        dob = request.form.get("dob")
-        height = request.form.get("height")
-        weight = request.form.get("weight")
-        goal = request.form.get("goal")
+            # update_profile_info(dob, height, weight, goal)
+            update_profile_info(user_id, dob, height, weight, goal)
+            flash("Profile updated successfully!")
+            return redirect(url_for("profile"))
 
-        update_profile_info(user_id, dob, height, weight, goal)
-        flash("Profile updated successfully!")
-        return redirect(url_for("profile"))
-
-    return render_template("profile_settings.html", user=user, fitness_goals=fitness_goals)
+        return render_template("profile_settings.html", user=user, fitness_goals=fitness_goals)
 
 
 # return all workout videos

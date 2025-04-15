@@ -224,6 +224,7 @@ foreign key (email_id) references email(email_id)
 create view v_login_details
 as
 select
+	m.member_id,
 	m.first_name,
 	e.email_address,
     p.hashed_password

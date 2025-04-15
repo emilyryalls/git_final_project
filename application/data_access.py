@@ -73,23 +73,15 @@ def get_db_connection():
 
 # <----- Login ------>
 
-def get_password_email_by_email(useremail):
+def get_details_by_email(useremail):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # sql_get_password = "SELECT user_password FROM membership WHERE user_email = %s"
-    # cursor.execute(sql_get_password, (useremail,))
-    #
-    # saved_password_tuple = cursor.fetchone()
-    # return saved_password_tuple
-
-
-    sql_get_password_name = "SELECT hashed_password, first_name, email_address FROM v_login_details WHERE email_address = %s"
+    sql_get_password_name = "SELECT hashed_password, first_name, email_address, member_id FROM v_login_details WHERE email_address = %s"
     cursor.execute(sql_get_password_name, (useremail,))
 
     saved_tuple = cursor.fetchone()
     return saved_tuple
-
 
 
 # <----- Add Member ------>
