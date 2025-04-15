@@ -1,12 +1,13 @@
 from application import app
 from flask import render_template, request, redirect, url_for, flash
-from application.data_access.blog_data_access import get_all_blogs,  get_blog_by_id, get_workout_video, add_member, get_password_by_email
+from application.data_access.blog_data_access import get_all_blogs,  get_blog_by_id, get_workout_video
 import os
 import re
 import json
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from application.data_access.user_data_access import get_user_by_id, update_profile_info
+from application.data_access.data_access import add_member, get_password_by_email
 
 @app.route('/')
 @app.route('/home')

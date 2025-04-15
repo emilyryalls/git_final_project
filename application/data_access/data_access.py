@@ -35,37 +35,6 @@ def get_password_by_email(useremail):
 
 
 #                                               <----- Add Member ------>
-# def add_member(fname, lname, uemail, upassword):
-#     conn = get_db_connection()
-#     cursor = conn.cursor()
-#
-#     #to be changed for real DB values
-#     sql_check_email = "SELECT member_id FROM member WHERE user_email = %s"
-#     cursor.execute(sql_check_email, (uemail,))
-#
-#     email_id = cursor.fetchone()
-#
-#     if email_id:
-#         return True
-#     else:
-#         sql_add_member = "INSERT INTO member (firstname, lastname, user_email, user_password) VALUES (%s, %s, %s, %s)"
-#         val = (fname, lname, uemail, upassword)
-#
-#     # try:
-#     cursor.execute(sql_add_member, val)
-#     conn.commit()
-#     #print('added to db test')
-#
-#     # except mysql.connector.Error as err:
-#     #     print(f"Error: {err}")
-#     #
-#     # finally:
-#     #     cursor.close()
-#     #     conn.close()
-#
-# #     def create():
-# #         return mysql_password
-
 
 def add_member(fname, lname, uemail, upassword):
     conn = get_db_connection()
