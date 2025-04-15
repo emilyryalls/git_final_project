@@ -14,9 +14,10 @@ from application.user_data_access import get_user_by_id, update_profile_info
 @app.route('/')
 @app.route('/home')
 def home():
-    session['loggedIn'] = False
+    if not session['loggedIn']:
+        return render_template('home.html', title='Home', loggedin=False)
 
-    return render_template('home.html', title='Home')
+    return render_template('home.html', title='Home', loggedin=True)
 
 
 @app.route('/membership', methods=['GET'])
@@ -82,6 +83,15 @@ def signin_submit():
                 error_invalid_credentials = 'Incorrect email or password. Please try again!'
         return render_template('login.html', title='Sign In', message = error, message_invalid_credentials = error_invalid_credentials)
     return render_template('login.html', title='Sign In')
+
+@app.route('/loggedOut')
+def loggedOut():
+    session.pop('email', None)
+    session.pop('user', None)
+    session.pop('user_id', None)
+    session['loggedIn'] = False
+    return redirect(url_for('home'))
+
 
 
 # #              <---- Blogs ---->

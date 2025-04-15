@@ -27,7 +27,11 @@
             <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="/workouts">Workout Videos</a></li>
             <li class="nav-item"><a class="nav-link" href="/blog_home">R.I.S.E. Fitness Blog</a></li>
+             {% if session.loggedIn %}
+            <li class="nav-item"><a class="nav-link" href="/profile">My Profile</a></li>
+             {% else %}
             <li class="nav-item"><a class="nav-link" href="/membership">Become a Member</a></li>
+             {% endif %}
           </ul>
         </div>
 
@@ -42,12 +46,12 @@
 
           <!-- Sign in / Profile dropdown (always visible) -->
           <div class="dropdown">
-            {% if user_authenticated %}
+            {% if session.loggedIn %}
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="{{ user_image_url }}" alt="User" width="32" height="32" class="rounded-circle me-2">
+              <img src="{{ url_for('static', filename='images/zara.jpeg') }}" alt="User" width="32" height="32" class="rounded-circle me-2">
               <div class="user-labels text-start d-none d-sm-block">
-                <div class="user-name">Hi, {{ firstname }}!</div>
+                <div class="user-name">Hi, {{ session.user }}!</div>
               </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end text-small" aria-labelledby="dropdownUser">
@@ -57,7 +61,7 @@
               <li><a class="dropdown-item" href="/profile">Profile</a></li>
               <li><a class="dropdown-item" href="/profile/settings">Settings</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/logout">Sign Out</a></li>
+              <li><a class="dropdown-item" href="/loggedOut">Sign Out</a></li>
             </ul>
             {% else %}
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
