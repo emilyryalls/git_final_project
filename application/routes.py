@@ -14,7 +14,7 @@ from application.user_data_access import get_user_by_id, update_profile_info
 @app.route('/')
 @app.route('/home')
 def home():
-    if not session['loggedIn']:
+    if not session.get('loggedIn'):
         return render_template('home.html', title='Home', loggedin=False)
 
     return render_template('home.html', title='Home', loggedin=True)
