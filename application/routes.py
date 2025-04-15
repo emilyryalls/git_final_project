@@ -1,5 +1,5 @@
 from application import app
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, session
 from application.data_access.blog_data_access import get_all_blogs,  get_blog_by_id, get_workout_video
 import os
 import re
@@ -12,7 +12,8 @@ from application.data_access.data_access import add_member, get_password_by_emai
 @app.route('/')
 @app.route('/home')
 def home():
-    # session['SignIn'] = False
+    session['loggedIn'] = False
+
     return render_template('home.html', title='Home')
 
 
@@ -36,8 +37,8 @@ def signup_submit():
         if len(useremail) == 0 or len(userpassword) == 0 or len(userfirstname) == 0 or len(userlastname) == 0:
             error = 'Please supply all fields'
         elif add_member(userfirstname, userlastname, useremail, hashed_password):
-            error_email_exist = 'This email address is already part of the family! Please log in to continue.'
-        elif not re.match("^[A-Za-zÀ-ÿ\s'-]+$", userfirstname) or not re.match("^[A-Za-zÀ-ÿ\s'-]+$", userlastname):
+            error_email_exist = 'Already part of the family! Log in instead 😊'
+        elif not re.match(r"^[A-Za-zÀ-ÿ\s'-]+$", userfirstname) or not re.match(r"^[A-Za-zÀ-ÿ\s'-]+$", userlastname):
             error = 'First name and last name can only contain letters, spaces, apostrophes (\'), and hyphens (-).'
         else:
             add_member(userfirstname, userlastname, useremail, hashed_password)
@@ -53,8 +54,7 @@ def signin_form():
 @app.route('/signin', methods=['GET', 'POST'])
 def signin_submit():
     error = ""
-    error_invalid_password = ""
-    error_email_exist = ""
+    error_invalid_credentials = ""
 
     if request.method == 'POST':
         useremail = request.form.get('userEmail')
@@ -63,17 +63,22 @@ def signin_submit():
         if len(useremail) == 0 or len(userpassword) == 0:
             error = 'Please supply all fields'
         else:
-            saved_password = get_password_by_email(useremail)
+            saved_details = get_details_by_email(useremail)
 
-            if saved_password:
-                stored_password = saved_password[0]
+            if saved_details: #if email exist
+                stored_password = saved_details[0]
+                session['email'] = saved_details[2]
+                session['user'] = saved_details[1]
+                session['user_id'] = saved_details[3]
+                session['loggedIn'] = True
+
                 if check_password_hash(stored_password, userpassword):
-                    return render_template('home.html')
+                    return redirect(url_for('profile'))
                 else:
-                    error_invalid_password = 'Incorrect password, please try again!'
+                    error_invalid_credentials = 'Incorrect email or password. Please try again!'
             else:
-                error_email_exist = 'Email not found. Please sign up or try again'
-        return render_template('login.html', title='Sign In', message = error, message_email_exist = error_email_exist, message_invalid_password = error_invalid_password)
+                error_invalid_credentials = 'Incorrect email or password. Please try again!'
+        return render_template('login.html', title='Sign In', message = error, message_invalid_credentials = error_invalid_credentials)
     return render_template('login.html', title='Sign In')
 
 
@@ -199,31 +204,40 @@ fitness_goals = [
 # Route to display the user profile
 @app.route("/profile", methods=["GET"])
 def profile():
-    # TEMP: Assume user_id = 1 for development/testing
-    user_id = 1
-    user = get_user_by_id(user_id)
-    return render_template("profile.html", user=user)
+    if 'loggedIn' in session and session['loggedIn']:
+        user = session['user']
 
+    # TEMP: Assume user_id = 1 for development/testing
+    # user_id = 1
+    # user = get_user_by_id(user_id)
+        return render_template("profile.html", user=user)
+    else:
+        return redirect(url_for('signin_form'))  # Redirect to signin if not logged in
 
 # Route to edit profile details on settings page
 @app.route("/profile/settings", methods=["GET", "POST"])
 def update_profile():
     # TEMP: Assume user_id = 1 for development/testing
-    user_id = 1
-    user = get_user_by_id(user_id)
+    # user_id = 1
+    # user = get_user_by_id(user_id)
+    if 'loggedIn' not in session:
+        return redirect(url_for('signin_form'))
+    else:
+        user = session['user']
+        user_id = session['user_id']
 
+        if request.method == "POST":
+            dob = request.form.get("dob")
+            height = request.form.get("height")
+            weight = request.form.get("weight")
+            goal = request.form.get("goal")
 
-    if request.method == "POST":
-        dob = request.form.get("dob")
-        height = request.form.get("height")
-        weight = request.form.get("weight")
-        goal = request.form.get("goal")
+            # update_profile_info(dob, height, weight, goal)
+            update_profile_info(user_id, dob, height, weight, goal)
+            flash("Profile updated successfully!")
+            return redirect(url_for("profile"))
 
-        update_profile_info(user_id, dob, height, weight, goal)
-        flash("Profile updated successfully!")
-        return redirect(url_for("profile"))
-
-    return render_template("profile_settings.html", user=user, fitness_goals=fitness_goals)
+        return render_template("profile_settings.html", user=user, fitness_goals=fitness_goals)
 
 
 # return all workout videos
