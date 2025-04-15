@@ -1,8 +1,10 @@
 from application import app
 from flask import render_template, request, redirect, url_for, flash, session
-from application.data_access.blog_data_access import get_all_blogs,  get_blog_by_id, get_workout_video
+from application.data_access.blog_data_access import get_all_blogs,  get_blog_by_id
 from application.data_access.user_data_access import get_user_by_id, update_profile_info
 from application.data_access.data_access import add_member, get_details_by_email
+from application.data_access.workout_data_access import get_workout_video
+from application.data_access.meal_plan_data_access import save_plan_to_file, load_latest_plan, get_user_id, get_user_plan_files, generate_plan_filename
 import os
 import re
 import json
@@ -83,7 +85,7 @@ def signin_submit():
     return render_template('login.html', title='Sign In')
 
 
-#              <---- Blogs ---->
+#                                               <---- Blogs ---->
 
 # <-- all blogs and filter-->
 @app.route('/blog_home', methods=['GET'])
@@ -111,87 +113,116 @@ def view_blog(blog_id):
     # Render the template for the individual blog, passing the blog data
     return render_template('blog/view_blog.html', blog=blog)
 
-#           <---- Meal planner ---->
 
-# Directory to store user meal plans
+#                                           <---- Meal planner ---->
+
+# Config
 USER_MEAL_PLANS_DIR = os.path.join(os.path.dirname(__file__), 'user_meal_plans')
-# List of days for the meal planner
 DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+MAX_MEAL_PLANS = 4
 
-
-# <--display the meal planner form-->
-@app.route('/meal_planner_form', methods=['GET'])
+@app.route('/meal_planner_form')
 def meal_planner():
-    # Get today's date
-    today = datetime.now()
+    if not get_user_id():
+        return redirect(url_for('signin_form'))
 
-    # Calculate the Monday of the current week
-    monday = today - timedelta(days=today.weekday())
-
-    # Format the date as string in 'DD-MM-YY' format (for example: '06-03-23')
+    monday = datetime.now() - timedelta(days=datetime.now().weekday())
     plan_name = monday.strftime('%d-%m-%y')
 
-    # Pass the 'plan_name' (week's start date) to the template along with 'days'
     return render_template('meal_plan/meal_planner_form.html', days=DAYS, plan_name=plan_name)
 
 
-# <--saving the meal plan-->
 @app.route('/save_meal_plan', methods=['POST'])
 def save_meal_plan():
-    # Get the meal plan name from the form
+    if not get_user_id():
+        return redirect(url_for('signin_form'))
+
+    user_id = get_user_id()
     plan_name = request.form.get('plan_name')
 
-    # Initialize an empty dictionary to store meals for each day of the week
-    week = {}
-    for day in DAYS:
-        # For each day, get the meals (breakfast, lunch, dinner, snacks) from the form
-        week[day] = {
+    week = {
+        day: {
             'breakfast': request.form.get(f'{day}_breakfast', ''),
             'lunch': request.form.get(f'{day}_lunch', ''),
             'dinner': request.form.get(f'{day}_dinner', ''),
             'snacks': request.form.get(f'{day}_snacks', ''),
-        }
-
-    # Create the complete meal plan dictionary with the user ID, plan name, and weekly meals
-    meal_plan = {
-        'user_id': 'user123',  # set user id for testing change to current_user.id once database is created
-        'name': plan_name,
-        'week': week
+        } for day in DAYS
     }
 
-    # Save the meal plan as a JSON file (user-specific)
-    user_meal_plan_file = os.path.join(USER_MEAL_PLANS_DIR, 'user123_meal_plan.json')
+    created_at = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    meal_plan = {
+        'user_id': user_id,
+        'name': plan_name,
+        'week': week,
+        'created_at': created_at
+    }
+
     try:
-        with open(user_meal_plan_file, 'w') as f:
-        # Write the meal plan data to the JSON file with indentation for readability
-            json.dump(meal_plan, f, indent=4)
+        save_plan_to_file(user_id, meal_plan)
     except Exception as e:
         return render_template('error.html', message=f"Failed to save meal plan: {e}")
 
-    return redirect(url_for('meal_plan/view_meal_plan'))
+    return render_template('meal_plan/view_meal_plan.html', meal_plan=meal_plan, plan_name=plan_name)
 
-# <--view the saved meal plan-->
-@app.route('/view_meal_plan', methods=['GET'])
+
+@app.route('/view_meal_plan')
 def view_meal_plan():
-    # Define the path to the saved user meal plan JSON file
-    user_meal_plan_file = os.path.join(USER_MEAL_PLANS_DIR, 'user123_meal_plan.json')
-    # user_meal_plan_file = os.path.join(USER_MEAL_PLANS_DIR, f'user_{current_user.id}_meal_plan.json') <--Use this once we have user table set up -->
+    if not get_user_id():
+        return redirect(url_for('signin_form'))
 
-    # Check if the meal plan file exists
-    if not os.path.exists(user_meal_plan_file):
-        # If it doesn't, render an error page
+    meal_plan = load_latest_plan(get_user_id())
+    if not meal_plan:
         return render_template('error.html', message="No meal plan found.")
 
-    # Open and read the meal plan from the JSON file
-    with open(user_meal_plan_file, 'r') as f:
+    plan_name = meal_plan.get('name', 'NONE')
+    return render_template('meal_plan/view_meal_plan.html', meal_plan=meal_plan, plan_name=plan_name)
+
+
+# <-- Meal Plan History -->
+@app.route('/meal_plans/history')
+def meal_plan_history():
+    if not get_user_id():
+        return redirect(url_for('signin_form'))
+
+    user_id = get_user_id()
+    user_files = get_user_plan_files(user_id)
+
+    # Limit to 4 most recent meal plans
+    meal_plans = []
+    for filename in reversed(user_files[:4]):  # show only the 4 most recent
+        try:
+            with open(os.path.join(USER_MEAL_PLANS_DIR, filename), 'r') as f:
+                data = json.load(f)
+                meal_plans.append({
+                    'name': data.get('name'),
+                    'created_at': data.get('created_at'),
+                    'timestamp': data.get('created_at'),  # for URL linking
+                    'filename': filename
+                })
+        except Exception as e:
+            print(f"Error reading {filename}: {e}")  # log any file read errors
+
+    return render_template('meal_plan/meal_plan_history.html', meal_plans=meal_plans)
+
+
+# <-- View a Specific Meal Plan -->
+@app.route('/view_meal_plan/<timestamp>')
+def view_specific_meal_plan(timestamp):
+    if not get_user_id():
+        return redirect(url_for('signin_form'))
+
+    user_id = get_user_id()
+    filename = generate_plan_filename(user_id, timestamp)
+    filepath = os.path.join(USER_MEAL_PLANS_DIR, filename)
+
+    if not os.path.exists(filepath):
+        return render_template('error.html', message="Meal plan not found.")
+
+    with open(filepath, 'r') as f:
         meal_plan = json.load(f)
 
+    return render_template('meal_plan/view_meal_plan.html', meal_plan=meal_plan, plan_name=meal_plan.get('name'))
 
-    # Ensure the plan name exists and is properly extracted
-    plan_name = meal_plan.get('name', 'NONE')  # If no plan name is found, it will default to 'NONE'
-
-    # Render the 'view_meal_plan' template and pass the meal plan data
-    return render_template('view_meal_plan.html', meal_plan=meal_plan, plan_name=plan_name)
 
 
 # Fitness goals list - to be removed once we have database

@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block body_content %}
+<!-- Main container for meal plan history -->
+<div class="container mt-5">
+    <!-- Heading for the page -->
+    <h1 class="text-center mb-4">My Meal Plan History</h1>
+
+    <!-- Check if there are meal plans -->
+    {% if meal_plans|length > 0 %}
+    <ul class="list-group">
+        {% for plan in meal_plans %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <strong>{{ plan.name }}</strong>
+                <span class="text-muted">created at {{ plan.created_at }}</span>
+            </div>
+            <a href="{{ url_for('view_specific_meal_plan', timestamp=plan.timestamp) }}" class="btn btn-info btn-sm">View</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <div class="alert alert-warning mt-4">
+        No meal plans found yet.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
