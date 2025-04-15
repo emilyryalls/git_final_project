@@ -14,18 +14,23 @@
     <!-- Meal Plan Title (name of the plan) -->
     <h1 class="text-center mb-4"> Meal Plan for the week starting: {{ selected_meal_plan.name }} </h1>
 
+    <!-- Meals Data Debugging -->
+    <!-- <p>Meals Data: {{ selected_meal_plan.meals | tojson }}</p> -->
+
+    <!-- Start of the row for meal plans -->
     <div class="row">
-        <!-- Loop through each day in the meal plan and display the meals -->
-        {% for day, meals in selected_meal_plan.meals.items() %}
-        <div class="col-md-6 mb-4">
-            <!-- Display the day of the week -->
+        <!-- Loop through the days in the correct order: Monday to Sunday -->
+        {% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
+        {% set meals = selected_meal_plan.meals[day] %}
+
+        <!-- Display each day's meal plan -->
+        <div class="col-md-4 mb-4">
             <div class="card">
                 <div class="card-header text-center">
                     <h4>{{ day }}</h4>
                 </div>
                 <div class="card-body">
                     <ul class="list-unstyled">
-                        <!-- Display breakfast, lunch, dinner, and snacks for each day -->
                         <li><strong>Breakfast:</strong> {{ meals.breakfast }}</li>
                         <li><strong>Lunch:</strong> {{ meals.lunch }}</li>
                         <li><strong>Dinner:</strong> {{ meals.dinner }}</li>
@@ -34,8 +39,10 @@
                 </div>
             </div>
         </div>
-        {% if loop.index % 2 == 0 %}
-        </div><div class="row">
+
+        <!-- Ensure each row has 3 columns per row on medium screens -->
+        {% if loop.index % 3 == 0 %}
+            </div><div class="row"> <!-- Start a new row after every 3 cards -->
         {% endif %}
         {% endfor %}
     </div>

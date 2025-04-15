@@ -218,7 +218,6 @@ def meal_plan_dashboard():
 # <-- View a Specific Meal Plan -->
 @app.route('/meal_plan_view/<timestamp>', methods=['GET'])
 def view_meal_plan(timestamp):
-    timestamp = unquote(timestamp)
     user_id = get_user_id()
 
     conn = get_db_connection()
@@ -232,7 +231,7 @@ def view_meal_plan(timestamp):
         flash("Meal plan not found", "danger")
         return redirect(url_for('meal_plan_dashboard'))
 
-    # Convert meals from string to dict
+    # Ensure meals is a dict (deserialize if it's a JSON string)
     if isinstance(selected_meal_plan['meals'], str):
         try:
             selected_meal_plan['meals'] = json.loads(selected_meal_plan['meals'])
