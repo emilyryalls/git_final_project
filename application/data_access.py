@@ -222,7 +222,7 @@ def get_workout_video(goal=None, experience=None, time=None):
         }
         workout_video_list.append(workout)
         # append the dictionary to the list
-        #this is done for each tuple using the for looop
+        #this is done for each tuple using the for loop
 
     return workout_video_list
 
