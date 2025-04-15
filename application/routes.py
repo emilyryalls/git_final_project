@@ -1,7 +1,7 @@
 from application import app
 import mysql.connector
 from flask import render_template, request, redirect, url_for, flash, session
-from application.blog_data_access import get_db_connection, add_member, get_password_by_email, get_all_blogs, get_blog_by_id, get_workout_video
+from application.blog_data_access import get_db_connection, add_member, get_password_by_email, get_all_blogs, get_blog_by_id, get_workout_video, get_details_by_email
 import os
 import re
 import json
@@ -86,8 +86,8 @@ def signin_submit():
         return render_template('login.html', title='Sign In', message = error, message_invalid_credentials = error_invalid_credentials)
     return render_template('login.html', title='Sign In')
 
-@app.route('/loggedOut')
-def loggedOut():
+@app.route('/loggedout')
+def logged_out():
     session.pop('email', None)
     session.pop('user', None)
     session.pop('user_id', None)
@@ -259,8 +259,8 @@ def profile():
         user = session['user']
 
     # TEMP: Assume user_id = 1 for development/testing
-    # user_id = 1
-    # user = get_user_by_id(user_id)
+        user_id = session.get('user_id')
+        user = get_user_by_id(user_id)
         return render_template("profile.html", user=user)
     else:
         return redirect(url_for('signin_form'))  # Redirect to signin if not logged in

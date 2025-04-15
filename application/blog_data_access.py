@@ -229,3 +229,6 @@ def get_workout_video(goal=None, experience=None, time=None):
 
     return workout_video_list
 
+
+def get_password_by_email():
+    return None
