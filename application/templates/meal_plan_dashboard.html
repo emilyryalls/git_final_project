@@ -22,10 +22,10 @@
     <!-- Tabs -->
     <ul class="nav nav-tabs mb-4" id="dashboardTabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="view-tab" data-bs-toggle="tab" data-bs-target="#view" type="button">📖 View Current Plan</button>
+            <button class="nav-link active" id="view-tab" data-bs-toggle="tab" data-bs-target="#view" type="button">📖 View Plan</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="create-tab" data-bs-toggle="tab" data-bs-target="#create" type="button">📝 Create New Plan</button>
+            <button class="nav-link" id="create-tab" data-bs-toggle="tab" data-bs-target="#create" type="button">📝 Create New</button>
         </li>
     </ul>
 
@@ -33,27 +33,27 @@
         <!-- View Current Plan -->
         <div class="tab-pane fade show active" id="view" role="tabpanel">
             {% if current_meal_plan %}
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body">
-                        <h3>{{ current_meal_plan.name }}</h3>
-                        <p><strong>📅 Created At:</strong> {{ current_meal_plan.created_at }}</p>
-                        <p><strong>🗒️ Description:</strong> {{ current_meal_plan.description }}</p>
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h3>{{ current_meal_plan.name }}</h3>
+                    <p><strong>📅 Created:</strong> {{ current_meal_plan.created_at }}</p>
+                    <p><strong>🗒️ Description:</strong> {{ current_meal_plan.description }}</p>
 
-                        {% for day, meals in current_meal_plan.meals.items() %}
-                        <div class="mt-4">
-                            <h5 class="fw-bold">{{ day }}</h5>
-                            <ul class="list-unstyled">
-                                <li>🍳 <strong>Breakfast:</strong> {{ meals.breakfast if meals.breakfast else "No meal planned" }}</li>
-                                <li>🥪 <strong>Lunch:</strong> {{ meals.lunch if meals.lunch else "No meal planned" }}</li>
-                                <li>🍝 <strong>Dinner:</strong> {{ meals.dinner if meals.dinner else "No meal planned" }}</li>
-                                <li>🍎 <strong>Snacks:</strong> {{ meals.snacks if meals.snacks else "No snacks planned" }}</li>
-                            </ul>
+                    {% for day, meals in current_meal_plan.meals.items() %}
+                    <div class="mt-4 border-top pt-3">
+                        <h5 class="fw-bold">{{ day }}</h5>
+                        <div class="row row-cols-2 row-cols-md-4 g-3">
+                            <div><strong>🍳 Breakfast:</strong> {{ meals.breakfast or "No meal planned" }}</div>
+                            <div><strong>🥪 Lunch:</strong> {{ meals.lunch or "No meal planned" }}</div>
+                            <div><strong>🍝 Dinner:</strong> {{ meals.dinner or "No meal planned" }}</div>
+                            <div><strong>🍎 Snacks:</strong> {{ meals.snacks or "No snacks planned" }}</div>
                         </div>
-                        {% endfor %}
                     </div>
+                    {% endfor %}
                 </div>
+            </div>
             {% else %}
-                <div class="alert alert-info">No current meal plan available.</div>
+            <div class="alert alert-info">No current meal plan available.</div>
             {% endif %}
         </div>
 
@@ -103,29 +103,39 @@
         </div>
     </div>
 
+    <!-- Meal Plan History -->
     <div class="mt-5">
-        <h4>📚 Meal Plan History</h4>
+        <h4 class="mb-3">📚 Meal Plan History</h4>
+
+        <!-- Search -->
+        <form method="GET" action="" class="mb-3">
+            <input type="text" class="form-control" name="search" placeholder="🔍 Search meal plans by name/date...">
+        </form>
+
         {% if meal_plans %}
-        <ul class="list-group">
+        <div class="accordion" id="historyAccordion">
             {% for plan in meal_plans %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <strong>{{ plan.name }}</strong>
-                    <small class="text-muted">— {{ plan.created_at }}</small>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHist{{ loop.index }}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHist{{ loop.index }}">
+                        {{ plan.name }} <span class="ms-auto small text-muted">{{ plan.created_at }}</span>
+                    </button>
+                </h2>
+                <div id="collapseHist{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#historyAccordion">
+                    <div class="accordion-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-0"><strong>Description:</strong> {{ plan.description }}</p>
+                        </div>
+                        <div class="btn-group">
+                            <a href="{{ url_for('view_meal_plan', timestamp=plan['created_at']) }}" class="btn btn-outline-info btn-sm">👁️ View</a>
+                            <a href="{{ url_for('edit_meal_plan', timestamp=plan.created_at) }}" class="btn btn-outline-warning btn-sm">✏️ Edit</a>
+                            <a href="{{ url_for('clone_meal_plan', timestamp=plan.created_at) }}" class="btn btn-outline-secondary btn-sm">📋 Clone</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="btn-group">
-                    <!-- View Button -->
-                    <a href="{{ url_for('view_meal_plan', timestamp=plan['created_at']) }}" class="btn btn-outline-info btn-sm">View</a>
-
-<!--                    &lt;!&ndash; Edit Button &ndash;&gt;-->
-<!--                    <a href="{{ url_for('edit_meal_plan', timestamp=plan.created_at) }}" class="btn btn-warning btn-sm mx-2">Edit</a>-->
-
-<!--                    &lt;!&ndash; Clone Button &ndash;&gt;-->
-<!--                    <a href="{{ url_for('clone_meal_plan', timestamp=plan['created_at']) }}" class="btn btn-secondary btn-sm">Clone</a>-->
-                </div>
-            </li>
+            </div>
             {% endfor %}
-        </ul>
+        </div>
         {% else %}
         <div class="alert alert-secondary mt-3">No previous meal plans found.</div>
         {% endif %}

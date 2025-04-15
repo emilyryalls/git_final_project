@@ -693,9 +693,9 @@ VALUES
 INSERT INTO meal_plans (member_id, name, description, meals, created_at)
 VALUES
 (1,
- 'Week of 28-04-25',
+ 'Week of 31-03-25',
  'High-carb meal plan for energy and endurance',
  '{"Monday": {"breakfast": "Oatmeal with Banana", "lunch": "Pasta with Pesto", "dinner": "Rice with Grilled Chicken", "snacks": "Granola Bar"}, "Tuesday": {"breakfast": "Bagels with Cream Cheese", "lunch": "Quinoa and Veggie Stir Fry", "dinner": "Baked Potato with Chili", "snacks": "Apple with Peanut Butter"}, "Wednesday": {"breakfast": "Smoothie with Spinach", "lunch": "Whole Wheat Sandwich", "dinner": "Spaghetti with Marinara Sauce", "snacks": "Carrot Sticks with Hummus"}, "Thursday": {"breakfast": "Toast with Avocado", "lunch": "Couscous Salad", "dinner": "Sweet Potato and Black Bean Tacos", "snacks": "Rice Cakes"}, "Friday": {"breakfast": "French Toast", "lunch": "Vegetable Soup", "dinner": "Risotto", "snacks": "Fruit Salad"}, "Saturday": {"breakfast": "Pancakes with Maple Syrup", "lunch": "Curry Rice", "dinner": "Chicken and Rice", "snacks": "Nuts and Dried Fruit"}, "Sunday": {"breakfast": "Muesli", "lunch": "Falafel Wrap", "dinner": "Veggie Burger", "snacks": "Granola"}}',
- '2025-04-28 08:45:00');
+ '2025-03-31 08:45:00');
 
  select * from meal_plans;

@@ -10,6 +10,7 @@ import re
 import json
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
+from urllib.parse import unquote
 
 
 @app.route('/')
@@ -217,6 +218,7 @@ def meal_plan_dashboard():
 # <-- View a Specific Meal Plan -->
 @app.route('/meal_plan_view/<timestamp>', methods=['GET'])
 def view_meal_plan(timestamp):
+    timestamp = unquote(timestamp)
     user_id = get_user_id()
 
     conn = get_db_connection()
@@ -241,6 +243,7 @@ def view_meal_plan(timestamp):
 
 @app.route('/edit_meal_plan/<timestamp>', methods=['GET', 'POST'])
 def edit_meal_plan(timestamp):
+    timestamp = unquote(timestamp)  # <-- Add this line
     user_id = get_user_id()
     if not user_id:
         return redirect(url_for('signin_form'))
@@ -292,6 +295,7 @@ def edit_meal_plan(timestamp):
 
 @app.route('/clone_meal_plan/<timestamp>', methods=['GET', 'POST'])
 def clone_meal_plan(timestamp):
+    timestamp = unquote(timestamp)
     user_id = get_user_id()
     selected_meal_plan = find_meal_plan_by_timestamp(user_id, timestamp)
 
