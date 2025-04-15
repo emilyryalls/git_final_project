@@ -31,35 +31,39 @@
 
     <div class="tab-content" id="dashboardTabsContent">
         <!-- View Current Plan -->
-        <div class="tab-pane fade show active" id="view" role="tabpanel">
-            {% if selected_meal_plan %}
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <h3>{{ selected_meal_plan.name }}</h3>
-                    <p><strong>📅 Created At:</strong> {{ selected_meal_plan.created_at }}</p>
-                    <p><strong>🗒️ Description:</strong> {{ selected_meal_plan.description }}</p>
+    <div class="tab-pane fade show active" id="view" role="tabpanel">
+        {% if selected_meal_plan %}
+            {% if selected_meal_plan.meals %}
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3>{{ selected_meal_plan.name }}</h3>
+                        <p><strong>📅 Created At:</strong> {{ selected_meal_plan.created_at }}</p>
+                        <p><strong>🗒️ Description:</strong> {{ selected_meal_plan.description }}</p>
 
-                    {% for day, meals in selected_meal_plan.meals.items() %}
-                    <div class="mt-4">
-                        <h5 class="fw-bold">{{ day }}</h5>
-                        <ul class="list-unstyled">
-                            <li>🍳 <strong>Breakfast:</strong> {{ meals.breakfast }}</li>
-                            <li>🥪 <strong>Lunch:</strong> {{ meals.lunch }}</li>
-                            <li>🍝 <strong>Dinner:</strong> {{ meals.dinner }}</li>
-                            <li>🍎 <strong>Snacks:</strong> {{ meals.snacks }}</li>
-                        </ul>
+                        {% for day, meals in selected_meal_plan.meals.items() %}
+                        <div class="mt-4">
+                            <h5 class="fw-bold">{{ day }}</h5>
+                            <ul class="list-unstyled">
+                                <li>🍳 <strong>Breakfast:</strong> {{ meals.breakfast if meals.breakfast else "No meal planned" }}</li>
+                                <li>🥪 <strong>Lunch:</strong> {{ meals.lunch if meals.lunch else "No meal planned" }}</li>
+                                <li>🍝 <strong>Dinner:</strong> {{ meals.dinner if meals.dinner else "No meal planned" }}</li>
+                                <li>🍎 <strong>Snacks:</strong> {{ meals.snacks if meals.snacks else "No snacks planned" }}</li>
+                            </ul>
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
-            </div>
             {% else %}
-            <div class="alert alert-info">No current meal plan selected.</div>
+                <div class="alert alert-warning">This meal plan doesn't have any meals data.</div>
             {% endif %}
-        </div>
+        {% else %}
+            <div class="alert alert-info">No current meal plan selected.</div>
+        {% endif %}
+    </div>
 
         <!-- Create New Plan -->
         <div class="tab-pane fade" id="create" role="tabpanel">
-            <form action="{{ url_for('meal_plan_dashboard') }}" method="POST" class="mt-3">
+            <form action="{{ url_for('save_meal_plan') }}" method="POST" class="mt-3">
                 <input type="hidden" name="plan_name" value="{{ plan_name }}">
 
                 <div class="mb-3">

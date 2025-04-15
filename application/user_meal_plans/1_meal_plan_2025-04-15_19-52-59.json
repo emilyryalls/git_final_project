@@ -1,0 +1,50 @@
+{
+      "user_id": 1,
+      "name": "Week of 14-04-25",
+      "description": "",
+      "week": {
+            "Monday": {
+                  "breakfast": "Smoothie",
+                  "lunch": "Pasta",
+                  "dinner": "Soup",
+                  "snacks": ""
+            },
+            "Tuesday": {
+                  "breakfast": "",
+                  "lunch": "",
+                  "dinner": "",
+                  "snacks": ""
+            },
+            "Wednesday": {
+                  "breakfast": "",
+                  "lunch": "",
+                  "dinner": "",
+                  "snacks": ""
+            },
+            "Thursday": {
+                  "breakfast": "",
+                  "lunch": "",
+                  "dinner": "",
+                  "snacks": ""
+            },
+            "Friday": {
+                  "breakfast": "",
+                  "lunch": "",
+                  "dinner": "",
+                  "snacks": ""
+            },
+            "Saturday": {
+                  "breakfast": "",
+                  "lunch": "",
+                  "dinner": "",
+                  "snacks": ""
+            },
+            "Sunday": {
+                  "breakfast": "",
+                  "lunch": "",
+                  "dinner": "",
+                  "snacks": ""
+            }
+      },
+      "created_at": "2025-04-15_19-52-59"
+}

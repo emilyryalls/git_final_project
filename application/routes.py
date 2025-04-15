@@ -188,6 +188,7 @@ def meal_plan_dashboard():
     timestamp = request.args.get('timestamp')
     selected_meal_plan = next((plan for plan in meal_plans if plan['timestamp'] == timestamp), None)
 
+    print(f"Selected Meal Plan: {selected_meal_plan}")  # Add this
     return render_template('meal_plan_dashboard.html',
                            meal_plans=meal_plans,
                            selected_meal_plan=selected_meal_plan,
