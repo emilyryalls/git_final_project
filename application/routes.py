@@ -1,6 +1,6 @@
 from application import app
 from flask import render_template, request, redirect, url_for, flash, session
-from application.data_access import get_all_blogs, add_member, get_password_by_email, get_blog_by_id, get_workout_video
+from application.data_access import get_all_blogs, add_member, get_password_by_email, get_blog_by_id
 import os
 import re
 import json
@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from application.user_data_access import get_user_by_id, update_profile_info
+from application.workouts_data_access import get_workout_video
 
 @app.route('/')
 @app.route('/home')
