@@ -1,4 +1,5 @@
 from application import app
+import mysql.connector
 from flask import render_template, request, redirect, url_for, flash, session
 from application.data_access.blog_data_access import get_all_blogs,  get_blog_by_id
 from application.data_access.user_data_access import update_profile_info
@@ -12,15 +13,19 @@ from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from urllib.parse import unquote
 
+from application.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences
+
+
 
 @app.route('/')
 @app.route('/home')
 def home():
-    session['loggedIn'] = False
+    if not session.get('loggedIn'):
+        return render_template('home.html', title='Home', loggedin=False)
 
-    return render_template('home.html', title='Home')
+    return render_template('home.html', title='Home', loggedin=True)
 
-
+# <---- Sign up / membership ---->
 @app.route('/membership', methods=['GET'])
 def signup_form():
     return render_template('membership.html', title='Membership')
@@ -36,6 +41,7 @@ def signup_submit():
         useremail = request.form.get('userEmail')
         userpassword = request.form.get('userPassword')
         hashed_password = generate_password_hash(userpassword)
+
         #print('received')
 
         if len(useremail) == 0 or len(userpassword) == 0 or len(userfirstname) == 0 or len(userlastname) == 0:
@@ -46,10 +52,18 @@ def signup_submit():
             error = 'First name and last name can only contain letters, spaces, apostrophes (\'), and hyphens (-).'
         else:
             add_member(userfirstname, userlastname, useremail, hashed_password)
+            # member_since = datetime.now()  #had to updates this lines so it shows name and date when rendering to profile page
+            # user = {
+            #     "firstname": userfirstname,
+            #     "member_since": member_since
+            # }
+            # return render_template('profile.html', user=user )
             return render_template('signedup.html')
+
     return render_template('membership.html', title='Sign Up', message = error, message_email_exist = error_email_exist)
 
 
+# <---- Login.logout ---->
 @app.route('/login', methods=['GET', 'POST'])
 def signin_form():
     return render_template('login.html', title='Login')
@@ -85,6 +99,51 @@ def signin_submit():
         return render_template('login.html', title='Sign In', message = error, message_invalid_credentials = error_invalid_credentials)
     return render_template('login.html', title='Sign In')
 
+# <--Newsletter subscription-->
+@app.route('/subscribe', methods=['POST'])
+def subscribe():
+    email = request.form.get('email')
+
+    if not email:
+        flash("Please enter a valid email address.")
+        return redirect(url_for('blogs'))  # Redirect back to blogs page
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        # Check if the email already exists
+        cursor.execute("SELECT email_id FROM email WHERE email_address = %s", (email,))
+        existing = cursor.fetchone()
+
+        if existing:
+            email_id = existing[0]
+        else:
+            # Add to email table
+            cursor.execute("INSERT INTO email (email_address) VALUES (%s)", (email,))
+            conn.commit()
+            email_id = cursor.lastrowid
+
+        # Insert into newsletter table (if not already subscribed)
+        cursor.execute("SELECT * FROM newsletter WHERE email_id = %s", (email_id,))
+        already_subscribed = cursor.fetchone()
+
+        if not already_subscribed:
+            cursor.execute("INSERT INTO newsletter (email_id) VALUES (%s)", (email_id,))
+            conn.commit()
+
+        flash("🎉 Thanks for subscribing!")
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        flash("❌ Something went wrong. Please try again.")
+    finally:
+        cursor.close()
+        conn.close()
+
+    return redirect(url_for('blogs'))  # Go back to the blog page after subscribing
+
+
+
 # --------------------------------------------------------------------------------------------------------------------- #
 #                                               <---- Blogs ---->
 
@@ -116,7 +175,7 @@ def view_blog(blog_id):
 
 # --------------------------------------------------------------------------------------------------------------------- #
 
-#                                           <---- Meal planner ---->
+#           <---- Meal planner ---->
 
 # Config
 DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -340,13 +399,7 @@ def clone_meal_plan(timestamp):
 
 # -------------------------------------------------------------------------------------------------------------- #
 
-# Fitness goals list - to be removed once we have database
-fitness_goals = [
-    "Build Muscle",
-    "Improve Stamina",
-    "Lose Weight",
-    "Tone Up"
-]
+# <---- Profile and profile settings ---->
 
 # Route to display the user profile
 @app.route("/profile", methods=["GET"])
@@ -355,15 +408,15 @@ def profile():
         user = session['user']
 
     # TEMP: Assume user_id = 1 for development/testing
-    # user_id = 1
-    # user = get_user_by_id(user_id)
+        user_id = session.get('user_id')
+        user = get_user_by_id(user_id)
         return render_template("profile.html", user=user)
     else:
         return redirect(url_for('signin_form'))  # Redirect to signin if not logged in
 
-# Route to edit profile details on settings page
+# Route to get profile settings page as well as to edit the profile details on it
 @app.route("/profile/settings", methods=["GET", "POST"])
-def update_profile():
+def profile_settings():
     # TEMP: Assume user_id = 1 for development/testing
     # user_id = 1
     # user = get_user_by_id(user_id)
@@ -373,20 +426,41 @@ def update_profile():
         user = session['user']
         user_id = session['user_id']
 
-        if request.method == "POST":
+    fitness_goals = get_all_goals()
+    experiences = get_all_experience_levels()
+    diets = get_all_diets()
+
+    if request.method == "POST":
+        form_type = request.form.get("form_type")
+
+        if form_type == "account_info":
+            # Just for future expansion (currently not updating these fields)
             dob = request.form.get("dob")
+            update_dob(user_id, dob)  # Optional: make this function
+
+        elif form_type == "body_metrics":
             height = request.form.get("height")
             weight = request.form.get("weight")
+            update_height_weight(user_id, height, weight)
+
+        elif form_type == "preferences":
             goal = request.form.get("goal")
+            experience = request.form.get("experience")
+            diet = request.form.get("diet")
+            update_fitness_preferences(user_id, goal, experience, diet)
 
-            # update_profile_info(dob, height, weight, goal)
-            update_profile_info(user_id, dob, height, weight, goal)
-            flash("Profile updated successfully!")
-            return redirect(url_for("profile"))
+        flash("Profile updated successfully!", "success")
+        return redirect(url_for("profile_settings"))
 
-        return render_template("profile_settings.html", user=user, fitness_goals=fitness_goals)
+    return render_template(
+        "profile_settings.html",
+        user=user,
+        fitness_goals=fitness_goals,
+        experiences=experiences,
+        diets=diets
+    )
 
-
+# <---- Workout videos ---->
 # return all workout videos
 @app.route('/workouts', methods=['GET'])
 def view_workout_videos():

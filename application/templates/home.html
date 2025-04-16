@@ -3,7 +3,7 @@
 {% block body_content %}
 
 <!--move to layout if we want an img like this one every page-->
-<div class="parallax" style="background-image: url('{{ url_for('static', filename='images/home_banner1.webp') }}');">
+<div class="parallax" style="background-image: url('{{ url_for('static', filename='images/home_img/home_banner1.webp') }}');">
     <h1>Own Your Journey: RISE with Us</h1>
 </div>
 
@@ -19,20 +19,20 @@
 
 <div class="section-divider"></div>
 
-<section class="feature-highlight mb-5" style="background-color: #ffe3dd;">
+<section style="background-color: #ffe3dd; padding: 100px 30px; margin-bottom: 60px; width: 100vw; margin-left: calc(-50vw + 50%); border-radius: 0;">
   <h2>Why R.I.S.E.?</h2>
     <br>
   <div class="row text-center">
     <div class="col-md-4">
-      <img src="{{ url_for('static', filename='images/home_icon_empowerment.png') }}" alt="Empowerment icon" width="80">
+      <img src="{{ url_for('static', filename='images/home_img/home_icon_empowerment.png') }}" alt="Empowerment icon" width="80">
       <p class="body-copy"><strong>Empowering Workouts</strong><br>Designed for every body, at every level.</p>
     </div>
     <div class="col-md-4">
-      <img src="{{ url_for('static', filename='images/home_icon_nutrition.png') }}" alt="Nutrition icon" width="80">
+      <img src="{{ url_for('static', filename='images/home_img/home_icon_nutrition.png') }}" alt="Nutrition icon" width="80">
       <p class="body-copy"><strong>Balanced Nutrition</strong><br>Realistic, flexible meal planning support.</p>
     </div>
     <div class="col-md-4">
-      <img src="{{ url_for('static', filename='images/home_icon_wellbeing.png') }}" alt="Wellbeing icon" width="80">
+      <img src="{{ url_for('static', filename='images/home_img/home_icon_wellbeing.png') }}" alt="Wellbeing icon" width="80">
       <p class="body-copy"><strong>Mind & Body Wellness</strong><br>Mindful living tools and uplifting blogs.</p>
     </div>
   </div>
@@ -40,7 +40,7 @@
 
 <div class="section-divider"></div>
 
-<div class="parallax" style="background-image: url('{{ url_for('static', filename='images/home_banner2.jpg') }}');">
+<div class="parallax" style="background-image: url('{{ url_for('static', filename='images/home_img/home_banner2.jpg') }}');">
     <h1>Grace in Grit</h1>
 </div>
 
@@ -49,14 +49,14 @@
 <section>
     <h2>Workouts That Work for You</h2>
     <p>From beginner to advanced, explore our library of empowering workouts designed to fit your lifestyle. Whether it’s strength training, cardio, or a quick 15-minute stretch — we’ve got you covered.</p>
-    <form action="/sign-up" method="get" style="display:inline;">
+    <form action="/workouts" method="get" style="display:inline;">
         <button type="submit" class="cta-button">See Workout Videos</button>
     </form>
 </section>
 
 <div class="section-divider"></div>
 
-<div class="parallax" style="background-image: url('{{ url_for('static', filename='images/home_banner3.jpeg') }}');">
+<div class="parallax" style="background-image: url('{{ url_for('static', filename='images/home_img/home_banner3.jpeg') }}');">
     <h1>The Rhythm of Resilience</h1>
 </div>
 
@@ -65,7 +65,7 @@
 <section>
     <h2>Healthy Living Blog</h2>
     <p>Your go-to space for tips on nutrition, mental wellness, motivation, and more. We believe in a balanced approach to fitness — one that uplifts your body and your mind.</p>
-    <form action="/sign-up" method="get" style="display:inline;">
+    <form action="/blog_home" method="get" style="display:inline;">
         <button type="submit" class="cta-button">Explore our Blog</button>
     </form>
 </section>
@@ -79,7 +79,7 @@
     <div class="carousel-inner">
 
       <div class="carousel-item active">
-        <div class="testimonial-slide" style="background-image: url('{{ url_for('static', filename='images/carousel_1_anna.webp') }}');">
+        <div class="testimonial-slide" style="background-image: url('{{ url_for('static', filename='images/home_img/carousel_1_anna.webp') }}');">
           <div class="testimonial-overlay">
             <p class="testimonial-quote">“R.I.S.E. gave me the confidence to start my fitness journey and stick with it.”</p>
             <small class="testimonial-name">– Anna</small>
@@ -88,7 +88,7 @@
       </div>
 
       <div class="carousel-item">
-        <div class="testimonial-slide" style="background-image: url('{{ url_for('static', filename='images/carousel_2_sara.webp') }}');">
+        <div class="testimonial-slide" style="background-image: url('{{ url_for('static', filename='images/home_img/carousel_2_sara.webp') }}');">
           <div class="testimonial-overlay">
             <p class="testimonial-quote">“Being able to track meal plans and the gentle approach helped me feel balanced, not pressured.”</p>
             <small class="testimonial-name">– Sara</small>
@@ -97,7 +97,7 @@
       </div>
 
       <div class="carousel-item">
-          <div class="testimonial-slide" style="background-image: url('{{ url_for('static', filename='images/carousel_3_jasmine.webp') }}');">
+          <div class="testimonial-slide" style="background-image: url('{{ url_for('static', filename='images/home_img/carousel_3_jasmine.webp') }}');">
             <div class="testimonial-overlay">
               <p class="testimonial-quote">“The trainers genuinely care. R.I.S.E. helped me push past my limits safely.”</p>
               <small class="testimonial-name">– Jasmine</small>
