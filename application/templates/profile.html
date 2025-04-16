@@ -85,7 +85,7 @@
             {% if user.member_since %} # wrapped it in a jinja if. bcause had user with null data on member since column
             <p><strong>🏁 Joined:</strong> {{ user.member_since.strftime('%B %Y') }}</p>
             {% else %}
-            <p class="text-dark">Member since: Not available</p> #changed to dar because it was not visible as text was same color as background
+            <p class="text-dark">Member since: Not available</p>  <!--changed to dar because it was not visible as text was same color as background-->
             {% endif %}
             <p><strong>💪 Profile Setup:</strong> <span class="badge bg-success">Completed</span></p>
             <p><strong>🎯 Goal:</strong> <span class="badge bg-info">Fitness goal selected</span></p>
