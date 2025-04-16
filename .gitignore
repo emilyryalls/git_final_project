@@ -175,3 +175,4 @@ cython_debug/
 
 # for Mac
 .DS_Store
+.python-version
