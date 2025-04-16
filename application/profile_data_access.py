@@ -7,18 +7,8 @@ if sys.platform == "win32":
 else:
     mysql_password = ""
 
-
-mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password=mysql_password,
-  database="rise_db"
-)
-
-
 def main():
     return None
-
 
 def get_db_connection():
     mydb = mysql.connector.connect(
