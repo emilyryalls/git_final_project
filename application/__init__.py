@@ -10,5 +10,5 @@ app.config['SECRET_KEY'] = SECRET_KEY
 
 
 from application import routes
-
+from application import errors
 

@@ -531,6 +531,47 @@ body.home-page .testimonial-name {
 }
 
 /* WORKOUTS PAGE */
+.workout-video-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 600;
+  font-size: 70px;
+  text-align: center;
+  color: #333;
+}
+
+.workout-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px;
+}
+
+.tag-goal {
+  background-color: #F25C54;
+  font-weight: 600;
+  color: white;
+}
+
+.tag-experience {
+  background-color: #F4845F;
+  font-weight: 600;
+  color: white;
+}
+
+.tag-time {
+  background-color: #fec196;
+  font-weight: 600;
+  color: black;
+}
+
+
+/* ERRORS PAGE */
+.error-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 600;
+  font-size: 70px;
+  text-align: center;
+  color: #333;
+}
+
 
 /* BLOG PAGE */
 
