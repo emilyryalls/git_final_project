@@ -27,9 +27,7 @@
             <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="/workouts">Workout Videos</a></li>
             <li class="nav-item"><a class="nav-link" href="/blog_home">R.I.S.E. Fitness Blog</a></li>
-             {% if session.loggedIn %}
-            <li class="nav-item"><a class="nav-link" href="/profile">My Profile</a></li>
-             {% else %}
+             {% if not session.loggedIn %} <!-- updated code so it doesnt show my profile link on navbar-->
             <li class="nav-item"><a class="nav-link" href="/membership">Become a Member</a></li>
              {% endif %}
           </ul>
@@ -61,7 +59,7 @@
               <li><a class="dropdown-item" href="/profile">Profile</a></li>
               <li><a class="dropdown-item" href="/profile/settings">Settings</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/logged_out">Sign Out</a></li>
+              <li><a class="dropdown-item" href="/loggedout">Sign Out</a></li>
             </ul>
             {% else %}
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"

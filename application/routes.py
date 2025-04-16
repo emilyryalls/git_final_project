@@ -36,6 +36,7 @@ def signup_submit():
         useremail = request.form.get('userEmail')
         userpassword = request.form.get('userPassword')
         hashed_password = generate_password_hash(userpassword)
+
         #print('received')
 
         if len(useremail) == 0 or len(userpassword) == 0 or len(userfirstname) == 0 or len(userlastname) == 0:
@@ -46,7 +47,14 @@ def signup_submit():
             error = 'First name and last name can only contain letters, spaces, apostrophes (\'), and hyphens (-).'
         else:
             add_member(userfirstname, userlastname, useremail, hashed_password)
+            # member_since = datetime.now()  #had to updates this lines so it shows name and date when rendering to profile page
+            # user = {
+            #     "firstname": userfirstname,
+            #     "member_since": member_since
+            # }
+            # return render_template('profile.html', user=user )
             return render_template('signedup.html')
+
     return render_template('membership.html', title='Sign Up', message = error, message_email_exist = error_email_exist)
 
 

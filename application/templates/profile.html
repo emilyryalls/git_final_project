@@ -7,7 +7,8 @@
   <div class="profile-info text-center">
     <img src="{{ url_for('static', filename='images/zara.jpeg') }}" alt="Profile Picture"
          class="rounded-circle mb-3 profile-picture">
-    <h2 class="mb-0">Hi, {{ user.firstname }}!</h2>
+    <h2 class="mb-0">Hi, {{ session.user }}!</h2>  <!-- changed user.firstname to session.user because wasnt being pass by the other way-->
+
     {% if user.member_since %}
       <p class="text-light">Member since {{ user.member_since.strftime('%B %Y') }}</p>
     {% else %}
@@ -81,7 +82,11 @@
             <h4 class="card-title mb-4">
               <i class="bi bi-flag-fill me-2"></i>Milestones
             </h4>
+            {% if user.member_since %} # wrapped it in a jinja if. bcause had user with null data on member since column
             <p><strong>🏁 Joined:</strong> {{ user.member_since.strftime('%B %Y') }}</p>
+            {% else %}
+            <p class="text-dark">Member since: Not available</p> #changed to dar because it was not visible as text was same color as background
+            {% endif %}
             <p><strong>💪 Profile Setup:</strong> <span class="badge bg-success">Completed</span></p>
             <p><strong>🎯 Goal:</strong> <span class="badge bg-info">Fitness goal selected</span></p>
             <div class="mt-auto pt-3">

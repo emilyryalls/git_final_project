@@ -29,7 +29,7 @@ def get_db_connection():
     )
     return mydb
 
-
+# this exclude those rows that have not all values
 def get_user_by_id(user_id):
     conn = get_db_connection()
     cursor = conn.cursor()
