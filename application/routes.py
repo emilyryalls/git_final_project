@@ -5,7 +5,7 @@ from application.data_access.blog_data_access import get_all_blogs,  get_blog_by
 from application.data_access.data_access import add_member, get_details_by_email
 from application.data_access.meal_plan_data_access import get_user_id, get_week_start_date, find_meal_plan_by_timestamp, get_db_connection
 from application.data_access.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences
-from application.data_access.user_data_access import get_user_by_id
+# from application.data_access.user_data_access import get_user_by_id
 from application.data_access.workouts_data_access import get_workout_video
 import re
 import json
