@@ -23,12 +23,12 @@ h1 {
     }
 
 body {
-    padding-top: 90px;
+    padding-top: 100px;
     font-family: 'Quicksand', sans-serif;
     font-weight: 400;
     color: black;
     text-align: center;
-    font-size: 16px;
+    font-size: 18px;
     background-color: #fec196;
     }
 
@@ -321,15 +321,7 @@ body.home-page .testimonial-name {
 .form-floating>.form-control, .form-floating>.form-control-plaintext, .form-floating>.form-select {
     height: calc(3.1rem + calc(var(--bs-border-width) * 2));
     min-height: calc(3.1rem + calc(var(--bs-border-width) * 2));
-
-
 }
-
-
-
-
-
-
 
 .bg-body-secondary {
   background-color: transparent !important;
@@ -450,16 +442,6 @@ body.home-page .testimonial-name {
 
 
 
-
-
-
-
-
-
-
-
-
-
 /* PROFILE PAGE */
 .profile-banner {
   background: linear-gradient(to right, #f25c54, #f4845f, #fec196);
@@ -507,6 +489,30 @@ body.home-page .testimonial-name {
 .card-body li {
   line-height: 1.8;
 }
+
+/* Hover effect on profile cards */
+.card:hover {
+  transform: translateY(-4px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* CTA Button (already defined, but ensure it's applied) */
+.cta-button {
+  background-color: #F25C54;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #F4845F;
+}
+
 
 /* Profile Settings */
 .btn-determine-goal {

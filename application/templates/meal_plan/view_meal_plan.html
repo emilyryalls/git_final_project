@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block body_content %}
+<!-- Main container for displaying the saved meal plan -->
+<div class="container mt-5">
+
+    <!-- Top Back Button -->
+    <div class="text-end mb-3">
+        <a href="{{ url_for('meal_plan_dashboard', timestamp=selected_meal_plan.created_at) }}" class="btn btn-outline-primary">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Meal Plan Title (name of the plan) -->
+    <h1 class="text-center mb-4"> Meal Plan for the week starting: {{ selected_meal_plan.name }} </h1>
+
+    <!-- Meals Data Debugging -->
+    <!-- <p>Meals Data: {{ selected_meal_plan.meals | tojson }}</p> -->
+
+    <!-- Start of the row for meal plans -->
+    <div class="row">
+        <!-- Loop through the days in the correct order: Monday to Sunday -->
+        {% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
+        {% set meals = selected_meal_plan.meals[day] %}
+
+        <!-- Display each day's meal plan -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>{{ day }}</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li><strong>Breakfast:</strong> {{ meals.breakfast }}</li>
+                        <li><strong>Lunch:</strong> {{ meals.lunch }}</li>
+                        <li><strong>Dinner:</strong> {{ meals.dinner }}</li>
+                        <li><strong>Snacks:</strong> {{ meals.snacks }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ensure each row has 3 columns per row on medium screens -->
+        {% if loop.index % 3 == 0 %}
+            </div><div class="row"> <!-- Start a new row after every 3 cards -->
+        {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- Bottom Back Button -->
+    <div class="text-end mt-4">
+        <a href="{{ url_for('meal_plan_dashboard', timestamp=selected_meal_plan.created_at) }}" class="btn btn-outline-primary">
+            ← Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+{% block body_content %}
+
+<!-- Profile banner section -->
+<div class="profile-banner text-white d-flex flex-column align-items-center justify-content-center">
+  <div class="profile-info text-center">
+    <img src="{{ url_for('static', filename='images/zara.jpeg') }}" alt="Profile Picture"
+         class="rounded-circle mb-3 profile-picture">
+        <h2 class="mb-0">Hi, {{ user }}!</h2>-->
+<!--    <h2 class="mb-0">Hi, {{ user.firstname }}!</h2>-->
+<!--    {% if user.member_since %}-->
+<!--      <p class="text-light">Member since {{ user.member_since.strftime('%B %Y') }}</p>-->
+<!--    {% else %}-->
+<!--      <p class="text-light">Member since: Not available</p>-->
+<!--    {% endif %}-->
+    <p class="fst-italic text-light">"Progress, not perfection."</p>
+  </div>
+</div>
+
+<div class="container mt-5 style=background-color: #ffe3dd;">
+  <div class="row g-4">
+    <!-- Column 1: Personal info -->
+    <div class="col-md-6">
+      <div class="card shadow-sm equal-height-card">
+        <div class="card-body d-flex flex-column">
+          <h4 class="card-title mb-3">Your Details</h4>
+          <p><strong>Date of Birth:</strong>
+<!--              {% if user.dob %}-->
+<!--                {{ user.dob.strftime('%d %B %Y') }}-->
+<!--              {% else %}-->
+<!--                Not provided-->
+<!--              {% endif %}-->
+          </p>
+<!--          <p><strong>Height:</strong> {{ user.height }} cm</p>-->
+<!--          <p><strong>Weight:</strong> {{ user.weight }} kg</p>-->
+          <p><strong>BMI:</strong>
+<!--            {% if user.height and user.weight %}-->
+<!--              {% set bmi = (user.weight / ((user.height / 100) ** 2)) %}-->
+<!--              {{ bmi | round(1) }}-->
+<!--            {% else %}-->
+<!--              Not available-->
+<!--            {% endif %}-->
+          </p>
+          <div class="mt-auto pt-3">
+            <a href="{{ url_for('update_profile') }}" class="btn btn-join-filled">
+              <i class="bi bi-gear-fill me-2"></i>Edit Profile
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 2: Fitness preferences -->
+    <div class="col-md-6">
+      <div class="card shadow-sm equal-height-card">
+        <div class="card-body d-flex flex-column">
+          <h4 class="card-title mb-3">Fitness Preferences</h4>
+<!--          <p><strong>Fitness Goal:</strong> {{ user.goal or "Not set" }}</p>-->
+          <p><strong>Favourite Exercise:</strong> </p>
+          <p><strong>Workout Intensity:</strong> </p>
+          <div class="mt-auto pt-3">
+            <a href="{{ url_for('update_profile') }}" class="btn btn-join-filled">
+              <i class="bi bi-lightning-fill me-2"></i>Set Preferences
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 3: milestones -->
+    <div class="col-md-6">
+      <div class="card shadow-sm equal-height-card">
+        <div class="card-body d-flex flex-column">
+          <h4 class="card-title mb-3">Milestones</h4>
+<!--          <p><strong>🏁 Joined:</strong> {{ user.member_since.strftime('%B %Y') }}</p>-->
+          <p><strong>💪 Profile setup:</strong> Completed</p>
+<!--          <p><strong>🎯 Goal:</strong> Fitness goal selected</p>-->
+          <div class="mt-auto pt-3">
+            <a href="/dashboard" class="btn btn-join-filled">
+              <i class="bi bi-star-fill me-2"></i>Your Fitness Journey
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 4: Activity at a glance -->
+    <div class="col-md-6">
+      <div class="card shadow-sm equal-height-card">
+        <div class="card-body d-flex flex-column">
+          <h4 class="card-title mb-3">Your Activity at a Glance</h4>
+          <p><strong>Days Logged In:</strong> 23</p>
+          <p><strong>Last Login:</strong> 2 days ago</p>
+          <p><strong>Favourite Activity:</strong> Yoga</p>
+          <div class="mt-auto pt-3">
+            <a href="/dashboard" class="btn btn-join-filled">
+              <i class="bi bi-bar-chart-fill me-2"></i>Go to Dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mb-5"></div>
+
+{% endblock %}

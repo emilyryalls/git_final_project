@@ -181,6 +181,8 @@ email_id bigint not null primary key auto_increment,
 email_address varchar(250) not null unique
 );
 
+INSERT INTO email (email_id, email_address) VALUES (1, 'zara.smith@example.com');
+
 select *
 from email;
 
@@ -195,12 +197,22 @@ foreign key (email_id) references email(email_id),
 date_of_birth date null,
 height decimal(5,2),
 weight decimal(5,2),
-goal_id bigint not null,
+goal_id bigint null,
 foreign key (goal_id) references goal(goal_id),
 diet_id bigint null,
 foreign key (diet_id) references diet(diet_id),
-profile_pic varchar(500)
+experience_id bigint,
+foreign key (experience_id) references experience(experience_id),
+profile_pic varchar(500),
+member_since timestamp default current_timestamp
 );
+
+INSERT INTO member (first_name, last_name, email_id, date_of_birth, height, weight, goal_id, diet_id, experience_id, profile_pic)
+VALUES ('Zara', 'Smith', 1, '1995-08-12', 165.00, 60.50, 1, 1, 1, 'static/images/zara.jpeg'
+);
+
+select *
+from member;
 
 
 -- password table
@@ -208,7 +220,7 @@ create table member_password
 (
 password_id bigint not null primary key auto_increment,
 member_id bigint not null,
-hashed_password varchar(250) not null,
+hashed_password text not null,
 foreign key (member_id) references member(member_id)
 );
 
@@ -219,6 +231,22 @@ newsletter_id bigint not null primary key auto_increment,
 email_id bigint not null,
 foreign key (email_id) references email(email_id)
 );
+
+-- login view for internal code only
+create view v_login_details
+as
+select
+	m.member_id,
+	m.first_name,
+	e.email_address,
+    p.hashed_password
+from email as e
+JOIN
+member as m
+on m.email_id = e.email_id
+JOIN
+member_password as p
+on p.member_id = m.member_id;
 
 select *
 from member;
@@ -422,6 +450,7 @@ Prevent injuries by warming up, cooling down, and listening to your body.
 Strengthen weak areas and maintain a balanced workout routine.',
     '6'
 );
+
 
 INSERT INTO blog (title, author_id, image, summary, content, category_id)
 VALUES (
@@ -634,3 +663,52 @@ Prioritize activities that promote both physical and mental health to achieve lo
     );
 
 select * from blog
+
+
+                                    -- meal plan --
+
+
+DROP TABLE meal_plans;
+CREATE TABLE meal_plans (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    member_id BIGINT NOT NULL,
+    name VARCHAR(255),
+    description TEXT,
+    meals JSON,
+    created_at DATETIME,
+    FOREIGN KEY (member_id) REFERENCES member(member_id)
+);
+
+INSERT INTO meal_plans (member_id, name, description, meals, created_at)
+VALUES
+(1,
+ 'Week of 14-04-25',
+ 'Healthy and balanced meal plan for the week',
+ '{"Monday": {"breakfast": "Oatmeal", "lunch": "Chicken Salad", "dinner": "Grilled Salmon", "snacks": "Apple"}, "Tuesday": {"breakfast": "Scrambled Eggs", "lunch": "Pasta", "dinner": "Steak", "snacks": "Nuts"}, "Wednesday": {"breakfast": "Smoothie", "lunch": "Veggie Wrap", "dinner": "Chicken Stir Fry", "snacks": "Carrot Sticks"}, "Thursday": {"breakfast": "Avocado Toast", "lunch": "Quinoa Salad", "dinner": "Grilled Chicken", "snacks": "Banana"}, "Friday": {"breakfast": "Pancakes", "lunch": "Sushi", "dinner": "Tacos", "snacks": "Yogurt"}, "Saturday": {"breakfast": "Egg Muffins", "lunch": "Salmon Wrap", "dinner": "Baked Ziti", "snacks": "Grapes"}, "Sunday": {"breakfast": "Bagels", "lunch": "Steak Salad", "dinner": "Chicken Parmesan", "snacks": "Popcorn"}}',
+ '2025-04-14 14:21:33');
+
+ INSERT INTO meal_plans (member_id, name, description, meals, created_at)
+VALUES
+(1,
+ 'Week of 07-04-25',
+ 'Vegan meal plan for the week',
+ '{"Monday": {"breakfast": "Avocado Toast", "lunch": "Vegan Burrito", "dinner": "Lentil Stew", "snacks": "Almonds"}, "Tuesday": {"breakfast": "Smoothie Bowl", "lunch": "Chickpea Salad", "dinner": "Tofu Stir Fry", "snacks": "Hummus with Carrots"}, "Wednesday": {"breakfast": "Chia Pudding", "lunch": "Vegan Wrap", "dinner": "Quinoa with Vegetables", "snacks": "Fruit"}, "Thursday": {"breakfast": "Overnight Oats", "lunch": "Avocado Salad", "dinner": "Vegan Chili", "snacks": "Trail Mix"}, "Friday": {"breakfast": "Peanut Butter Toast", "lunch": "Vegan Sushi", "dinner": "Vegan Tacos", "snacks": "Popcorn"}, "Saturday": {"breakfast": "Banana Pancakes", "lunch": "Tofu Salad", "dinner": "Lentil Soup", "snacks": "Energy Balls"}, "Sunday": {"breakfast": "Vegan Smoothie", "lunch": "Rice and Beans", "dinner": "Veggie Pizza", "snacks": "Dark Chocolate"}}',
+ '2025-04-07 08:45:00');
+
+ INSERT INTO meal_plans (member_id, name, description, meals, created_at)
+VALUES
+(1,
+ 'Week of 21-04-25',
+ 'Meal plan focused on protein-rich meals for muscle growth',
+ '{"Monday": {"breakfast": "Egg Scramble", "lunch": "Grilled Chicken Breast", "dinner": "Beef Stir Fry", "snacks": "Protein Bar"}, "Tuesday": {"breakfast": "Greek Yogurt", "lunch": "Turkey Wrap", "dinner": "Salmon with Veggies", "snacks": "Boiled Eggs"}, "Wednesday": {"breakfast": "Omelette", "lunch": "Chicken Caesar Salad", "dinner": "Steak and Sweet Potatoes", "snacks": "Almonds"}, "Thursday": {"breakfast": "Protein Shake", "lunch": "Tuna Salad", "dinner": "Grilled Chicken with Rice", "snacks": "Cottage Cheese"}, "Friday": {"breakfast": "Breakfast Burrito", "lunch": "Shrimp Salad", "dinner": "Pork Tenderloin", "snacks": "Peanut Butter"}, "Saturday": {"breakfast": "Egg White Omelette", "lunch": "Grilled Fish", "dinner": "Chicken and Broccoli", "snacks": "Greek Yogurt"}, "Sunday": {"breakfast": "Chia Pudding", "lunch": "Beef Tacos", "dinner": "Grilled Pork Chop", "snacks": "Protein Shake"}}',
+ '2025-04-21 14:21:33');
+
+INSERT INTO meal_plans (member_id, name, description, meals, created_at)
+VALUES
+(1,
+ 'Week of 31-03-25',
+ 'High-carb meal plan for energy and endurance',
+ '{"Monday": {"breakfast": "Oatmeal with Banana", "lunch": "Pasta with Pesto", "dinner": "Rice with Grilled Chicken", "snacks": "Granola Bar"}, "Tuesday": {"breakfast": "Bagels with Cream Cheese", "lunch": "Quinoa and Veggie Stir Fry", "dinner": "Baked Potato with Chili", "snacks": "Apple with Peanut Butter"}, "Wednesday": {"breakfast": "Smoothie with Spinach", "lunch": "Whole Wheat Sandwich", "dinner": "Spaghetti with Marinara Sauce", "snacks": "Carrot Sticks with Hummus"}, "Thursday": {"breakfast": "Toast with Avocado", "lunch": "Couscous Salad", "dinner": "Sweet Potato and Black Bean Tacos", "snacks": "Rice Cakes"}, "Friday": {"breakfast": "French Toast", "lunch": "Vegetable Soup", "dinner": "Risotto", "snacks": "Fruit Salad"}, "Saturday": {"breakfast": "Pancakes with Maple Syrup", "lunch": "Curry Rice", "dinner": "Chicken and Rice", "snacks": "Nuts and Dried Fruit"}, "Sunday": {"breakfast": "Muesli", "lunch": "Falafel Wrap", "dinner": "Veggie Burger", "snacks": "Granola"}}',
+ '2025-03-31 08:45:00');
+
+ select * from meal_plans;
