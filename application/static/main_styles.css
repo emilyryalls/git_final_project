@@ -557,6 +557,15 @@ body.home-page .testimonial-name {
 }
 
 
+/* ERRORS PAGE */
+.error-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 600;
+  font-size: 70px;
+  text-align: center;
+  color: #333;
+}
+
 
 /* BLOG PAGE */
 
