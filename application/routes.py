@@ -2,21 +2,18 @@ from application import app
 import mysql.connector
 from flask import render_template, request, redirect, url_for, flash, session
 from application.data_access.blog_data_access import get_all_blogs,  get_blog_by_id
-from application.data_access.user_data_access import update_profile_info
 from application.data_access.data_access import add_member, get_details_by_email
-from application.data_access.workout_data_access import get_workout_video
 from application.data_access.meal_plan_data_access import get_user_id, get_week_start_date, find_meal_plan_by_timestamp, get_db_connection
-import os
+from application.data_access.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences
+from application.data_access.user_data_access import get_user_by_id
+from application.data_access.workouts_data_access import get_workout_video
 import re
 import json
-from datetime import datetime, timedelta
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from urllib.parse import unquote
 
-from application.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences
 
-from application.user_data_access import get_user_by_id, update_profile_info
-from application.workouts_data_access import get_workout_video
 
 @app.route('/')
 @app.route('/home')

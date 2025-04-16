@@ -662,13 +662,12 @@ Prioritize activities that promote both physical and mental health to achieve lo
     '7'
     );
 
-select * from blog
+select * from blog;
 
 
                                     -- meal plan --
 
 
-DROP TABLE meal_plans;
 CREATE TABLE meal_plans (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     member_id BIGINT NOT NULL,
