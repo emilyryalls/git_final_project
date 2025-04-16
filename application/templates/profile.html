@@ -2,19 +2,36 @@
 {% block body_content %}
 
 <!-- Profile banner -->
-<div class="profile-banner w-100 text-white d-flex flex-column align-items-center justify-content-center"
-     style="margin: 0; border-radius: 0; padding-top: 60px; padding-bottom: 40px;">
-  <div class="profile-info text-center">
-    <img src="{{ url_for('static', filename='images/zara.jpeg') }}" alt="Profile Picture"
-         class="rounded-circle mb-3 profile-picture">
-    <h2 class="mb-0">Hi, {{ session.user }}!</h2>  <!-- changed user.firstname to session.user because wasnt being pass by the other way-->
+<div class="profile-banner w-100 text-white d-flex justify-content-center align-items-center flex-wrap text-start"
+     style="padding: 60px 20px 40px; background-color: #f77c82; border-radius: 0;">
 
+  <!-- Profile picture + Edit -->
+  <div class="position-relative me-4" style="width: 150px; height: 150px;">
+    <img src="{{ url_for('static', filename=(user.profile_pic if user.profile_pic else 'images/profile_img/default_profile.png')) }}"
+         alt="Profile Picture"
+         class="rounded-circle"
+         style="width: 100%; height: 100%; object-fit: cover; border: 3px solid white; box-shadow: 0 0 8px rgba(0,0,0,0.15);">
+
+    <!-- Edit icon  -->
+    <form action="{{ url_for('upload_profile_pic') }}" method="POST" enctype="multipart/form-data" id="profile-pic-form">
+      <label for="profile-pic-input"
+             class="position-absolute bottom-0 end-0 translate-middle p-1 bg-white border rounded-circle shadow-sm d-flex align-items-center justify-content-center"
+             style="width: 36px; height: 36px; cursor: pointer;">
+        <i class="bi bi-pencil-fill text-dark" style="font-size: 1rem;"></i>
+      </label>
+      <input type="file" name="profile_pic" id="profile-pic-input" style="display: none;" onchange="document.getElementById('profile-pic-form').submit()">
+    </form>
+  </div>
+
+  <!-- Profile info text -->
+  <div class="profile-info-text">
+    <h2 class="mb-1" style="font-weight: 600;">Hi, {{ user.firstname }}!</h2>
     {% if user.member_since %}
-      <p class="text-light">Member since {{ user.member_since.strftime('%B %Y') }}</p>
+      <p class="mb-1" style="color: #fceaea;">Member since {{ user.member_since.strftime('%B %Y') }}</p>
     {% else %}
-      <p class="text-light">Member since: Not available</p>
+      <p class="mb-1" style="color: #fceaea;">Member since: Not available</p>
     {% endif %}
-    <p class="fst-italic text-light">"Progress, not perfection."</p>
+    <p class="fst-italic" style="color: #fdf3f3;">"Progress, not perfection."</p>
   </div>
 </div>
 
@@ -34,13 +51,13 @@
               {% if user.dob %}
                 {{ user.dob.strftime('%d %B %Y') }}
               {% else %}
-                <span class="text-muted fst-italic">Not provided</span>
+                <span class="text-muted">Not provided</span>
               {% endif %}
             </p>
-            <p><strong>Height:</strong> {{ user.height or 'Not set' }} cm</p>
-            <p><strong>Weight:</strong> {{ user.weight or 'Not set' }} kg</p>
+            <p><strong>Height:</strong> {{ user.height ~ ' cm' if user.height else 'Not set' }}</p>
+            <p><strong>Weight:</strong> {{ user.weight ~ ' kg' if user.weight else 'Not set' }}</p>
             <p><strong>BMI:</strong>
-              {% if user.height and user.weight %}
+              {% if user.height and user.weight and user.height > 0 %}
                 {% set bmi = (user.weight / ((user.height / 100) ** 2)) %}
                 {{ bmi | round(1) }}
               {% else %}
@@ -82,10 +99,10 @@
             <h4 class="card-title mb-4">
               <i class="bi bi-flag-fill me-2"></i>Milestones
             </h4>
-            {% if user.member_since %} # wrapped it in a jinja if. bcause had user with null data on member since column
+            {% if user.member_since %}
             <p><strong>🏁 Joined:</strong> {{ user.member_since.strftime('%B %Y') }}</p>
             {% else %}
-            <p class="text-dark">Member since: Not available</p>  <!--changed to dar because it was not visible as text was same color as background-->
+            <p>Member since: Not available</p>
             {% endif %}
             <p><strong>💪 Profile Setup:</strong> <span class="badge bg-success">Completed</span></p>
             <p><strong>🎯 Goal:</strong> <span class="badge bg-info">Fitness goal selected</span></p>
