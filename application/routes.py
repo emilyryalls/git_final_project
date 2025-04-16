@@ -99,6 +99,16 @@ def signin_submit():
         return render_template('login.html', title='Sign In', message = error, message_invalid_credentials = error_invalid_credentials)
     return render_template('login.html', title='Sign In')
 
+
+@app.route('/loggedout')
+def logged_out():
+    session.pop('email', None)
+    session.pop('user', None)
+    session.pop('user_id', None)
+    session['loggedIn'] = False
+    return redirect(url_for('home'))
+
+
 # <--Newsletter subscription-->
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
