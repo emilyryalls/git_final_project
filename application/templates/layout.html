@@ -27,7 +27,7 @@
             <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="/workouts">Workout Videos</a></li>
             <li class="nav-item"><a class="nav-link" href="/blog_home">R.I.S.E. Fitness Blog</a></li>
-             {% if not session.loggedIn %} <!-- updated code so it doesnt show my profile link on navbar-->
+             {% if not session.loggedIn %}
             <li class="nav-item"><a class="nav-link" href="/membership">Become a Member</a></li>
              {% endif %}
           </ul>
@@ -47,7 +47,7 @@
             {% if session.loggedIn %}
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-             <img src="{{ url_for('static', filename=user.profile_pic) if user and user.profile_pic else url_for('static', filename='images/profile_img/default_profile.png') }}" alt="User" width="32" height="32" class="rounded-circle me-2">
+             <img src="{{ url_for('static', filename=session['profile_pic']) if session.get('profile_pic') else url_for('static', filename='images/profile_img/default_profile.png') }}" alt="User" width="32" height="32" class="rounded-circle me-2">
               <div class="user-labels text-start d-none d-sm-block">
                 <div class="user-name">Hi, {{ session.user }}!</div>
               </div>
