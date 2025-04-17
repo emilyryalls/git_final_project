@@ -160,5 +160,14 @@ def update_dob(user_id, dob):
     conn.close()
 
 
+def update_profile_picture(user_id, profile_pic_path):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE member SET profile_pic = %s WHERE member_id = %s", (profile_pic_path, user_id))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
 if __name__ == "__main__":
     main()

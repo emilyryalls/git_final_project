@@ -5,7 +5,7 @@ from flask import render_template, request, redirect, url_for, flash, session
 from application.data_access.blog_data_access import get_all_blogs,  get_blog_by_id
 from application.data_access.data_access import add_member, get_details_by_email
 from application.data_access.meal_plan_data_access import get_user_id, get_week_start_date, find_meal_plan_by_timestamp, get_db_connection
-from application.data_access.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences
+from application.data_access.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences, update_profile_picture
 # from application.data_access.user_data_access import get_user_by_id
 from application.data_access.workouts_data_access import get_workout_video
 import re
@@ -417,6 +417,9 @@ def profile():
         user_id = session.get('user_id')
         user = get_user_by_id(user_id)
 
+        # Sync session with latest profile pic (useful for navbar display)
+        session['profile_pic'] = user.get('profile_pic')
+
         # Check if redirected from settings with success message
         updated = request.args.get("updated")
 
@@ -480,25 +483,38 @@ def profile_settings():
 
 @app.route('/upload_profile_pic', methods=['POST'])
 def upload_profile_pic():
+    if 'loggedIn' not in session or 'user_id' not in session:
+        return redirect(url_for('signin_form'))
+
     if 'profile_pic' not in request.files:
+        flash("No file part", "warning")
         return redirect(url_for('profile'))
 
     file = request.files['profile_pic']
     if file.filename == '':
+        flash("No selected file", "warning")
         return redirect(url_for('profile'))
 
     if file:
         filename = secure_filename(file.filename)
-        filepath = os.path.join('static', 'uploads', filename)
-        file.save(filepath)
 
-        # Update in database
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("UPDATE member SET profile_pic = %s WHERE member_id = %s", (filepath, session['user_id']))
-        conn.commit()
-        cursor.close()
-        conn.close()
+        # ✅ Absolute path for saving the image
+        upload_folder = os.path.join(app.root_path, 'static', 'images', 'uploads')
+        os.makedirs(upload_folder, exist_ok=True)
+
+        full_path = os.path.join(upload_folder, filename)
+
+        # ✅ Relative path for use in <img src=""> (convert backslashes to slashes)
+        relative_path = os.path.join('images', 'uploads', filename).replace("\\", "/")
+
+        file.save(full_path)
+        print("SAVED TO:", full_path)
+        print("Exists?", os.path.exists(full_path))
+
+        update_profile_picture(session['user_id'], relative_path)
+        session['profile_pic'] = relative_path
+        flash("Profile picture updated successfully!", "success")
+        print("SAVED PATH (relative):", relative_path)
 
     return redirect(url_for('profile'))
 

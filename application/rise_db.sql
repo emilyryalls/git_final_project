@@ -208,7 +208,7 @@ member_since timestamp default current_timestamp
 );
 
 INSERT INTO member (first_name, last_name, email_id, date_of_birth, height, weight, goal_id, diet_id, experience_id, profile_pic)
-VALUES ('Zara', 'Smith', 1, '1995-08-12', 165.00, 60.50, 1, 1, 1, 'static/images/zara.jpeg'
+VALUES ('Zara', 'Smith', 1, '1995-08-12', 165.00, 60.50, 1, 1, 1, 'images/zara.jpeg'
 );
 
 select *

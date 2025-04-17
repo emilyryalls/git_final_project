@@ -7,10 +7,7 @@
 
   <!-- Profile picture + Edit -->
   <div class="position-relative me-4" style="width: 150px; height: 150px;">
-    <img src="{{ url_for('static', filename=(user.profile_pic if user.profile_pic else 'images/profile_img/default_profile.png')) }}"
-         alt="Profile Picture"
-         class="rounded-circle"
-         style="width: 100%; height: 100%; object-fit: cover; border: 3px solid white; box-shadow: 0 0 8px rgba(0,0,0,0.15);">
+    <img src="{{ url_for('static', filename=user.profile_pic) if user and user.profile_pic else url_for('static', filename='images/profile_img/default_profile.png') }}" alt="Profile Picture" class="rounded-circle" style="width: 100%; height: 100%; object-fit: cover; border: 3px solid white; box-shadow: 0 0 8px rgba(0,0,0,0.15);">
 
     <!-- Edit icon  -->
     <form action="{{ url_for('upload_profile_pic') }}" method="POST" enctype="multipart/form-data" id="profile-pic-form">
@@ -51,7 +48,7 @@
               {% if user.dob %}
                 {{ user.dob.strftime('%d %B %Y') }}
               {% else %}
-                <span class="text-muted">Not provided</span>
+                <span>Not provided</span>
               {% endif %}
             </p>
             <p><strong>Height:</strong> {{ user.height ~ ' cm' if user.height else 'Not set' }}</p>
@@ -61,7 +58,7 @@
                 {% set bmi = (user.weight / ((user.height / 100) ** 2)) %}
                 {{ bmi | round(1) }}
               {% else %}
-                <span class="text-muted fst-italic">Not available</span>
+                <span>Not available</span>
               {% endif %}
             </p>
             <div class="mt-auto pt-3">
