@@ -263,7 +263,6 @@ def update_workout_progress(member_id, day_id, is_done):
 
     # Check if a record already exists
     check_query = "SELECT * FROM workout_progress WHERE member_id = %s AND day_id = %s"
-
     cursor.execute(check_query, (member_id, day_id))
     result = cursor.fetchone()
 
@@ -277,6 +276,7 @@ def update_workout_progress(member_id, day_id, is_done):
 
     # Commit the changes to the database
     conn.commit()
+
 
 
 def get_workout_progress(member_id):

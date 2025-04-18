@@ -518,14 +518,20 @@ def view_workout_plan():
 
 @app.route('/mark_workout_done', methods=['POST'])
 def mark_workout_done():
-    # Get form data
-    member_id = request.form.get('member_id')  # Get member_id from form
-    day_id = request.form.get('day_id')  # Get day_id from form
-    is_done = 'is_done' in request.form  # Check if the checkbox is checked
+    member_id = request.form.get('member_id')
 
-    # Call the function to update the database with the workout progress
-    update_workout_progress(member_id, day_id, is_done)
+    # Loop through day IDs 1 to 6
+    for day_id in range(1, 7):
+        checkbox_name = f'is_done_{day_id}'
+        is_done = checkbox_name in request.form  # True if box is checked, False otherwise
+        # Check whether the checkbox for this specific day (e.g., 'is_done_1') was submitted in the form.
+        # In HTML, checkboxes only appear in form data if they are checked.
+        # So if the checkbox name exists in request.form, it means it was ticked (True).
+        # If it's not there, it means it was unticked (False).
 
-    # Redirect to the workout plan page after saving progress
+        # Update the workout progress in the database
+        update_workout_progress(member_id, day_id, is_done)
+
     return redirect('/my_workouts')
+
 
