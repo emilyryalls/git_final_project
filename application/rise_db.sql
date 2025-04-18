@@ -783,7 +783,7 @@ VALUES
  progress_id bigint not null primary key auto_increment,
  member_id bigint not null,
  day_id int not null,
- is_done BOOLEAN DEFAULT FALSE,
+ is_done BOOLEAN not null,
  FOREIGN KEY (member_id) REFERENCES member(member_id),
  FOREIGN KEY (day_id) REFERENCES day_of_week(day_id)
 );

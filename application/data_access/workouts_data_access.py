@@ -234,6 +234,10 @@ def get_sets():
     return result[0] if result else None
 
 def get_days_of_week():
+    """
+    This function returns the days of the week, Mon-Sun, stored as a list of strings.
+    :return lst[str]:
+    """
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -248,6 +252,55 @@ def get_days_of_week():
         days_of_week.append(row[0])
 
     return days_of_week
+
+
+def update_workout_progress(member_id, day_id, is_done):
+    """
+    This function updates or inserts into the 'workout_progress' table in the database to mark a workout as done.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Check if a record already exists
+    check_query = "SELECT * FROM workout_progress WHERE member_id = %s AND day_id = %s"
+
+    cursor.execute(check_query, (member_id, day_id))
+    result = cursor.fetchone()
+
+    # if the record exists, update it. otherwise, insert a new record
+    if result:
+        update_query = "UPDATE workout_progress SET is_done = %s WHERE member_id = %s AND day_id = %s"
+        cursor.execute(update_query, (is_done, member_id, day_id))
+    else:
+        insert_query = "INSERT INTO workout_progress (member_id, day_id, is_done) VALUES (%s, %s, %s)"
+        cursor.execute(insert_query, (member_id, day_id, is_done))
+
+    # Commit the changes to the database
+    conn.commit()
+
+
+def get_workout_progress(member_id):
+    """
+    This function returns the workout progress for a given member.
+
+
+
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    query = "SELECT day_id, is_done FROM workout_progress WHERE member_id = %s"
+
+    cursor.execute(query, (member_id,))
+    result = cursor.fetchall()
+
+    # Convert to dictionary
+    workout_progress = {}
+    for row in result:
+        # Access the tuple elements by index
+        workout_progress[row[0]] = row[1]
+
+    return workout_progress
 
 
 

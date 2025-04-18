@@ -9,7 +9,7 @@ from application.data_access.meal_plan_data_access import get_user_id, get_week_
 from application.data_access.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences
 # from application.data_access.user_data_access import get_user_by_id
 from application.data_access.workouts_data_access import get_workout_video, get_exercises, get_sets, get_reps, \
-    get_member_fitness_goal, get_member_experience, get_days_of_week
+    get_member_fitness_goal, get_member_experience, get_days_of_week, update_workout_progress, get_workout_progress
 import re
 import json
 from datetime import datetime
@@ -498,18 +498,34 @@ def view_workout_plan():
     member_experience = get_member_experience()
 
     if fitness_goal is None and member_experience is None:
-        return render_template('member_workouts.html', fitness_goal=None, experience = None, exercises = None, sets = None, reps = None, days = None, error_message ="You need to select both your fitness goal and experience level to access your workout plan")
+        return render_template('member_workouts.html', fitness_goal=None, experience = None, exercises = None, sets = None, reps = None, days = None, workout_progress = None, error_message ="You need to select both your fitness goal and experience level to access your workout plan")
 
     if fitness_goal is None:
-        return render_template('member_workouts.html', fitness_goal=None, experience= member_experience, exercises = None, sets = None, reps = None, days = None, error_message="You need to select a fitness goal to access your workout plan")
+        return render_template('member_workouts.html', fitness_goal=None, experience= member_experience, exercises = None, sets = None, reps = None, days = None, workout_progress = None, error_message="You need to select a fitness goal to access your workout plan")
 
     if member_experience is None:
-        return render_template('member_workouts.html', fitness_goal = fitness_goal, experience = None, exercises = None, sets = None, reps = None, days = None, error_message="You need to select your experience level to access your workout plan")
+        return render_template('member_workouts.html', fitness_goal = fitness_goal, experience = None, exercises = None, sets = None, reps = None, days = None, workout_progress = None, error_message="You need to select your experience level to access your workout plan")
 
 
     exercise_plan = get_exercises()
     sets = get_sets()
     reps = get_reps()
     days = get_days_of_week()
+    workout_progress = get_workout_progress(session.get('user_id'))
 
-    return render_template('member_workouts.html', exercises = exercise_plan, sets = sets, reps = reps, fitness_goal = fitness_goal, experience = member_experience, days = days)
+    return render_template('member_workouts.html', exercises = exercise_plan, sets = sets, reps = reps, fitness_goal = fitness_goal, experience = member_experience, days = days, workout_progress = workout_progress)
+
+
+@app.route('/mark_workout_done', methods=['POST'])
+def mark_workout_done():
+    # Get form data
+    member_id = request.form.get('member_id')  # Get member_id from form
+    day_id = request.form.get('day_id')  # Get day_id from form
+    is_done = 'is_done' in request.form  # Check if the checkbox is checked
+
+    # Call the function to update the database with the workout progress
+    update_workout_progress(member_id, day_id, is_done)
+
+    # Redirect to the workout plan page after saving progress
+    return redirect('/my_workouts')
+

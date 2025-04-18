@@ -33,30 +33,42 @@
                 <th>Exercises</th>
                 <th>Reps</th>
                 <th>Sets</th>
+                <th>Completed?</th>
             </tr>
         </thead>
         <tbody>
             {% for item in range(6) %}
-            <tr>
-                <td>{{ days[item] }}</td>
-                <td>{{ exercises[item] }}</td>
-                <td>{{ reps }}</td>
-                <td>{{ sets }}</td>
-            </tr>
+                <tr>
+                    <td>{{ days[item] }}</td>
+                    <td>{{ exercises[item] }}</td>
+                    <td>{{ reps }}</td>
+                    <td>{{ sets }}</td>
+                    <!-- Include a form field to mark a day's workout as done -->
+                    <td>
+                        <form action="/mark_workout_done" method="POST">
+                            <!-- hidden data not visible to website user in browser, but important info submitted to database when form submitted-->
+                            <input type="hidden" name="member_id" value="{{ session.user_id }}">
+                            <input type="hidden" name="day_id" value="{{ item+1 }}">  <!-- item+1 so it is stored corectly in databse - e.g. Mon is 0 index position in the list, but day_id 1 in the database-->
+                            <input type="checkbox" name="is_done" value="True" onchange="this.form.submit()"
+                                {% if workout_progress.get(item+1) %}checked{% endif %}>
+                        </form>
+                    </td>
+                </tr>
             {% endfor %}
             <tr>
                 <td>{{ days[6] }}</td>
                 <td colspan="3" class="text-muted fst-italic">
                     Rest Day / Active Recovery (e.g., light cycling, walking, stretching)
                 </td>
+                <td></td>
             </tr>
         </tbody>
     </table>
+
+
     {% endif %}
 
-        <div class="section-divider"></div>
-
+    <div class="section-divider"></div>
 </div>
-
 
 {% endblock %}
