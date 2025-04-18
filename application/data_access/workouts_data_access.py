@@ -233,6 +233,22 @@ def get_sets():
 
     return result[0] if result else None
 
+def get_days_of_week():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    query = "SELECT day FROM day_of_week"
+
+    cursor.execute(query)
+    result = cursor.fetchall()
+
+    # get a list of just names of days of the week from the tuple
+    days_of_week = []
+    for row in result:
+        days_of_week.append(row[0])
+
+    return days_of_week
+
 
 
 def main():

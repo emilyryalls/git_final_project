@@ -36,25 +36,26 @@
             </tr>
         </thead>
         <tbody>
-            {% set days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] %}
-            {% for i in range(6) %}
+            {% for item in range(6) %}
             <tr>
-                <td>{{ days[i] }}</td>
-                <td>{{ exercises[i] }}</td>
+                <td>{{ days[item] }}</td>
+                <td>{{ exercises[item] }}</td>
                 <td>{{ reps }}</td>
                 <td>{{ sets }}</td>
             </tr>
             {% endfor %}
             <tr>
-                <td>Sunday</td>
+                <td>{{ days[6] }}</td>
                 <td colspan="3" class="text-muted fst-italic">
                     Rest Day / Active Recovery (e.g., light cycling, walking, stretching)
                 </td>
             </tr>
         </tbody>
     </table>
-    <br>
     {% endif %}
+
+        <div class="section-divider"></div>
+
 </div>
 
 

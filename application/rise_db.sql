@@ -761,6 +761,32 @@ VALUES
 (4, 'Superman Hold, Mountain Climbers, Leg Raises');
 
 
+CREATE table day_of_week
+(
+day_id int not null primary key auto_increment,
+day varchar(10) not null
+);
+
+INSERT into day_of_week(day)
+VALUES
+('Monday'),
+('Tuesday'),
+('Wednesday'),
+('Thursday'),
+('Friday'),
+('Saturday'),
+('Sunday');
+
+
+ CREATE table workout_progress
+ (
+ progress_id bigint not null primary key auto_increment,
+ member_id bigint not null,
+ day_id int not null,
+ is_done BOOLEAN DEFAULT FALSE,
+ FOREIGN KEY (member_id) REFERENCES member(member_id),
+ FOREIGN KEY (day_id) REFERENCES day_of_week(day_id)
+);
 
  select *
  from member;
