@@ -1,3 +1,5 @@
+import random
+
 from application import app
 import mysql.connector
 from flask import render_template, request, redirect, url_for, flash, session
@@ -6,7 +8,8 @@ from application.data_access.data_access import add_member, get_details_by_email
 from application.data_access.meal_plan_data_access import get_user_id, get_week_start_date, find_meal_plan_by_timestamp, get_db_connection
 from application.data_access.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences
 # from application.data_access.user_data_access import get_user_by_id
-from application.data_access.workouts_data_access import get_workout_video
+from application.data_access.workouts_data_access import get_workout_video, get_exercises, get_sets, get_reps, \
+    get_member_fitness_goal, get_member_experience
 import re
 import json
 from datetime import datetime
@@ -468,16 +471,39 @@ def profile_settings():
         diets=diets
     )
 
-# <---- Workout videos ---->
+# Workout Videos
 # return all workout videos
 @app.route('/workouts', methods=['GET'])
 def view_workout_videos():
     # request is a special object in flask that gives you access to data sent by the client (browser)
     # request.args is a dictionary-like object that holds all of the querey paramteres from the URL
-    # .get(goal) retrieves the value of the goal parameter from the URL
+    # example - .get('goal') retrieves the value of the goal parameter from the URL
     # goal is a parameter defined in data_access.py
     goal = request.args.get('goal')
     experience = request.args.get('experience')
     time = request.args.get('time')
     workout_video = get_workout_video(goal, experience, time)
     return render_template('workout_videos.html', video=workout_video, title='Workout Videos')
+
+
+# Workout Plan
+@app.route('/my_workouts', methods=['GET'])
+def view_workout_plan():
+    fitness_goal = get_member_fitness_goal()
+    member_experience = get_member_experience()
+
+    if fitness_goal is None and member_experience is None:
+        return render_template('member_workouts.html', fitness_goal=None, experience = None, exercises = None, sets = None, reps = None, error_message ="You need to select both your fitness goal and experience level to access your workout plan")
+
+    if fitness_goal is None:
+        return render_template('member_workouts.html', fitness_goal=None, experience= member_experience, exercises = None, sets = None, reps = None, error_message="You need to select a fitness goal to access your workout plan")
+
+    if member_experience is None:
+        return render_template('member_workouts.html', fitness_goal = fitness_goal, experience = None, exercises = None, sets = None, reps = None, error_message="You need to select your experience level to access your workout plan")
+
+
+    exercise_plan = get_exercises()
+    sets = get_sets()
+    reps = get_reps()
+
+    return render_template('member_workouts.html', exercises = exercise_plan, sets = sets, reps = reps, fitness_goal = fitness_goal, experience = member_experience)

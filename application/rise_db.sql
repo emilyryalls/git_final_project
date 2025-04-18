@@ -27,14 +27,17 @@ from goal;
 create table experience
 (
 experience_id bigint not null primary key auto_increment,
-user_experience varchar(30) not null
+user_experience varchar(30) not null,
+reps int not null,
+sets int not null
 );
 
-insert into experience(user_experience)
+insert into experience(user_experience, reps, sets)
 values
-('Beginner'),
-('Intermediate'),
-('Advanced');
+('Beginner', 8, 2),
+('Intermediate', 10, 3),
+('Advanced', 12, 4);
+
 
 select *
 from experience;
@@ -711,3 +714,53 @@ VALUES
  '2025-03-31 08:45:00');
 
  select * from meal_plans;
+
+
+ -- WORKOUT PLANS
+ 
+CREATE table exercise (
+    exercise_id bigint not null primary key auto_increment,
+    goal_id bigint not null,
+    exercise_name varchar(100) not null,
+    foreign key (goal_id) references goal(goal_id)
+);
+
+
+INSERT INTO exercise (goal_id, exercise_name)
+VALUES
+-- Build Muscle (goal_id = 1)
+(1, 'Barbell Squats, Pull Ups, Bench Press'),
+(1, 'Incline Dumbbell Press, One-Arm Dumbbell Row, Romanian Deadlifts'),
+(1, 'Deadlifts, Chin Ups, Dumbbell Chest Press'),
+(1, 'Barbell Rows, Lunges, Overhead Press'),
+(1, 'Dumbbell Lunges, Lat Pulldown, Dumbbell Shoulder Press'),
+(1, 'Romanian Deadlifts, Squats, Flat Bench Press'),
+
+-- Improve Stamina (goal_id = 2)
+(2, 'Burpees, Jump Rope, Rowing Machine'),
+(2, 'Kettlebell Swings, Box Jumps, Treadmill Intervals'),
+(2, 'Treadmill Intervals, Jump Rope, Burpees'),
+(2, 'Jump Rope, Lateral Shuffles, Kettlebell Swings'),
+(2, 'Rowing Machine, Box Jumps, Burpees'),
+(2, 'Mountain Climbers, Sprint Intervals, Jump Rope'),
+
+-- Lose Weight (goal_id = 3)
+(3, 'Jumping Jacks, Walking Lunges, Dumbbell Thrusters'),
+(3, 'Stair Climbs, Lateral Shuffles, Plank to Push-Up'),
+(3, 'Box Jumps, Mountain Climbers, Burpees'),
+(3, 'Dumbbell Thrusters, High Knees, Lateral Shuffles'),
+(3, 'Walking Lunges, Jumping Jacks, Plank to Push-Up'),
+(3, 'Lateral Shuffles, Dumbbell Thrusters, Jump Rope'),
+
+-- Improve Core Strength (goal_id = 4)
+(4, 'Russian Twists, Bicycle Crunches, Superman Hold'),
+(4, 'Mountain Climbers, Side Plank with Reach, Leg Raises'),
+(4, 'Leg Raises, Side Plank with Reach, Flutter Kicks'),
+(4, 'Bicycle Crunches, V-Ups, Superman Hold'),
+(4, 'Side Plank with Reach, Russian Twists, Bicycle Crunches'),
+(4, 'Superman Hold, Mountain Climbers, Leg Raises');
+
+
+
+ select *
+ from member;

@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block body_content %}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">{{ session.user }}'s Workout Plan</h2>
+
+    {% if fitness_goal is none and experience is none %}
+        <p class="text-center text-danger">{{ error_message }}</p>
+        <p>You can select your goal and experience level in your <a href="/profile/settings"> profile settings</a></p>
+
+    {% elif fitness_goal is none %}
+        <p class="text-center text-danger">{{ error_message }}</p>
+        <p>You can select a goal in your <a href="/profile/settings"> profile settings</a></p>
+
+    {% elif experience is none %}
+        <p class="text-center text-danger">{{ error_message }}</p>
+        <p>You can select your experience level in your <a href="/profile/settings"> profile settings</a></p>
+
+    {% else %}
+    <p>Welcome to your personalised Workout Plan!</p>
+    <p>This is based on your chosen fitness goal: <strong>{{ fitness_goal|title }}</strong>
+    <br>
+    and your chosen experience level: <strong>{{ experience|title }}</strong></p>
+    <p> You can amend your goal and experience level in your <a href="/profile/settings"> profile settings</a></p>
+
+    <div class="section-divider"></div>
+
+    <table class="table table-bordered text-center">
+        <thead class="thead-light">
+            <tr>
+                <th>Day</th>
+                <th>Exercises</th>
+                <th>Sets</th>
+                <th>Reps</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] %}
+            {% for i in range(6) %}
+            <tr>
+                <td>{{ days[i] }}</td>
+                <td>{{ exercises[i] }}</td>
+                <td>{{ sets }}</td>
+                <td>{{ reps }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td>Sunday</td>
+                <td colspan="3" class="text-muted fst-italic">
+                    Rest Day / Active Recovery (e.g., light cycling, walking, stretching)
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    {% endif %}
+</div>
+
+
+{% endblock %}
