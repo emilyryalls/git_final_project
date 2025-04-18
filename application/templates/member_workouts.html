@@ -26,30 +26,31 @@
 
     <div class="section-divider"></div>
 
- <form action="/mark_workout_done" method="POST">
-    <input type="hidden" name="member_id" value="{{ session.user_id }}">
-    <table class="table table-bordered text-center">
-        <thead class="thead-light">
-            <tr>
-                <th>Day</th>
-                <th>Exercises</th>
-                <th>Reps</th>
-                <th>Sets</th>
-                <th>Completed?</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in range(6) %}
-                <tr>
-                    <td>{{ days[item] }}</td>
-                    <td>{{ exercises[item] }}</td>
-                    <td>{{ reps }}</td>
-                    <td>{{ sets }}</td>
-                    <td>
-                        <input type="checkbox"
-                               name="is_done_{{ item+1 }}"
-                               value="True"
-                               {% if workout_progress.get(item+1) %}checked{% endif %}>
+<form action="/mark_workout_done" method="POST">
+     <!-- hidden data not visible to website user in browser, but important info submitted to database when form submitted-->
+   <input type="hidden" name="member_id" value="{{ session.user_id }}">
+   <table class="table table-bordered text-center">
+       <thead class="thead-light">
+           <tr>
+               <th>Day</th>
+               <th>Exercises</th>
+               <th>Reps</th>
+               <th>Sets</th>
+               <th>Completed?</th>
+           </tr>
+       </thead>
+       <tbody>
+           {% for item in range(6) %}
+               <tr>
+                   <td>{{ days[item] }}</td>
+                   <td>{{ exercises[item] }}</td>
+                   <td>{{ reps }}</td>
+                   <td>{{ sets }}</td>
+                   <td>
+                       <input type="checkbox"
+                              name="is_done_{{ item+1 }}"
+                              value="True"
+                              {% if workout_progress.get(item+1) %}checked{% endif %}> <!-- item +1 so it aligns with the id in the database - id will be 1 higher than the index in a collection e.g. list, dict, tup etc.-->
                     </td>
                 </tr>
             {% endfor %}
@@ -72,6 +73,38 @@
     {% endif %}
 
     <div class="section-divider"></div>
+
+{% if fitness_goal and experience %}
+    <h2 class="text-center mb-4">Recommended Video Workouts</h2>
+    <p>Here are some recommended video workouts based on your fitness goal and experience level</p>
+
+    <div class="container">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      {% for v_workout_videos in video %}
+      <div class="col">
+        <div class="card h-100 workout-card">
+          {% if v_workout_videos.video_link %}
+          <div class="ratio ratio-16x9">
+            <iframe class="card-img-top" src="{{ v_workout_videos.video_link }}" allowfullscreen></iframe>
+          </div>
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title text-center">{{ v_workout_videos.video_name }}</h5>
+            <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
+              <span class="badge tag-goal">{{ v_workout_videos.fitness_goal }}</span>
+              <span class="badge tag-experience">{{ v_workout_videos.experience }}</span>
+              <span class="badge tag-time">{{ v_workout_videos.time }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    </div>
+{% endif %}
+
+<br>
+
 </div>
 
 {% endblock %}

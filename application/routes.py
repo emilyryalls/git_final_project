@@ -498,13 +498,13 @@ def view_workout_plan():
     member_experience = get_member_experience()
 
     if fitness_goal is None and member_experience is None:
-        return render_template('member_workouts.html', fitness_goal=None, experience = None, exercises = None, sets = None, reps = None, days = None, workout_progress = None, error_message ="You need to select both your fitness goal and experience level to access your workout plan")
+        return render_template('member_workouts.html', fitness_goal=None, experience = None, exercises = None, sets = None, reps = None, days = None, workout_progress = None, video=None, error_message ="You need to select both your fitness goal and experience level to access your workout plan")
 
     if fitness_goal is None:
-        return render_template('member_workouts.html', fitness_goal=None, experience= member_experience, exercises = None, sets = None, reps = None, days = None, workout_progress = None, error_message="You need to select a fitness goal to access your workout plan")
+        return render_template('member_workouts.html', fitness_goal=None, experience= member_experience, exercises = None, sets = None, reps = None, days = None, workout_progress = None, video=None, error_message="You need to select a fitness goal to access your workout plan")
 
     if member_experience is None:
-        return render_template('member_workouts.html', fitness_goal = fitness_goal, experience = None, exercises = None, sets = None, reps = None, days = None, workout_progress = None, error_message="You need to select your experience level to access your workout plan")
+        return render_template('member_workouts.html', fitness_goal = fitness_goal, experience = None, exercises = None, sets = None, reps = None, days = None, workout_progress = None, video=None, error_message="You need to select your experience level to access your workout plan")
 
 
     exercise_plan = get_exercises()
@@ -512,8 +512,9 @@ def view_workout_plan():
     reps = get_reps()
     days = get_days_of_week()
     workout_progress = get_workout_progress(session.get('user_id'))
+    workout_video = get_workout_video(fitness_goal, member_experience)
 
-    return render_template('member_workouts.html', exercises = exercise_plan, sets = sets, reps = reps, fitness_goal = fitness_goal, experience = member_experience, days = days, workout_progress = workout_progress)
+    return render_template('member_workouts.html', exercises = exercise_plan, sets = sets, reps = reps, fitness_goal = fitness_goal, experience = member_experience, days = days, workout_progress = workout_progress, video=workout_video)
 
 
 @app.route('/mark_workout_done', methods=['POST'])
