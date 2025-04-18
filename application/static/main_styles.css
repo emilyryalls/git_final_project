@@ -316,8 +316,6 @@ body.home-page .testimonial-name {
 
 /* SIGN UP PAGE */
 
-
-
 .form-floating>.form-control, .form-floating>.form-control-plaintext, .form-floating>.form-select {
     height: calc(3.1rem + calc(var(--bs-border-width) * 2));
     min-height: calc(3.1rem + calc(var(--bs-border-width) * 2));
@@ -335,7 +333,6 @@ body.home-page .testimonial-name {
 .modal-content {
   flex-direction: row;
   background-color: #ffe3dd;
-
 }
 
 .modal-body {
@@ -343,9 +340,6 @@ body.home-page .testimonial-name {
   flex-direction: row;
   justify-content: center;
   align-items: stretch;
-
- /* padding-left: 0px;
-  padding-right: 3rem;*/
 }
 
 #modal-body-one{
@@ -370,14 +364,14 @@ body.home-page .testimonial-name {
 
 }
 
-#signupText{
+#signupText, #signinText, #resetText{
   font-family: 'Quicksand';
   color: #333333;
   text-shadow: none;
   font-weight: 440;
 }
 
-#signupButton{
+#signupButton, #signinButton, #resetButton{
   background-color: #F25C54;
   border-color: #F25C54;
   font-weight: bold;
@@ -385,8 +379,9 @@ body.home-page .testimonial-name {
   transition: background-color 0.3s ease;
 }
 
-#signupButton:hover {
+#signupButton:hover, #signinButton:hover, #resetButton:hover {
   background-color: #F4845F;
+  border-color: #F4845F;
 }
 
 .text-body-secondary{
@@ -394,13 +389,10 @@ body.home-page .testimonial-name {
   color: #333333;
 }
 
-
-
 @media (min-width: 1200px) {
   .modal-dialog {
     --bs-modal-width:1340px
   }
-
 }
 
 @media (min-width: 1150px) {
@@ -438,6 +430,46 @@ body.home-page .testimonial-name {
   .modal-dialog {
     --bs-modal-width: 500px;
   }
+}
+
+/* LOGIN PAGE */
+
+#modal-flex-container-signin, #modal-flex-container-reset{
+    width: fit-content;
+    justify-self: anchor-center;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+@media (min-width: 1150px) {
+    #container-signin, #container-reset {
+        padding: 2rem;
+        /* background-color: red; */
+    }
+    .col-md-img {
+        width: 41.66666667%;
+    }
+}
+@media (min-width: 992px) {
+    .container, .container-lg, .container-md, .container-sm {
+        max-width: 960px;
+    }
+}
+
+#container-signin, #container-reset {
+  flex: 1;
+  padding: 2rem;
+}
+
+/* RESET PAGE */
+@media (min-width: 768px) and (max-width: 1150px) {
+    #reseting{
+        display: flex;
+        flex-direction: column;
+    }
+    .col-md-img {
+        width: 80%;
+    }
 }
 
 

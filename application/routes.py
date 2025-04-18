@@ -1,3 +1,5 @@
+from re import match
+
 from application import app
 import mysql.connector
 from flask import render_template, request, redirect, url_for, flash, session
@@ -14,7 +16,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from urllib.parse import unquote
 
 
-
 @app.route('/')
 @app.route('/home')
 def home():
@@ -22,6 +23,7 @@ def home():
         return render_template('home.html', title='Home', loggedin=False)
 
     return render_template('home.html', title='Home', loggedin=True)
+
 
 # <---- Sign up / membership ---->
 @app.route('/membership', methods=['GET'])
@@ -40,8 +42,6 @@ def signup_submit():
         userpassword = request.form.get('userPassword')
         hashed_password = generate_password_hash(userpassword)
 
-        #print('received')
-
         if len(useremail) == 0 or len(userpassword) == 0 or len(userfirstname) == 0 or len(userlastname) == 0:
             error = 'Please supply all fields'
         elif add_member(userfirstname, userlastname, useremail, hashed_password):
@@ -50,18 +50,12 @@ def signup_submit():
             error = 'First name and last name can only contain letters, spaces, apostrophes (\'), and hyphens (-).'
         else:
             add_member(userfirstname, userlastname, useremail, hashed_password)
-            # member_since = datetime.now()  #had to updates this lines so it shows name and date when rendering to profile page
-            # user = {
-            #     "firstname": userfirstname,
-            #     "member_since": member_since
-            # }
-            # return render_template('profile.html', user=user )
             return render_template('signedup.html')
 
     return render_template('membership.html', title='Sign Up', message = error, message_email_exist = error_email_exist)
 
 
-# <---- Login.logout ---->
+# <---- Login.logout ------->
 @app.route('/login', methods=['GET', 'POST'])
 def signin_form():
     return render_template('login.html', title='Login')
@@ -105,6 +99,38 @@ def logged_out():
     session.pop('user_id', None)
     session['loggedIn'] = False
     return redirect(url_for('home'))
+
+
+@app.route('/reset', methods=['GET', 'POST'])
+def reset_form():
+    if not session.get('LoggedIn'):
+        return redirect(url_for('login'))
+
+    error_different_password = ""
+    error_invalid_password = ""
+
+    if request.method == 'POST':
+        current_password = request.form.get('currentPassword')
+        new_password = request.form.get('newPassword')
+        confirm_password = request.form.get('confirmPassword')
+        member_id = session['user_id']
+
+        password_details = get_password_details_by_id(member_id)
+        stored_password = password_details[0]
+
+        if check_password_hash(stored_password, current_password):
+            if new_password == confirm_password:
+                hashed_new_password = generate_password_hash(new_password)
+                change_password(hashed_new_password, member_id)
+                return render_template('login.html', title='Login')
+            else:
+                error_different_password = "Passwords do not match"
+        else:
+            error_invalid_password = "Incorrect Password, please try again"
+
+    return render_template('reset.html', title='Reset', message_invalid_password=error_invalid_password, message_different_password=error_different_password)
+
+
 
 
 # <--Newsletter subscription-->

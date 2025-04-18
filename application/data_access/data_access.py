@@ -75,3 +75,10 @@ def add_member(fname, lname, uemail, hpassword):
         cursor.execute(sql_add_password, val_password)
         conn.commit()
 
+
+#####
+def get_password_details_by_id(member_id):
+    pass
+
+def change_password(hashed_new_password):
+    pass
