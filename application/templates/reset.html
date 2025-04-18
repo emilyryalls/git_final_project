@@ -15,11 +15,16 @@
                       <img src="{{ url_for('static', filename='images/reset logo.png') }}" alt="Reset Logo" class="img-fluid" style="max-height: 250px; max-width: 300px" id="container-img-reset">
                     </div>
                     <div class="col-md-7 modal-body ">
-                        <form class="reset" action="login" method="POST" id="formreset" >
+                        <form class="reset" action="reset" method="POST" id="formreset" >
                             <div class="form-floating mb-2">
                                 <input type="password" class="form-control rounded-3" id="currentPassword" name="currentPassword" placeholder="Password">
                                 <label for="currentPassword">Current Password <span class="text-danger"> * </span></label>
                             </div>
+                            {% if message_invalid_password %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ message_invalid_password }}
+                                </div>
+                            {% endif %}
                             <div class="form-floating mb-2">
                                 <input type="password" class="form-control rounded-3" id="newPassword" name="newPassword" placeholder="Password">
                                 <label for="newPassword">New Password <span class="text-danger"> * </span></label>
@@ -29,14 +34,14 @@
                                 <input type="password" class="form-control rounded-3" id="confirmPassword" name="confirmPassword" placeholder="Password">
                                 <label for="confirmPassword">Confirm New Password <span class="text-danger"> * </span></label>
                             </div>
-                            {% if message_invalid_credentials %}
+                            {% if message_different_password %}
                                 <div class="alert alert-danger" role="alert">
-                                    {{ message_invalid_credentials }}
+                                    {{ message_different_password }}
                                 </div>
                             {% endif %}
-                            {% if message %}
+                            {% if message_missing %}
                                 <div class="alert alert-danger" role="alert">
-                                    {{ message }}
+                                    {{ message_missing }}
                                 </div>
                             {% endif %}
                             <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" id="resetButton" type="submit">Change Password</button>

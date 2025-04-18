@@ -31,7 +31,6 @@ def get_details_by_email(useremail):
     saved_tuple = cursor.fetchone()
     return saved_tuple
 
-
 #                                               <----- Add Member ------>
 
 # <----- Add Member ------>
@@ -77,8 +76,15 @@ def add_member(fname, lname, uemail, hpassword):
 
 
 #####
-def get_password_details_by_id(member_id):
-    pass
+def get_password_details_by_id(memberid):
+    conn = get_db_connection()
+    cursor = conn.cursor()
 
-def change_password(hashed_new_password):
+    sql_get_password_id = "SELECT hashed_password FROM v_login_details WHERE member_id = %s"
+    cursor.execute(sql_get_password_id, (memberid,))
+
+    saved_tuple = cursor.fetchone()
+    return saved_tuple
+
+def change_password(hashed_new_password, member_id):
     pass

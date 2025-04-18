@@ -4,7 +4,7 @@ from application import app
 import mysql.connector
 from flask import render_template, request, redirect, url_for, flash, session
 from application.data_access.blog_data_access import get_all_blogs,  get_blog_by_id
-from application.data_access.data_access import add_member, get_details_by_email
+from application.data_access.data_access import add_member, get_details_by_email, get_password_details_by_id, change_password
 from application.data_access.meal_plan_data_access import get_user_id, get_week_start_date, find_meal_plan_by_timestamp, get_db_connection
 from application.data_access.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences
 # from application.data_access.user_data_access import get_user_by_id
@@ -103,9 +103,9 @@ def logged_out():
 
 @app.route('/reset', methods=['GET', 'POST'])
 def reset_form():
-    if not session.get('LoggedIn'):
-        return redirect(url_for('login'))
-
+    if not session.get('loggedIn'):
+        return redirect(url_for('signin_form'))
+    error_missing = ""
     error_different_password = ""
     error_invalid_password = ""
 
@@ -115,20 +115,26 @@ def reset_form():
         confirm_password = request.form.get('confirmPassword')
         member_id = session['user_id']
 
-        password_details = get_password_details_by_id(member_id)
-        stored_password = password_details[0]
-
-        if check_password_hash(stored_password, current_password):
-            if new_password == confirm_password:
-                hashed_new_password = generate_password_hash(new_password)
-                change_password(hashed_new_password, member_id)
-                return render_template('login.html', title='Login')
-            else:
-                error_different_password = "Passwords do not match"
+        if not member_id:
+            return redirect(url_for('signin_form'))
         else:
-            error_invalid_password = "Incorrect Password, please try again"
+            password_details = get_password_details_by_id(member_id)
+            if password_details:
+                stored_password = password_details[0]
+                if len(current_password) == 0 or len(new_password) == 0 or len(confirm_password) == 0:
+                    error_missing = 'Please supply all fields'
+                else:
+                    if check_password_hash(stored_password, current_password):
+                        if new_password == confirm_password:
+                            hashed_new_password = generate_password_hash(new_password)
+                            change_password(hashed_new_password, member_id)
+                            return render_template('login.html', title='Login')
+                        else:
+                            error_different_password = "Passwords do not match"
+                    else:
+                        error_invalid_password = "Incorrect Password, please try again"
 
-    return render_template('reset.html', title='Reset', message_invalid_password=error_invalid_password, message_different_password=error_different_password)
+    return render_template('reset.html', title='Reset', message_invalid_password=error_invalid_password, message_different_password=error_different_password, message_missing=error_missing)
 
 
 
