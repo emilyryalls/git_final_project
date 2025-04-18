@@ -29,6 +29,8 @@ def get_details_by_email(useremail):
     cursor.execute(sql_get_password_name, (useremail,))
 
     saved_tuple = cursor.fetchone()
+
+    conn.commit()
     return saved_tuple
 
 #                                               <----- Add Member ------>
@@ -84,7 +86,16 @@ def get_password_details_by_id(memberid):
     cursor.execute(sql_get_password_id, (memberid,))
 
     saved_tuple = cursor.fetchone()
+
+    conn.commit()
     return saved_tuple
 
-def change_password(hashed_new_password, member_id):
-    pass
+def change_password(hashed_new_password, memberid):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql_change_password = "UPDATE member_password SET hashed_password = %s WHERE member_id = %s"
+    cursor.execute(sql_change_password, (hashed_new_password, memberid))
+
+    conn.commit()
+    return True
