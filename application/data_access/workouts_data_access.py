@@ -193,7 +193,9 @@ def get_exercises():
     result = cursor.fetchall()
 
     # get just the exercise names from the tuples
-    exercise_names = [row[0] for row in result]
+    exercise_names = []
+    for row in result:
+        exercise_names.append(row[0])
 
     return exercise_names
 
