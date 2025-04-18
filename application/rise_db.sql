@@ -221,7 +221,7 @@ create table member_password
 password_id bigint not null primary key auto_increment,
 member_id bigint not null,
 hashed_password text not null,
-foreign key (member_id) references member(member_id)
+foreign key (member_id) references member(member_id) on delete cascade
 );
 
 -- newsletter table
@@ -675,7 +675,7 @@ CREATE TABLE meal_plans (
     description TEXT,
     meals JSON,
     created_at DATETIME,
-    FOREIGN KEY (member_id) REFERENCES member(member_id)
+    FOREIGN KEY (member_id) REFERENCES member(member_id) on delete cascade
 );
 
 INSERT INTO meal_plans (member_id, name, description, meals, created_at)

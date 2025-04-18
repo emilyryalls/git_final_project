@@ -4,7 +4,7 @@ from application import app
 import mysql.connector
 from flask import render_template, request, redirect, url_for, flash, session
 from application.data_access.blog_data_access import get_all_blogs,  get_blog_by_id
-from application.data_access.data_access import add_member, get_details_by_email, get_password_details_by_id, change_password
+from application.data_access.data_access import add_member, get_details_by_email, get_password_details_by_id, change_password, delete_account
 from application.data_access.meal_plan_data_access import get_user_id, get_week_start_date, find_meal_plan_by_timestamp, get_db_connection
 from application.data_access.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences
 # from application.data_access.user_data_access import get_user_by_id
@@ -136,6 +136,19 @@ def reset_form():
 
     return render_template('reset.html', title='Reset', message_invalid_password=error_invalid_password, message_different_password=error_different_password, message_missing=error_missing)
 
+
+@app.route('/delete', methods=['GET', 'POST'])
+def delete_account():
+    if not session.get('loggedIn'):
+        return redirect(url_for('signin_form'))
+    if request.method == 'POST':
+       member_id = session['user_id']
+       if not member_id:
+           return redirect(url_for('signin_form'))
+       else:
+           delete_account(member_id)
+           return render_template('profile_settings.html', title='settings')
+    return render_template('delete.html', title='Delete')
 
 
 

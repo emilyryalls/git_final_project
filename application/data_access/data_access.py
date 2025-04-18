@@ -99,3 +99,13 @@ def change_password(hashed_new_password, memberid):
 
     conn.commit()
     return True
+
+def delete_account(memberid):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql_delete_account = "DELETE FROM member WHERE member_id = %s"
+    cursor.execute(sql_delete_account, (memberid,))
+
+    conn.commit()
+    return True
