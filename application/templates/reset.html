@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block body_content %}
+
+<div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modal-reset">
+    <div class="modal-dialog modal-xl" role="document" id="modal-dialog-reset">
+        <div class="modal-content rounded-4 shadow test" id="modal-flex-container-reset">
+            <div class="container" id="container-reset">
+                <div class="modal-header-reset p-3 pb-4 border-bottom-0" id="modal-header-reset">
+                    <h1 class="mb-0 fs-2" id="resetText">Set your new password below</h1>
+                    <h6 class="mb-0 fs-8" id="resetMessage">Make sure it’s something strong and memorable</h6>
+                    <small class="text-body fs-8" >Password must be 8-20 characters.</small>
+                </div>
+                <div class="row align-items-center reseting" id="reseting">
+                    <div class="col-md-img text-center mb-md-0" >
+                      <img src="{{ url_for('static', filename='images/reset logo.png') }}" alt="Reset Logo" class="img-fluid" style="max-height: 250px; max-width: 300px" id="container-img-reset">
+                    </div>
+                    <div class="col-md-7 modal-body ">
+                        <form class="reset" action="reset" method="POST" id="formreset" >
+                            <div class="form-floating mb-2">
+                                <input type="password" class="form-control rounded-3" id="currentPassword" name="currentPassword" placeholder="Password">
+                                <label for="currentPassword">Current Password <span class="text-danger"> * </span></label>
+                            </div>
+                            {% if message_invalid_password %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ message_invalid_password }}
+                                </div>
+                            {% endif %}
+                            <div class="form-floating mb-2">
+                                <input type="password" class="form-control rounded-3" id="newPassword" name="newPassword" placeholder="Password">
+                                <label for="newPassword">New Password <span class="text-danger"> * </span></label>
+
+                            </div>
+                            <div class="form-floating mb-2">
+                                <input type="password" class="form-control rounded-3" id="confirmPassword" name="confirmPassword" placeholder="Password">
+                                <label for="confirmPassword">Confirm New Password <span class="text-danger"> * </span></label>
+                            </div>
+                            {% if message_different_password %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ message_different_password }}
+                                </div>
+                            {% endif %}
+                            {% if message_missing %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ message_missing }}
+                                </div>
+                            {% endif %}
+                            <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" id="resetButton" type="submit">Change Password</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

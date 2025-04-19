@@ -316,8 +316,6 @@ body.home-page .testimonial-name {
 
 /* SIGN UP PAGE */
 
-
-
 .form-floating>.form-control, .form-floating>.form-control-plaintext, .form-floating>.form-select {
     height: calc(3.1rem + calc(var(--bs-border-width) * 2));
     min-height: calc(3.1rem + calc(var(--bs-border-width) * 2));
@@ -335,7 +333,6 @@ body.home-page .testimonial-name {
 .modal-content {
   flex-direction: row;
   background-color: #ffe3dd;
-
 }
 
 .modal-body {
@@ -343,9 +340,6 @@ body.home-page .testimonial-name {
   flex-direction: row;
   justify-content: center;
   align-items: stretch;
-
- /* padding-left: 0px;
-  padding-right: 3rem;*/
 }
 
 #modal-body-one{
@@ -370,14 +364,14 @@ body.home-page .testimonial-name {
 
 }
 
-#signupText{
+#signupText, #signinText, #resetText, #deleteText{
   font-family: 'Quicksand';
   color: #333333;
   text-shadow: none;
   font-weight: 440;
 }
 
-#signupButton{
+#signupButton, #signinButton, #resetButton, #deleteButton{
   background-color: #F25C54;
   border-color: #F25C54;
   font-weight: bold;
@@ -385,8 +379,9 @@ body.home-page .testimonial-name {
   transition: background-color 0.3s ease;
 }
 
-#signupButton:hover {
+#signupButton:hover, #signinButton:hover, #resetButton:hover, #deleteButton:hover {
   background-color: #F4845F;
+  border-color: #F4845F;
 }
 
 .text-body-secondary{
@@ -394,13 +389,10 @@ body.home-page .testimonial-name {
   color: #333333;
 }
 
-
-
 @media (min-width: 1200px) {
   .modal-dialog {
     --bs-modal-width:1340px
   }
-
 }
 
 @media (min-width: 1150px) {
@@ -439,6 +431,58 @@ body.home-page .testimonial-name {
     --bs-modal-width: 500px;
   }
 }
+
+/* LOGIN PAGE */
+
+#modal-flex-container-signin, #modal-flex-container-reset, #modal-flex-container-delete {
+    width: fit-content;
+    justify-self: anchor-center;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+@media (min-width: 1150px) {
+    #container-signin, #container-reset, #container-delete {
+        padding: 2rem;
+        /* background-color: red; */
+    }
+    .col-md-img {
+        width: 41.66666667%;
+    }
+
+    #grid-delete-r{
+    width: 58.33333333% !important;
+
+}
+#grid-delete-l{
+        width: 41.66666667% !important;
+
+
+}
+}
+@media (min-width: 992px) {
+    .container, .container-lg, .container-md, .container-sm {
+        max-width: 960px;
+    }
+}
+
+#container-signin, #container-reset, {
+  flex: 1;
+  padding: 2rem;
+}
+
+/* RESET PAGE */
+@media (min-width: 768px) and (max-width: 1150px) {
+    #reseting, #delete{
+        display: flex;
+        flex-direction: column;
+    }
+    .col-md-img {
+        width: 80%;
+    }
+}
+
+
 
 
 
@@ -529,6 +573,74 @@ body.home-page .testimonial-name {
   color: white;
   border-color: #F4845F;
 }
+
+.fitness-goal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: rgba(255, 243, 235, 0.97); /* soft peach tint */
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  animation: fadeIn 0.4s ease-in-out;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.fitness-goal-overlay h5 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #F25C54;
+  margin-bottom: 1rem;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.fitness-goal-overlay p {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 1.5rem;
+}
+
+.fitness-goal-overlay .btn {
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+.fitness-goal-overlay .btn-light {
+  background-color: #F4845F;
+  color: white;
+  border: none;
+}
+
+.fitness-goal-overlay .btn-outline-light {
+  color: #F25C54;
+  border: 2px solid #F25C54;
+}
+
+.fitness-goal-overlay .btn-outline-light:hover {
+  background-color: #F25C54;
+  color: white;
+  border-color: #F25C54;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 
 /* WORKOUTS PAGE */
 .workout-video-title {

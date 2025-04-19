@@ -49,8 +49,8 @@
           <div class="card-body px-4 py-4">
             <h4 class="card-title text-center mb-4"><i class="bi bi-shield-lock-fill me-2"></i>Security Settings</h4>
             <div class="d-flex flex-column align-items-center">
-              <a href="#" class="btn btn-outline-secondary mb-3">Change Password</a>
-              <a href="#" class="btn btn-outline-danger">Delete Account</a>
+              <a href="/reset" class="btn btn-outline-secondary mb-3">Change Password</a>
+              <a href="/delete" class="btn btn-outline-danger">Delete Account</a>
             </div>
           </div>
         </div>
@@ -68,11 +68,11 @@
             <input type="hidden" name="form_type" value="body_metrics">
             <div class="mb-3 text-start">
               <label for="height" class="form-label">Height (cm)</label>
-              <input type="number" class="form-control" id="height" name="height" value="{{ user.height }}">
+              <input type="number" class="form-control" id="height" name="height" value="{{ user.height if user.height is not none else '' }}" placeholder="Enter your height">
             </div>
             <div class="mb-3 text-start">
               <label for="weight" class="form-label">Weight (kg)</label>
-              <input type="number" class="form-control" id="weight" name="weight" value="{{ user.weight }}">
+              <input type="number" class="form-control" id="weight" name="weight" value="{{ user.weight if user.weight is not none else '' }}" placeholder="Enter your weight">
             </div>
             <div class="mt-3">
               <button type="submit" class="btn btn-join-filled">Update Measurements</button>
@@ -90,6 +90,7 @@
             <div class="mb-3 text-start">
               <label for="goal" class="form-label">Fitness Goal</label>
               <select class="form-select" name="goal" id="goal">
+                <option disabled {% if not user.goal %}selected{% endif %}>Select your fitness goal</option>
                 <option value="Build Muscle" {% if user.goal == 'Build Muscle' %}selected{% endif %}>Build Muscle</option>
                 <option value="Improve Stamina" {% if user.goal == 'Improve Stamina' %}selected{% endif %}>Improve Stamina</option>
                 <option value="Lose Weight" {% if user.goal == 'Lose Weight' %}selected{% endif %}>Lose Weight</option>
@@ -100,6 +101,7 @@
             <div class="mb-3 text-start">
               <label for="experience" class="form-label">Experience Level</label>
               <select class="form-select" name="experience" id="experience">
+                <option disabled {% if not user.experience %}selected{% endif %}>Select your experience level</option>
                 <option value="Beginner" {% if user.experience == 'Beginner' %}selected{% endif %}>Beginner</option>
                 <option value="Intermediate" {% if user.experience == 'Intermediate' %}selected{% endif %}>Intermediate</option>
                 <option value="Advanced" {% if user.experience == 'Advanced' %}selected{% endif %}>Advanced</option>
@@ -109,6 +111,7 @@
             <div class="mb-3 text-start">
               <label for="diet" class="form-label">Dietary Requirement</label>
               <select class="form-select" name="diet" id="diet">
+                <option disabled {% if not user.diet %}selected{% endif %}>Select your dietary preference</option>
                 <option value="No preference" {% if user.diet == 'No preference' %}selected{% endif %}>No preference</option>
                 <option value="Vegan" {% if user.diet == 'Vegan' %}selected{% endif %}>Vegan</option>
               </select>
@@ -129,7 +132,8 @@
 </div>
 
 
-<!-- Fitness Goal Quiz Modal -->
+<!-- Fitness goal quiz (modal) -->
+<!--A modal is a temporary overlay/pop-up window that appears on top of the main page to grab the user's attention without navigating away from the current screen (blocks interaction with the rest of the page) -->
 <div class="modal fade" id="fitnessGoalModal" tabindex="-1" aria-labelledby="fitnessGoalModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content p-4 position-relative overflow-hidden">
@@ -143,6 +147,7 @@
 
       <div class="modal-body">
         <form id="goalQuizForm">
+          <!-- Question 1: Motivation -->
           <div class="mb-3">
             <label class="form-label">What's your main motivation for starting (or continuing) your fitness journey?</label>
             <select class="form-select" name="q1" required>
@@ -153,6 +158,8 @@
               <option value="core">I want to improve posture and reduce back pain</option>
             </select>
           </div>
+
+          <!-- Question 2: Exciting outcome -->
           <div class="mb-3">
             <label class="form-label">Which of these outcomes excites you the most?</label>
             <select class="form-select" name="q2" required>
@@ -163,6 +170,8 @@
               <option value="core">Holding a plank or balancing exercises with ease</option>
             </select>
           </div>
+
+          <!-- Question 3: Workout type -->
           <div class="mb-3">
             <label class="form-label">What type of workouts do you think you'd enjoy the most?</label>
             <select class="form-select" name="q3" required>
@@ -173,17 +182,21 @@
               <option value="core">Pilates, yoga, or mobility-focused workouts</option>
             </select>
           </div>
+
+          <!-- Submit button -->
           <div class="text-center">
             <button type="button" class="btn btn-join-filled" onclick="evaluateQuiz()">Show Suggested Goal</button>
           </div>
         </form>
 
-        <!-- Result Overlay -->
-        <div id="quizResult" class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center bg-primary text-white d-none" style="z-index: 10;">
+        <!-- Result overlay (initially hidden with d-none) -->
+        <div id="quizResult" class="fitness-goal-overlay d-none">
           <div class="text-center px-4">
             <h5 class="fw-bold mb-3">🎯 Your Suggested Fitness Goal</h5>
               <p id="quizGoalText" class="fs-4 fw-semibold mb-4"></p>
-                <div class="d-flex justify-content-center gap-3 flex-wrap">
+
+            <!-- Buttons to retry or close modal -->
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
                   <button class="btn btn-light" onclick="retryQuiz()">Retry</button>
                   <button class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
                 </div>
@@ -198,27 +211,51 @@
 
 <!-- Have an easy way to go back to the profile -->
 
+<!-- JavaScript to evaluate and display quiz result -->
 <script>
+// Define a function to assess answers to the quiz
 function evaluateQuiz() {
+  // STEP 1: Access the quiz form element from the DOM using its ID
   const form = document.getElementById("goalQuizForm");
+
+  // STEP 2: Retrieve the selected dropdown values from each of the three quiz questions
+  // These are dropdown fields with the names q1, q2, and q3
   const q1 = form.q1.value;
   const q2 = form.q2.value;
   const q3 = form.q3.value;
 
+  // STEP 3: Do an input validation check to ensure all questions have been answered
+  // If any field is still blank, prompt the user to complete the form
   if (!q1 || !q2 || !q3) {
     alert("Please answer all questions.");
-    return;
+    return; // Exit the function early if validation fails
   }
 
+  // STEP 4: Combine all selected answers and store in an array (ordered list) for easier processing
   const answers = [q1, q2, q3];
+
+  // Creates an empty object in which to count how many times each fitness goal type appears
   const frequency = {};
+
+  // .forEach() is an array method that runs a given function for every item in the answers array
+  // frequency[ans] checks if this answer already has a count in the object. If not, it starts at 0. Then increments it by 1
   answers.forEach(ans => {
     frequency[ans] = (frequency[ans] || 0) + 1;
   });
 
+  // STEP 5: Count how often each goal type appears in the answers
+  // This helps determine the most frequently chosen category
+  // Object.entries(frequency) turns the object into an array of key–value pairs: e.g. { strength: 2, core: 1 } → [["strength", 2], ["core", 1]]
+  // .sort((a, b) => b[1] - a[1]) sorts this array in descending order by value (i.e. highest count first)
   const sorted = Object.entries(frequency).sort((a, b) => b[1] - a[1]);
-  const mostCommon = sorted[0][0];
 
+  // STEP 7: Identify the goal category with the highest frequency
+  // This will be the suggested fitness goal
+  // sorted[0] gives us the first (most frequent) pair in the sorted list
+  const mostCommon = sorted[0][0]; // Get the key of the top result (e.g. "strength")
+
+  // STEP 8: Define a mapping between answer codes and readable goal descriptions
+  // This ensures that we display a friendly, human-readable message to the user
   const goalMap = {
     strength: "Build Muscle",
     endurance: "Improve Stamina",
@@ -226,28 +263,42 @@ function evaluateQuiz() {
     core: "Improve Core Strength"
   };
 
+  // STEP 9: Look up the readable goal name using the most common category
   const goalText = goalMap[mostCommon];
 
-  // Display result in overlay
+  // STEP 10: Show the result overlay on top of the modal (was hidden with class="d-none" earlier)
   const resultOverlay = document.getElementById("quizResult");
+
+  // This puts the goal text (like "Build Muscle") into the HTML <p> element where the result will be displayed
   document.getElementById("quizGoalText").textContent = goalText;
+
+  // .classList gives access to all the CSS classes of an element, while .remove("d-none") removes the Bootstrap class that was hiding the overlay (d-none), making it visible
   resultOverlay.classList.remove("d-none");
 
-  // Set the main goal select
+   // STEP 11: If there's a dropdown elsewhere on the page for selecting a goal (with id="goal"), this sets its value to match the suggested goal
   const goalSelect = document.getElementById("goal");
+
+  // If the goal select element exists, its value is set to match the quiz result. A temp green background and white text is added to highlight the change and setTimeout() runs the function after 2 seconds, removing the highlight style
   if (goalSelect) {
-    goalSelect.value = goalText;
+    goalSelect.value = goalText; // Set the selected value
+
+    // Add a temporary highlight to give the user visual feedback
     goalSelect.classList.add("bg-success", "text-white");
     setTimeout(() => {
       goalSelect.classList.remove("bg-success", "text-white");
-    }, 2000);
+    }, 2000); // Remove highlight after 2 seconds
   }
 
+  // STEP 12: Smooth scroll the user down to the result overlay
   resultOverlay.scrollIntoView({ behavior: "smooth" });
 }
 
+// This function allows the user to retry the quiz
 function retryQuiz() {
+  // Hide the result overlay again
   document.getElementById("quizResult").classList.add("d-none");
+
+  // Clear the form fields so the user can try again from scratch
   document.getElementById("goalQuizForm").reset();
 }
 </script>

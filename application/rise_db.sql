@@ -196,7 +196,7 @@ member_id bigint not null primary key auto_increment,
 first_name varchar(50) not null,
 last_name varchar(100) not null,
 email_id bigint not null,
-foreign key (email_id) references email(email_id),
+foreign key (email_id) references email(email_id) on delete cascade,
 date_of_birth date null,
 height decimal(5,2),
 weight decimal(5,2),
@@ -224,7 +224,7 @@ create table member_password
 password_id bigint not null primary key auto_increment,
 member_id bigint not null,
 hashed_password text not null,
-foreign key (member_id) references member(member_id)
+foreign key (member_id) references member(member_id) on delete cascade
 );
 
 -- newsletter table
@@ -232,7 +232,7 @@ create table newsletter
 (
 newsletter_id bigint not null primary key auto_increment,
 email_id bigint not null,
-foreign key (email_id) references email(email_id)
+foreign key (email_id) references email(email_id) on delete cascade
 );
 
 -- login view for internal code only
@@ -241,6 +241,7 @@ as
 select
 	m.member_id,
 	m.first_name,
+	m.email_id,
 	e.email_address,
     p.hashed_password
 from email as e
@@ -678,7 +679,7 @@ CREATE TABLE meal_plans (
     description TEXT,
     meals JSON,
     created_at DATETIME,
-    FOREIGN KEY (member_id) REFERENCES member(member_id)
+    FOREIGN KEY (member_id) REFERENCES member(member_id) on delete cascade
 );
 
 INSERT INTO meal_plans (member_id, name, description, meals, created_at)
@@ -689,7 +690,7 @@ VALUES
  '{"Monday": {"breakfast": "Oatmeal", "lunch": "Chicken Salad", "dinner": "Grilled Salmon", "snacks": "Apple"}, "Tuesday": {"breakfast": "Scrambled Eggs", "lunch": "Pasta", "dinner": "Steak", "snacks": "Nuts"}, "Wednesday": {"breakfast": "Smoothie", "lunch": "Veggie Wrap", "dinner": "Chicken Stir Fry", "snacks": "Carrot Sticks"}, "Thursday": {"breakfast": "Avocado Toast", "lunch": "Quinoa Salad", "dinner": "Grilled Chicken", "snacks": "Banana"}, "Friday": {"breakfast": "Pancakes", "lunch": "Sushi", "dinner": "Tacos", "snacks": "Yogurt"}, "Saturday": {"breakfast": "Egg Muffins", "lunch": "Salmon Wrap", "dinner": "Baked Ziti", "snacks": "Grapes"}, "Sunday": {"breakfast": "Bagels", "lunch": "Steak Salad", "dinner": "Chicken Parmesan", "snacks": "Popcorn"}}',
  '2025-04-14 14:21:33');
 
- INSERT INTO meal_plans (member_id, name, description, meals, created_at)
+INSERT INTO meal_plans (member_id, name, description, meals, created_at)
 VALUES
 (1,
  'Week of 07-04-25',
@@ -697,7 +698,7 @@ VALUES
  '{"Monday": {"breakfast": "Avocado Toast", "lunch": "Vegan Burrito", "dinner": "Lentil Stew", "snacks": "Almonds"}, "Tuesday": {"breakfast": "Smoothie Bowl", "lunch": "Chickpea Salad", "dinner": "Tofu Stir Fry", "snacks": "Hummus with Carrots"}, "Wednesday": {"breakfast": "Chia Pudding", "lunch": "Vegan Wrap", "dinner": "Quinoa with Vegetables", "snacks": "Fruit"}, "Thursday": {"breakfast": "Overnight Oats", "lunch": "Avocado Salad", "dinner": "Vegan Chili", "snacks": "Trail Mix"}, "Friday": {"breakfast": "Peanut Butter Toast", "lunch": "Vegan Sushi", "dinner": "Vegan Tacos", "snacks": "Popcorn"}, "Saturday": {"breakfast": "Banana Pancakes", "lunch": "Tofu Salad", "dinner": "Lentil Soup", "snacks": "Energy Balls"}, "Sunday": {"breakfast": "Vegan Smoothie", "lunch": "Rice and Beans", "dinner": "Veggie Pizza", "snacks": "Dark Chocolate"}}',
  '2025-04-07 08:45:00');
 
- INSERT INTO meal_plans (member_id, name, description, meals, created_at)
+INSERT INTO meal_plans (member_id, name, description, meals, created_at)
 VALUES
 (1,
  'Week of 21-04-25',
@@ -717,7 +718,7 @@ VALUES
 
 
  -- WORKOUT PLANS
- 
+
 CREATE table exercise (
     exercise_id bigint not null primary key auto_increment,
     goal_id bigint not null,

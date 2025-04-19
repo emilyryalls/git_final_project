@@ -5,7 +5,6 @@ import json
 
 from unicodedata import category
 
-
 if sys.platform == "win32":
     mysql_password = "password"
 else:
@@ -25,12 +24,13 @@ def get_details_by_email(useremail):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    sql_get_password_name = "SELECT hashed_password, first_name, email_address, member_id FROM v_login_details WHERE email_address = %s"
+    sql_get_password_name = "SELECT hashed_password, first_name, email_address, member_id, email_id FROM v_login_details WHERE email_address = %s"
     cursor.execute(sql_get_password_name, (useremail,))
 
     saved_tuple = cursor.fetchone()
-    return saved_tuple
 
+    conn.commit()
+    return saved_tuple
 
 #                                               <----- Add Member ------>
 
@@ -75,3 +75,47 @@ def add_member(fname, lname, uemail, hpassword):
         cursor.execute(sql_add_password, val_password)
         conn.commit()
 
+
+#####
+def get_password_details_by_id(memberid):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql_get_password_id = "SELECT hashed_password FROM v_login_details WHERE member_id = %s"
+    cursor.execute(sql_get_password_id, (memberid,))
+
+    saved_tuple = cursor.fetchone()
+
+    conn.commit()
+    return saved_tuple
+
+def change_password(hashed_new_password, memberid):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql_change_password = "UPDATE member_password SET hashed_password = %s WHERE member_id = %s"
+    cursor.execute(sql_change_password, (hashed_new_password, memberid))
+
+    conn.commit()
+    return True
+
+def delete_account(memberid):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql_delete_account = "DELETE FROM member WHERE member_id = %s"
+    cursor.execute(sql_delete_account, (memberid,))
+
+    conn.commit()
+    return True
+
+
+def delete_email(emailid):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql_delete_email = "DELETE FROM email WHERE email_id = %s"
+    cursor.execute(sql_delete_email, (emailid,))
+
+    conn.commit()
+    return True
