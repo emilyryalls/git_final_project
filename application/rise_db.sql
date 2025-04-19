@@ -193,7 +193,7 @@ member_id bigint not null primary key auto_increment,
 first_name varchar(50) not null,
 last_name varchar(100) not null,
 email_id bigint not null,
-foreign key (email_id) references email(email_id),
+foreign key (email_id) references email(email_id) on delete cascade,
 date_of_birth date null,
 height decimal(5,2),
 weight decimal(5,2),
@@ -229,7 +229,7 @@ create table newsletter
 (
 newsletter_id bigint not null primary key auto_increment,
 email_id bigint not null,
-foreign key (email_id) references email(email_id)
+foreign key (email_id) references email(email_id) on delete cascade
 );
 
 -- login view for internal code only
@@ -238,6 +238,7 @@ as
 select
 	m.member_id,
 	m.first_name,
+	m.email_id,
 	e.email_address,
     p.hashed_password
 from email as e

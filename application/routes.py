@@ -4,7 +4,7 @@ from application import app
 import mysql.connector
 from flask import render_template, request, redirect, url_for, flash, session
 from application.data_access.blog_data_access import get_all_blogs,  get_blog_by_id
-from application.data_access.data_access import add_member, get_details_by_email, get_password_details_by_id, change_password, delete_account
+from application.data_access.data_access import add_member, get_details_by_email, get_password_details_by_id, change_password, delete_account, delete_email
 from application.data_access.meal_plan_data_access import get_user_id, get_week_start_date, find_meal_plan_by_timestamp, get_db_connection
 from application.data_access.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences
 # from application.data_access.user_data_access import get_user_by_id
@@ -80,6 +80,7 @@ def signin_submit():
                 session['email'] = saved_details[2]
                 session['user'] = saved_details[1]
                 session['user_id'] = saved_details[3]
+                session['email_id'] = saved_details[4]
                 session['loggedIn'] = True
 
                 if check_password_hash(stored_password, userpassword):
@@ -138,16 +139,22 @@ def reset_form():
 
 
 @app.route('/delete', methods=['GET', 'POST'])
-def delete_account():
+def delete_account_route():
     if not session.get('loggedIn'):
         return redirect(url_for('signin_form'))
+
     if request.method == 'POST':
-       member_id = session['user_id']
+       member_id = session.get('user_id')
+       emailid = session.get('email_id')
        if not member_id:
            return redirect(url_for('signin_form'))
        else:
            delete_account(member_id)
-           return render_template('profile_settings.html', title='settings')
+           delete_email(emailid)
+           session.clear()
+           flash("Your account has been deleted. Your rise continues anytime.")
+           return render_template('login.html', title='settings')
+
     return render_template('delete.html', title='Delete')
 
 

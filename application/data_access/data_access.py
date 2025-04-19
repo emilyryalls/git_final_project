@@ -25,7 +25,7 @@ def get_details_by_email(useremail):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    sql_get_password_name = "SELECT hashed_password, first_name, email_address, member_id FROM v_login_details WHERE email_address = %s"
+    sql_get_password_name = "SELECT hashed_password, first_name, email_address, member_id, email_id FROM v_login_details WHERE email_address = %s"
     cursor.execute(sql_get_password_name, (useremail,))
 
     saved_tuple = cursor.fetchone()
@@ -106,6 +106,17 @@ def delete_account(memberid):
 
     sql_delete_account = "DELETE FROM member WHERE member_id = %s"
     cursor.execute(sql_delete_account, (memberid,))
+
+    conn.commit()
+    return True
+
+
+def delete_email(emailid):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sql_delete_email = "DELETE FROM email WHERE email_id = %s"
+    cursor.execute(sql_delete_email, (emailid,))
 
     conn.commit()
     return True
