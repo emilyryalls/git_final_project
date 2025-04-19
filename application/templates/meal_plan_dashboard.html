@@ -2,151 +2,151 @@
 
 {% block body_content %}
 
-        <div class="container mt-5">
-        <div class="blog-home-title">
-            <p>🍽️ Meal Plan </p>
-        </div>
+<div class="container mt-5">
+    <div class="blog-home-title">
+        <p>🍽️ Meal Plan </p>
+    </div>
 
-
-        <!-- Toast Notification -->
-        <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% for category, message in messages %}
-                    <div class="toast align-items-center text-white bg-{{ category }} border-0 show" role="alert">
-                        <div class="d-flex">
-                            <div class="toast-body">{{ message }}</div>
-                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-                        </div>
+    <!-- Toast Notification -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="toast align-items-center text-white bg-{{ category }} border-0 show" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body">{{ message }}</div>
+                        <button type="button" class="cta-button btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
                     </div>
-                {% endfor %}
-            {% endwith %}
-        </div>
+                </div>
+            {% endfor %}
+        {% endwith %}
+    </div>
 
-        <!-- Tabs -->
-        <ul class="nav nav-tabs mb-4" id="dashboardTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="view-tab" data-bs-toggle="tab" data-bs-target="#view" type="button">📖 View Plan</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="create-tab" data-bs-toggle="tab" data-bs-target="#create" type="button">📝 Create New</button>
-            </li>
-        </ul>
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4" id="dashboardTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="cta-button nav-link active" id="view-tab" data-bs-toggle="tab" data-bs-target="#view" type="button">📖 View Plan</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="cta-button nav-link" id="create-tab" data-bs-toggle="tab" data-bs-target="#create" type="button">📝 Create New</button>
+        </li>
+    </ul>
 
-        <div class="tab-content" id="dashboardTabsContent">
-            <!-- View Current Plan -->
-            <div class="tab-pane fade show active" id="view" role="tabpanel">
-                {% if current_meal_plan %}
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-body">
-                            <h3>{{ current_meal_plan.name }}</h3>
-                            <p><strong>📅 Created:</strong> {{ current_meal_plan.created_at }}</p>
-                            <p><strong>🗒️ Description:</strong> {{ current_meal_plan.description }}</p>
+    <div class="tab-content" id="dashboardTabsContent">
+        <!-- View Current Plan -->
+        <div class="tab-pane fade show active" id="view" role="tabpanel">
+            {% if current_meal_plan %}
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3>{{ current_meal_plan.name }}</h3>
+                        <p><strong>📅 Created:</strong> {{ current_meal_plan.created_at }}</p>
+                        <p><strong>🗒️ Description:</strong> {{ current_meal_plan.description }}</p>
 
-                            {% for day in days %}
-                                <div class="mt-4 border-top pt-3">
-                                    <h5 class="fw-bold">{{ day }}</h5>
-                                    <div class="row row-cols-2 row-cols-md-4 g-3">
-                                        <div><strong>🍳 Breakfast:</strong> {{ current_meal_plan.meals[day].breakfast or "No meal planned" }}</div>
-                                        <div><strong>🥪 Lunch:</strong> {{ current_meal_plan.meals[day].lunch or "No meal planned" }}</div>
-                                        <div><strong>🍝 Dinner:</strong> {{ current_meal_plan.meals[day].dinner or "No meal planned" }}</div>
-                                        <div><strong>🍎 Snacks:</strong> {{ current_meal_plan.meals[day].snacks or "No snacks planned" }}</div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="alert alert-info">No current meal plan available.</div>
-                {% endif %}
-            </div>
-
-            <!-- Create New Plan -->
-            <div class="tab-pane fade" id="create" role="tabpanel">
-                <form action="{{ url_for('save_meal_plan') }}" method="POST" class="mt-3">
-                    <input type="hidden" name="plan_name" value="{{ plan_name }}">
-
-                    <div class="mb-3">
-                        <label for="meal_plan_description" class="form-label">Plan Description</label>
-                        <input type="text" class="form-control" id="meal_plan_description" name="meal_plan_description" placeholder="e.g., High-protein week, Keto, Budget meals...">
-                    </div>
-
-                    <!-- Accordion -->
-                    <div class="accordion" id="mealAccordion">
                         {% for day in days %}
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="heading{{ day }}">
-                                    <button class="accordion-button {% if not loop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ day }}">
-                                        {{ day }}
-                                    </button>
-                                </h2>
-                                <div id="collapse{{ day }}" class="accordion-collapse collapse {% if loop.first %}show{% endif %}" data-bs-parent="#mealAccordion">
-                                    <div class="accordion-body">
-                                        <div class="row g-2">
-                                            <div class="col">
-                                                <input type="text" class="form-control" name="{{ day }}_breakfast" placeholder="🍳 Breakfast">
-                                            </div>
-                                            <div class="col">
-                                                <input type="text" class="form-control" name="{{ day }}_lunch" placeholder="🥪 Lunch">
-                                            </div>
-                                            <div class="col">
-                                                <input type="text" class="form-control" name="{{ day }}_dinner" placeholder="🍝 Dinner">
-                                            </div>
-                                            <div class="col">
-                                                <input type="text" class="form-control" name="{{ day }}_snacks" placeholder="🍎 Snacks">
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="mt-4 border-top pt-3">
+                                <h5 class="fw-bold">{{ day }}</h5>
+                                <div class="row row-cols-2 row-cols-md-4 g-3">
+                                    <div><strong>🍳 Breakfast:</strong> {{ current_meal_plan.meals[day].breakfast or "No meal planned" }}</div>
+                                    <div><strong>🥪 Lunch:</strong> {{ current_meal_plan.meals[day].lunch or "No meal planned" }}</div>
+                                    <div><strong>🍝 Dinner:</strong> {{ current_meal_plan.meals[day].dinner or "No meal planned" }}</div>
+                                    <div><strong>🍎 Snacks:</strong> {{ current_meal_plan.meals[day].snacks or "No snacks planned" }}</div>
                                 </div>
                             </div>
                         {% endfor %}
                     </div>
+                </div>
+            {% else %}
+                <div class="alert alert-info">No current meal plan available.</div>
+            {% endif %}
+        </div>
 
-                    <button type="submit" class="btn btn-success mt-4 w-100">💾 Save Meal Plan</button>
-                </form>
-            </div>
+        <!-- Create New Plan -->
+        <div class="tab-pane fade" id="create" role="tabpanel">
+            <form action="{{ url_for('save_meal_plan') }}" method="POST" class="mt-3">
+                <input type="hidden" name="plan_name" value="{{ plan_name }}">
 
-            <!-- Meal Plan History -->
-            <div class="mt-5">
-                <h4 class="mb-3">📚 Meal Plan History</h4>
+                <div class="mb-3">
+                    <label for="meal_plan_description" class="form-label">Plan Description</label>
+                    <input type="text" class="form-control" id="meal_plan_description" name="meal_plan_description" placeholder="e.g., High-protein week, Keto, Budget meals...">
+                </div>
 
-                <!-- Search -->
-                <form method="GET" action="" class="mb-3">
-                    <input type="text" class="form-control" name="search" placeholder="🔍 Search meal plans by name/date...">
-                </form>
-
-                {% if meal_plans %}
-                    <div class="accordion" id="historyAccordion">
-                        {% for plan in meal_plans %}
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingHist{{ loop.index }}">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHist{{ loop.index }}">
-                                        {{ plan.name }} <span class="ms-auto small text-muted">{{ plan.created_at }}</span>
-                                    </button>
-                                </h2>
-                                <div id="collapseHist{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#historyAccordion">
-                                    <div class="accordion-body d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <p class="mb-0"><strong>Description:</strong> {{ plan.description }}</p>
+                <!-- Accordion -->
+                <div class="accordion" id="mealAccordion">
+                    {% for day in days %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ day }}">
+                                <button class="cta-button accordion-button {% if not loop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ day }}">
+                                    {{ day }}
+                                </button>
+                            </h2>
+                            <div id="collapse{{ day }}" class="accordion-collapse collapse {% if loop.first %}show{% endif %}" data-bs-parent="#mealAccordion">
+                                <div class="accordion-body">
+                                    <div class="row g-2">
+                                        <div class="col">
+                                            <input type="text" class="form-control" name="{{ day }}_breakfast" placeholder="🍳 Breakfast">
                                         </div>
-                                        <div class="dropdown">
-                                            <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                ⚙️ Actions
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="{{ url_for('view_meal_plan', timestamp=plan['created_at']) }}">👁️ View</a></li>
-                                                <li><a class="dropdown-item" href="{{ url_for('edit_meal_plan', timestamp=plan.created_at) }}">✏️ Edit</a></li>
-                                                <li><a class="dropdown-item" href="{{ url_for('clone_meal_plan', timestamp=plan.created_at) }}">📋 Clone</a></li>
-                                            </ul>
+                                        <div class="col">
+                                            <input type="text" class="form-control" name="{{ day }}_lunch" placeholder="🥪 Lunch">
+                                        </div>
+                                        <div class="col">
+                                            <input type="text" class="form-control" name="{{ day }}_dinner" placeholder="🍝 Dinner">
+                                        </div>
+                                        <div class="col">
+                                            <input type="text" class="form-control" name="{{ day }}_snacks" placeholder="🍎 Snacks">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <div class="alert alert-secondary mt-3">No previous meal plans found.</div>
-                {% endif %}
-            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="cta-button mt-4 w-100">💾 Save Meal Plan</button>
+            </form>
+        </div>
+
+        <!-- Meal Plan History -->
+        <div class="mt-5">
+            <h4 class="mb-3">📚 Meal Plan History</h4>
+
+            <!-- Search -->
+            <form method="GET" action="" class="mb-3">
+                <input type="text" class="form-control" name="search" placeholder="🔍 Search meal plans by name/date...">
+            </form>
+
+            {% if meal_plans %}
+                <div class="accordion" id="historyAccordion">
+                    {% for plan in meal_plans %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingHist{{ loop.index }}">
+                                <button class="cta-button accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHist{{ loop.index }}">
+                                    {{ plan.name }} <span class="ms-auto small text-muted">{{ plan.created_at }}</span>
+                                </button>
+                            </h2>
+                            <div id="collapseHist{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#historyAccordion">
+                                <div class="accordion-body d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="mb-0"><strong>Description:</strong> {{ plan.description }}</p>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="cta-button dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            ⚙️ Actions
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{{ url_for('view_meal_plan', timestamp=plan['created_at']) }}">👁️ View</a></li>
+                                            <li><a class="dropdown-item" href="{{ url_for('edit_meal_plan', timestamp=plan.created_at) }}">✏️ Edit</a></li>
+                                            <li><a class="dropdown-item" href="{{ url_for('clone_meal_plan', timestamp=plan.created_at) }}">📋 Clone</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-secondary mt-3">No previous meal plans found.</div>
+            {% endif %}
         </div>
     </div>
+</div>
+
 {% endblock %}

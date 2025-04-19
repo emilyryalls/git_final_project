@@ -1,14 +1,6 @@
 {% extends "layout.html" %}
 
 {% block body_content %}
-<!-- Main container for displaying the saved meal plan -->
-
-<!-- Top Back Button -->
-<div class="text-end mb-3">
-    <a href="{{ url_for('meal_plan_dashboard', timestamp=selected_meal_plan.created_at) }}" class="btn btn-outline-primary">
-        ← Back to Dashboard
-    </a>
-</div>
 
 <!-- Meal Plan Title (name of the plan) -->
 <div class="container mt-5">
@@ -49,11 +41,12 @@
         {% endfor %}
     </div>
 
-    <!-- Bottom Back Button -->
-    <div class="text-end mt-4">
-        <a href="{{ url_for('meal_plan_dashboard', timestamp=selected_meal_plan.created_at) }}" class="btn btn-outline-primary">
-            ← Back to Dashboard
-        </a>
-    </div>
+<!-- Bottom Back Button -->
+<div class="container mt-4 pb-5">
+    <a href="{{ url_for('meal_plan_dashboard', timestamp=selected_meal_plan.created_at) }}" class="cta-button">
+        ← Back to Dashboard
+    </a>
 </div>
+
+</div> <!-- closes the container -->
 {% endblock %}
