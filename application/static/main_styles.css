@@ -574,6 +574,74 @@ body.home-page .testimonial-name {
   border-color: #F4845F;
 }
 
+.fitness-goal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: rgba(255, 243, 235, 0.97); /* soft peach tint */
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  animation: fadeIn 0.4s ease-in-out;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.fitness-goal-overlay h5 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #F25C54;
+  margin-bottom: 1rem;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.fitness-goal-overlay p {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 1.5rem;
+}
+
+.fitness-goal-overlay .btn {
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+.fitness-goal-overlay .btn-light {
+  background-color: #F4845F;
+  color: white;
+  border: none;
+}
+
+.fitness-goal-overlay .btn-outline-light {
+  color: #F25C54;
+  border: 2px solid #F25C54;
+}
+
+.fitness-goal-overlay .btn-outline-light:hover {
+  background-color: #F25C54;
+  color: white;
+  border-color: #F25C54;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+
 /* WORKOUTS PAGE */
 .workout-video-title {
   font-family: 'Bebas Neue', sans-serif;

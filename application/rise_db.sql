@@ -207,10 +207,6 @@ profile_pic varchar(500),
 member_since timestamp default current_timestamp
 );
 
-INSERT INTO member (first_name, last_name, email_id, date_of_birth, height, weight, goal_id, diet_id, experience_id, profile_pic)
-VALUES ('Zara', 'Smith', 1, '1995-08-12', 165.00, 60.50, 1, 1, 1, 'static/images/zara.jpeg'
-);
-
 select *
 from member;
 
@@ -687,7 +683,7 @@ VALUES
  '{"Monday": {"breakfast": "Oatmeal", "lunch": "Chicken Salad", "dinner": "Grilled Salmon", "snacks": "Apple"}, "Tuesday": {"breakfast": "Scrambled Eggs", "lunch": "Pasta", "dinner": "Steak", "snacks": "Nuts"}, "Wednesday": {"breakfast": "Smoothie", "lunch": "Veggie Wrap", "dinner": "Chicken Stir Fry", "snacks": "Carrot Sticks"}, "Thursday": {"breakfast": "Avocado Toast", "lunch": "Quinoa Salad", "dinner": "Grilled Chicken", "snacks": "Banana"}, "Friday": {"breakfast": "Pancakes", "lunch": "Sushi", "dinner": "Tacos", "snacks": "Yogurt"}, "Saturday": {"breakfast": "Egg Muffins", "lunch": "Salmon Wrap", "dinner": "Baked Ziti", "snacks": "Grapes"}, "Sunday": {"breakfast": "Bagels", "lunch": "Steak Salad", "dinner": "Chicken Parmesan", "snacks": "Popcorn"}}',
  '2025-04-14 14:21:33');
 
- INSERT INTO meal_plans (member_id, name, description, meals, created_at)
+INSERT INTO meal_plans (member_id, name, description, meals, created_at)
 VALUES
 (1,
  'Week of 07-04-25',
@@ -695,7 +691,7 @@ VALUES
  '{"Monday": {"breakfast": "Avocado Toast", "lunch": "Vegan Burrito", "dinner": "Lentil Stew", "snacks": "Almonds"}, "Tuesday": {"breakfast": "Smoothie Bowl", "lunch": "Chickpea Salad", "dinner": "Tofu Stir Fry", "snacks": "Hummus with Carrots"}, "Wednesday": {"breakfast": "Chia Pudding", "lunch": "Vegan Wrap", "dinner": "Quinoa with Vegetables", "snacks": "Fruit"}, "Thursday": {"breakfast": "Overnight Oats", "lunch": "Avocado Salad", "dinner": "Vegan Chili", "snacks": "Trail Mix"}, "Friday": {"breakfast": "Peanut Butter Toast", "lunch": "Vegan Sushi", "dinner": "Vegan Tacos", "snacks": "Popcorn"}, "Saturday": {"breakfast": "Banana Pancakes", "lunch": "Tofu Salad", "dinner": "Lentil Soup", "snacks": "Energy Balls"}, "Sunday": {"breakfast": "Vegan Smoothie", "lunch": "Rice and Beans", "dinner": "Veggie Pizza", "snacks": "Dark Chocolate"}}',
  '2025-04-07 08:45:00');
 
- INSERT INTO meal_plans (member_id, name, description, meals, created_at)
+INSERT INTO meal_plans (member_id, name, description, meals, created_at)
 VALUES
 (1,
  'Week of 21-04-25',
@@ -711,4 +707,4 @@ VALUES
  '{"Monday": {"breakfast": "Oatmeal with Banana", "lunch": "Pasta with Pesto", "dinner": "Rice with Grilled Chicken", "snacks": "Granola Bar"}, "Tuesday": {"breakfast": "Bagels with Cream Cheese", "lunch": "Quinoa and Veggie Stir Fry", "dinner": "Baked Potato with Chili", "snacks": "Apple with Peanut Butter"}, "Wednesday": {"breakfast": "Smoothie with Spinach", "lunch": "Whole Wheat Sandwich", "dinner": "Spaghetti with Marinara Sauce", "snacks": "Carrot Sticks with Hummus"}, "Thursday": {"breakfast": "Toast with Avocado", "lunch": "Couscous Salad", "dinner": "Sweet Potato and Black Bean Tacos", "snacks": "Rice Cakes"}, "Friday": {"breakfast": "French Toast", "lunch": "Vegetable Soup", "dinner": "Risotto", "snacks": "Fruit Salad"}, "Saturday": {"breakfast": "Pancakes with Maple Syrup", "lunch": "Curry Rice", "dinner": "Chicken and Rice", "snacks": "Nuts and Dried Fruit"}, "Sunday": {"breakfast": "Muesli", "lunch": "Falafel Wrap", "dinner": "Veggie Burger", "snacks": "Granola"}}',
  '2025-03-31 08:45:00');
 
- select * from meal_plans;
+select * from meal_plans;

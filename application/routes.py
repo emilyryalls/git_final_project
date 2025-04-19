@@ -2,17 +2,19 @@ from re import match
 
 from application import app
 import mysql.connector
+import os
 from flask import render_template, request, redirect, url_for, flash, session
 from application.data_access.blog_data_access import get_all_blogs,  get_blog_by_id
 from application.data_access.data_access import add_member, get_details_by_email, get_password_details_by_id, change_password, delete_account, delete_email
 from application.data_access.meal_plan_data_access import get_user_id, get_week_start_date, find_meal_plan_by_timestamp, get_db_connection
-from application.data_access.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences
+from application.data_access.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences, update_profile_picture
 # from application.data_access.user_data_access import get_user_by_id
 from application.data_access.workouts_data_access import get_workout_video
 import re
 import json
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from urllib.parse import unquote
 
 
@@ -465,12 +467,16 @@ def clone_meal_plan(timestamp):
 @app.route("/profile", methods=["GET"])
 def profile():
     if 'loggedIn' in session and session['loggedIn']:
-        user = session['user']
-
-    # TEMP: Assume user_id = 1 for development/testing
         user_id = session.get('user_id')
         user = get_user_by_id(user_id)
-        return render_template("profile.html", user=user)
+
+        # Sync session with latest profile pic (useful for navbar display)
+        session['profile_pic'] = user.get('profile_pic')
+
+        # Check if redirected from settings with success message
+        updated = request.args.get("updated")
+
+        return render_template("profile.html", user=user, updated=updated)
     else:
         return redirect(url_for('signin_form'))  # Redirect to signin if not logged in
 
@@ -478,30 +484,34 @@ def profile():
 @app.route("/profile/settings", methods=["GET", "POST"])
 def profile_settings():
     # TEMP: Assume user_id = 1 for development/testing
-    # user_id = 1
-    # user = get_user_by_id(user_id)
     if 'loggedIn' not in session:
         return redirect(url_for('signin_form'))
-    else:
-        user = session['user']
-        user_id = session['user_id']
 
-    fitness_goals = get_all_goals()
-    experiences = get_all_experience_levels()
-    diets = get_all_diets()
+    user_id = session['user_id']
+    # user = get_user_by_id(user_id)
 
     if request.method == "POST":
         form_type = request.form.get("form_type")
 
         if form_type == "account_info":
-            # Just for future expansion (currently not updating these fields)
-            dob = request.form.get("dob")
-            update_dob(user_id, dob)  # Optional: make this function
+            dob_str = request.form.get("dob")
+            if dob_str:
+                from datetime import datetime, date
+                dob = datetime.strptime(dob_str, "%Y-%m-%d").date()
+                today = date.today()
+                age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+
+                if age < 18:
+                    flash("You must be at least 18 years old to update your profile.", "danger")
+                    return redirect(url_for("profile_settings"))
+
+                update_dob(user_id, dob)
+
 
         elif form_type == "body_metrics":
             height = request.form.get("height")
             weight = request.form.get("weight")
-            update_height_weight(user_id, height, weight)
+            update_height_weight(user_id, height.strip(), weight.strip())
 
         elif form_type == "preferences":
             goal = request.form.get("goal")
@@ -509,16 +519,58 @@ def profile_settings():
             diet = request.form.get("diet")
             update_fitness_preferences(user_id, goal, experience, diet)
 
-        flash("Profile updated successfully!", "success")
-        return redirect(url_for("profile_settings"))
+        # # Refresh session user data
+        # updated_user = get_user_by_id(user_id)
+        # session['user'] = updated_user
 
-    return render_template(
-        "profile_settings.html",
-        user=user,
-        fitness_goals=fitness_goals,
-        experiences=experiences,
-        diets=diets
-    )
+        flash("Profile updated successfully!", "success")
+        return redirect(url_for("profile", updated=1))
+
+    user = get_user_by_id(user_id)
+    fitness_goals = get_all_goals()
+    experiences = get_all_experience_levels()
+    diets = get_all_diets()
+
+    return render_template("profile_settings.html", user=user, fitness_goals=fitness_goals, experiences=experiences, diets=diets)
+
+
+@app.route('/upload_profile_pic', methods=['POST'])
+def upload_profile_pic():
+    if 'loggedIn' not in session or 'user_id' not in session:
+        return redirect(url_for('signin_form'))
+
+    if 'profile_pic' not in request.files:
+        flash("No file part", "warning")
+        return redirect(url_for('profile'))
+
+    file = request.files['profile_pic']
+    if file.filename == '':
+        flash("No selected file", "warning")
+        return redirect(url_for('profile'))
+
+    if file:
+        filename = secure_filename(file.filename)
+
+        # ✅ Absolute path for saving the image
+        upload_folder = os.path.join(app.root_path, 'static', 'images', 'uploads')
+        os.makedirs(upload_folder, exist_ok=True)
+
+        full_path = os.path.join(upload_folder, filename)
+
+        # ✅ Relative path for use in <img src=""> (convert backslashes to slashes)
+        relative_path = os.path.join('images', 'uploads', filename).replace("\\", "/")
+
+        file.save(full_path)
+        print("SAVED TO:", full_path)
+        print("Exists?", os.path.exists(full_path))
+
+        update_profile_picture(session['user_id'], relative_path)
+        session['profile_pic'] = relative_path
+        flash("Profile picture updated successfully!", "success")
+        print("SAVED PATH (relative):", relative_path)
+
+    return redirect(url_for('profile'))
+
 
 # <---- Workout videos ---->
 # return all workout videos

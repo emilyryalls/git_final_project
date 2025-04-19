@@ -5,7 +5,6 @@ import json
 
 from unicodedata import category
 
-
 if sys.platform == "win32":
     mysql_password = "password"
 else:
