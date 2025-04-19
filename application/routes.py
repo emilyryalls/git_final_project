@@ -497,22 +497,25 @@ def view_workout_plan():
     fitness_goal = get_member_fitness_goal()
     member_experience = get_member_experience()
 
+    # return different error messages if user hasn't picked a fitness goal and/or experience level. on the webpage they will be told to pick both to access their personalised workout plan. if statements used in member_workouts.html to return these error messages if goal and/or experience have no value
+
     if fitness_goal is None and member_experience is None:
-        return render_template('member_workouts.html', fitness_goal=None, experience = None, exercises = None, sets = None, reps = None, days = None, workout_progress = None, video=None, error_message ="You need to select both your fitness goal and experience level to access your workout plan")
+        return render_template('member_workouts.html', fitness_goal=None, experience = None, error_message ="You need to select both your fitness goal and experience level to access your workout plan")
 
     if fitness_goal is None:
-        return render_template('member_workouts.html', fitness_goal=None, experience= member_experience, exercises = None, sets = None, reps = None, days = None, workout_progress = None, video=None, error_message="You need to select a fitness goal to access your workout plan")
+        return render_template('member_workouts.html', fitness_goal=None, experience= member_experience, error_message="You need to select a fitness goal to access your workout plan")
 
     if member_experience is None:
-        return render_template('member_workouts.html', fitness_goal = fitness_goal, experience = None, exercises = None, sets = None, reps = None, days = None, workout_progress = None, video=None, error_message="You need to select your experience level to access your workout plan")
+        return render_template('member_workouts.html', fitness_goal = fitness_goal, experience = None, error_message="You need to select your experience level to access your workout plan")
 
 
     exercise_plan = get_exercises()
     sets = get_sets()
     reps = get_reps()
     days = get_days_of_week()
-    workout_progress = get_workout_progress(session.get('user_id'))
+    workout_progress = get_workout_progress(session.get('user_id')) # session.get('user_id') used directly in the route and passed through as a parameter to get member_id
     workout_video = get_workout_video(fitness_goal, member_experience)
+    # getting workouts that fit the member's fitness goal and experience level
 
     return render_template('member_workouts.html', exercises = exercise_plan, sets = sets, reps = reps, fitness_goal = fitness_goal, experience = member_experience, days = days, workout_progress = workout_progress, video=workout_video)
 
@@ -520,19 +523,24 @@ def view_workout_plan():
 @app.route('/mark_workout_done', methods=['POST'])
 def mark_workout_done():
     member_id = request.form.get('member_id')
+    # another way of getting member_id - it is passed through as a hidden value in the html form in member_workouts.html
 
-    # Loop through day IDs 1 to 6
+    # loop through day_ids 1 to 6 (7 is not inclusive) - Mon-Sat. Not Sunday as it is hard coded as a rest day in member_workouts.html
     for day_id in range(1, 7):
-        checkbox_name = f'is_done_{day_id}'
-        is_done = checkbox_name in request.form  # True if box is checked, False otherwise
-        # Check whether the checkbox for this specific day (e.g., 'is_done_1') was submitted in the form.
-        # In HTML, checkboxes only appear in form data if they are checked.
-        # So if the checkbox name exists in request.form, it means it was ticked (True).
-        # If it's not there, it means it was unticked (False).
+        checkbox_name = f'is_done_{day_id}' #generates strings is_done_1, is_done_2 etc. to is_done_6. they correspond to each checkbox in the html form, defined in member_workouts.html
+        is_done = checkbox_name in request.form
+        # request.form is a special object in flask that contains all the form data sent via POST method
+        # this checks if the checkbox for the current day_id exists in the request.form
+        # in html, checkboxes only appear in form data if they are checked
+        # if the box is checked in the form, is_done is True
+        # if the box is unchecked, is_done is False, as it doesn't exist in request.form
 
-        # Update the workout progress in the database
+        # update the workout_progress table in the database
+        # this function checks if an entry already exists for the day and user, and updates if it does, or inserts a new entry to the table if it doesn't
+        # this is included in the for loop, so this is done for every day_id, either True or False is given
         update_workout_progress(member_id, day_id, is_done)
 
+    # stay on the /my_workouts page after checking a box to mark a day as complete
     return redirect('/my_workouts')
 
 

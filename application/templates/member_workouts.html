@@ -41,7 +41,7 @@
                </tr>
            </thead>
            <tbody>
-               {% for item in range(6) %}
+               {% for item in range(6) %} <!-- Index values 0, 1, 2, 3, 4, 5 -->
                    <tr>
                        <td>{{ days[item] }}</td>
                        <td>{{ exercises[item] }}</td>
@@ -51,12 +51,15 @@
                            <input type="checkbox"
                                   name="is_done_{{ item+1 }}"
                                   value="True"
-                                  {% if workout_progress.get(item+1) %}checked{% endif %}> <!-- item +1 so it aligns with the id in the database - id will be 1 higher than the index in a collection e.g. list, dict, tup etc.-->
+                                  {% if workout_progress.get(item+1) %}checked{% endif %}> <!-- item +1 so it aligns with the id in the database - id will be 1 higher than the index in a collection e.g. list, dict, tup etc., and this code is referencing the day_id (key in the workout_progress dict), not an index. same with the name, we want the number to match the day_id as this is used in routes.py-->
+                                    <!-- This code gets the is_done value for each day from the workout_progress dictionary . If the return is true, the checked attribute is added to the input tag, which makes the checkbox visually checked on the webpage-->
+                                    <!-- when a user checks or unchecks a box, this is updated in the database first, and then the page is reloaded, meaning the data passed into this template will be up to date with the database-->
+                                    <!-- workout_progress available to use as passed through render template in routes.py for this html file-->
                         </td>
                     </tr>
                 {% endfor %}
                 <tr>
-                    <td>{{ days[6] }}</td>
+                    <td>{{ days[6] }}</td> <!-- index value 6 for Sunday, not the day_id-->
                     <td colspan="3" class="text-muted fst-italic">
                         Rest Day / Active Recovery (e.g., light cycling, walking, stretching)
                     </td>
@@ -69,9 +72,10 @@
         <button type="submit" class="cta-button">Save Workout Progress</button>
     </div>
 </form>
-    {% endif %}
 
-    <div class="section-divider"></div>
+        <div class="section-divider"></div>
+
+    {% endif %}
 
 {% if fitness_goal and experience %}
     <h2 class="text-center">Recommended Video Workouts</h2>

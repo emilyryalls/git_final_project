@@ -175,7 +175,10 @@ def get_member_experience():
         cursor.execute(query)
         result = cursor.fetchone()
 
-        return result[0] if result else None
+        if result:
+            return result[0]
+        else:
+            return None
 
 
 def get_exercises():
@@ -214,7 +217,10 @@ def get_reps():
     cursor.execute(query)
     result = cursor.fetchone()
 
-    return result[0] if result else None
+    if result:
+        return result[0]
+    else:
+        return None
 
 
 def get_sets():
@@ -231,7 +237,11 @@ def get_sets():
     cursor.execute(query)
     result = cursor.fetchone()
 
-    return result[0] if result else None
+    if result:
+        return result[0]
+    else:
+        return None
+
 
 def get_days_of_week():
     """
@@ -256,15 +266,16 @@ def get_days_of_week():
 
 def update_workout_progress(member_id, day_id, is_done):
     """
-    This function updates or inserts into the 'workout_progress' table in the database to mark a workout as done.
+    This function updates or inserts into the 'workout_progress' table in the database to mark a day as done.
     """
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # Check if a record already exists
+    # check if a record for that user and day already exists
     check_query = "SELECT * FROM workout_progress WHERE member_id = %s AND day_id = %s"
     cursor.execute(check_query, (member_id, day_id))
     result = cursor.fetchone()
+    # returns tuple (progress_id, member_id, day_id, is_done), and None if there is no entry for the user and day in the table
 
     # if the record exists, update it. otherwise, insert a new record
     if result:
@@ -274,31 +285,33 @@ def update_workout_progress(member_id, day_id, is_done):
         insert_query = "INSERT INTO workout_progress (member_id, day_id, is_done) VALUES (%s, %s, %s)"
         cursor.execute(insert_query, (member_id, day_id, is_done))
 
-    # Commit the changes to the database
+    # commit the changes to the database
     conn.commit()
 
 
 
 def get_workout_progress(member_id):
     """
-    This function returns the workout progress for a given member.
-
-
-
+    This function checks the workout progress for a given member, stored in the database.
+    :return: dict
     """
     conn = get_db_connection()
     cursor = conn.cursor()
 
     query = "SELECT day_id, is_done FROM workout_progress WHERE member_id = %s"
 
+    # (member_id,) is a tuple - passed into the query in place of %s
+    # unlike other functions above, member_id passed as parameter rather than included in function itself - just trying a different approach
+    # member_id assigned in the route where this function is used, using session.get('user_id')
     cursor.execute(query, (member_id,))
     result = cursor.fetchall()
 
-    # Convert to dictionary
+    # result is a list of tuples e.g. result = [(1, True), (2, False), (3, True)]
+    # convert to dictionary, storing is_done value for each day for the member
     workout_progress = {}
-    for row in result:
-        # Access the tuple elements by index
-        workout_progress[row[0]] = row[1]
+    for item in result:
+        # in the tuple, item[0] is the day_id and item[1] is True or False, depending if workout ticked as done that day
+        workout_progress[item[0]] = item[1]
 
     return workout_progress
 
