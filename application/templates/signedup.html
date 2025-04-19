@@ -2,13 +2,33 @@
 
 {% block body_content %}
 
-<h1>Signup Successful!</h1>
-    <p>Congratulations! You've successfully signed up.</p>
 
-    <p>What would you like to do next?</p>
+<div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modal-delete">
+    <div class="modal-dialog modal-xl" role="document" id="modal-dialog-delete">
+        <div class="modal-content rounded-4 shadow test" id="modal-flex-container-delete">
+            <div class="container" id="container-delete">
+                <div class="modal-header-delete p-3 pb-4 border-bottom-0" id="modal-header-delete">
+                    <h1 class="mb-0 fs-2" id="deleteText">Signup Successful!</h1>
+                    <h6 class="mb-0 fs-8" id="SignedMessage">You've successfully signed up.</h6>
 
-    <a href="/login">Login</a> <!-- Option to log in -->
-    <a href="/">Back to Home Page</a>
+                </div>
+                <div class="row align-items-center delete" id="delete">
+                    <div class="col-md-img text-center mb-md-0" id="grid-delete-r" >
+                      <img src="{{ url_for('static', filename='images/thank you.png') }}" alt="Delete Logo" class="img-fluid" style="max-height: 250px; max-width: 300px" id="container-img-delete">
+                    </div>
+                    <div class="col-md-7 modal-body " id="grid-delete-l">
+                        <form class="delete" action="delete" method="POST" id="formdelete" >
+                            <h6 class="mb-0 fs-8" id="questionMessage">What would you like to do next?</h6>
+                            <a href="/signin" class="btn btn-secondary mb-1 w-100" id="signupButton">Login</a>
+                            <a href="/" class="btn btn-secondary mb-1 w-100">Back to Home Page</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 {% endblock %}
