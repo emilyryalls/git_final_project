@@ -456,7 +456,7 @@ def clone_meal_plan(timestamp):
         flash("Meal Plan Cloned!", "success")
         return redirect(url_for('meal_plan_dashboard', timestamp=timestamp_new))
 
-    return render_template('edit_meal_plan.html', selected_meal_plan=selected_meal_plan, days=DAYS)
+    return render_template('meal_plan/clone_meal_plan.html', selected_meal_plan=selected_meal_plan, days=DAYS)
 
 
 # -------------------------------------------------------------------------------------------------------------- #

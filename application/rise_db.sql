@@ -664,7 +664,6 @@ select * from blog;
 
                                     -- meal plan --
 
-
 CREATE TABLE meal_plans (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     member_id BIGINT NOT NULL,

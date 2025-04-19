@@ -687,4 +687,30 @@ body.home-page .testimonial-name {
 
 /* BLOG PAGE */
 
+
+.blog-home-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 600;
+  font-size: 70px;
+  text-align: center;
+  color: #333;
+}
+
+.blog-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+
+
 /* SIGN IN PAGE */
+
+/* MEAL PLAN*/
+
+.meal-plan-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 600;
+  font-size: 70px;
+  text-align: center;
+  color: #333;
+}

@@ -2,17 +2,19 @@
 
 {% block body_content %}
 <!-- Main container for displaying the saved meal plan -->
+
+<!-- Top Back Button -->
+<div class="text-end mb-3">
+    <a href="{{ url_for('meal_plan_dashboard', timestamp=selected_meal_plan.created_at) }}" class="btn btn-outline-primary">
+        ← Back to Dashboard
+    </a>
+</div>
+
+<!-- Meal Plan Title (name of the plan) -->
 <div class="container mt-5">
-
-    <!-- Top Back Button -->
-    <div class="text-end mb-3">
-        <a href="{{ url_for('meal_plan_dashboard', timestamp=selected_meal_plan.created_at) }}" class="btn btn-outline-primary">
-            ← Back to Dashboard
-        </a>
+    <div class="blog-home-title">
+        <p>Meal Plan for the week starting: {{ selected_meal_plan.name }}</p>
     </div>
-
-    <!-- Meal Plan Title (name of the plan) -->
-    <h1 class="text-center mb-4"> Meal Plan for the week starting: {{ selected_meal_plan.name }} </h1>
 
     <!-- Meals Data Debugging -->
     <!-- <p>Meals Data: {{ selected_meal_plan.meals | tojson }}</p> -->
@@ -25,11 +27,11 @@
 
         <!-- Display each day's meal plan -->
         <div class="col-md-4 mb-4">
-            <div class="card">
+            <div class="card h-100"> <!-- Ensures the card is the same height -->
                 <div class="card-header text-center">
                     <h4>{{ day }}</h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <ul class="list-unstyled">
                         <li><strong>Breakfast:</strong> {{ meals.breakfast }}</li>
                         <li><strong>Lunch:</strong> {{ meals.lunch }}</li>
