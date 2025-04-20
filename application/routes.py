@@ -135,7 +135,8 @@ def reset_form():
                         if new_password == confirm_password:
                             hashed_new_password = generate_password_hash(new_password)
                             change_password(hashed_new_password, member_id)
-                            return render_template('profile.html', title='Profile')
+                            return redirect(url_for('profile'))
+                            # return render_template('profile.html', title='Profile', user= )
                         else:
                             error_different_password = "Passwords do not match"
                     else:
@@ -158,7 +159,7 @@ def delete_account_route():
            delete_account(member_id)
            delete_email(emailid)
            session.clear()
-           flash("Your account has been deleted. Your rise continues anytime.")
+           flash("Your account has been deleted.")
            return render_template('home.html', title='settings')
 
     return render_template('delete.html', title='Delete')
