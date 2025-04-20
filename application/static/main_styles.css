@@ -74,6 +74,14 @@ body {
   border-top: 2px solid #ff6b6b; /* coral to match navbar */
 }
 
+.sticky-bottom {
+    position: fixed;
+    bottom: 0;
+    z-index: 1020;
+    left: 0;
+    width: 100%;
+}
+
 .text-body-secondary {
     color: rgb(255 255 255) !important;
 }
@@ -364,7 +372,7 @@ body.home-page .testimonial-name {
 
 }
 
-#signupText, #signinText, #resetText, #deleteText{
+#signupText, #signinText, #resetText, #deleteText, #loginText{
   font-family: 'Quicksand';
   color: #333333;
   text-shadow: none;
@@ -434,7 +442,7 @@ body.home-page .testimonial-name {
 
 /* LOGIN PAGE */
 
-#modal-flex-container-signin, #modal-flex-container-reset, #modal-flex-container-delete {
+#modal-flex-container-signin, #modal-flex-container-reset, #modal-flex-container-delete, #modal-flex-container-login {
     width: fit-content;
     justify-self: anchor-center;
     padding-left: 20px;
@@ -442,7 +450,7 @@ body.home-page .testimonial-name {
 }
 
 @media (min-width: 1150px) {
-    #container-signin, #container-reset, #container-delete {
+    #container-signin, #container-reset, #container-delete, #container-login {
         padding: 2rem;
         /* background-color: red; */
     }
@@ -450,11 +458,11 @@ body.home-page .testimonial-name {
         width: 41.66666667%;
     }
 
-    #grid-delete-r{
+    #grid-delete-r, #grid-login-r{
     width: 58.33333333% !important;
 
 }
-#grid-delete-l{
+#grid-delete-l, #grid-login-l{
         width: 41.66666667% !important;
 
 
@@ -466,7 +474,7 @@ body.home-page .testimonial-name {
     }
 }
 
-#container-signin, #container-reset, {
+#container-signin, #container-reset, #container-login{
   flex: 1;
   padding: 2rem;
 }

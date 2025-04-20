@@ -2,38 +2,42 @@
 
 {% block body_content %}
 
-<div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSignin">
+<div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalLogin">
     <div class="modal-dialog modal-xl" role="document" >
-        <div class="modal-content rounded-4 shadow test" id="modal-flex-container-signin">
-            <div class="container" id="container-signin">
-                <div class="modal-header p-3 pb-4 border-bottom-0" id="modal-header-signin">
-                    <h1 class="mb-0 fs-2" id="signinText">Welcome Back! Sign in to access your dashboard.</h1>
+        <div class="modal-content rounded-4 shadow test" id="modal-flex-container-login">
+            <div class="container" id="container-login">
+                <div class="modal-header p-3 pb-4 border-bottom-0" id="modal-header-login">
+                    <h1 class="mb-0 fs-2" id="loginText">Welcome Back! Sign in to access your dashboard.</h1>
                 </div>
-                <div class="modal-body p-5 pt-0">
-                    <form class="" action="signin" method="POST">
-                        <div class="form-floating mb-2">
-                            <input type="email" class="form-control rounded-3" id="userEmail" name="userEmail" placeholder="name@example.com">
-                            <label for="userEmail">Email address <span class="text-danger"> * </span></label>
-                        </div>
-                        <div class="form-floating mb-2">
-                            <input type="password" class="form-control rounded-3" id="userPassword" name="userPassword" placeholder="Password">
-                            <label for="userPassword">Password <span class="text-danger"> * </span></label>
-                            <small class="text-body"> <a href="/reset" style="color:black">Forgot password?</a></small>
+                <div class="row align-items-center delete" id="delete">
+                    <div class="col-md-img text-center mb-md-0" id="grid-login-r" >
+                      <img src="{{ url_for('static', filename='images/login.png') }}" alt="Login Logo" class="img-fluid" style="max-height: 250px; max-width: 300px" id="container-img-login">
+                    </div>
+                    <div class="col-md-7 modal-body " id="grid-login-l">
+                        <form class="" action="signin" method="POST">
+                            <div class="form-floating mb-2">
+                                <input type="email" class="form-control rounded-3" id="userEmail" name="userEmail" placeholder="name@example.com">
+                                <label for="userEmail">Email address <span class="text-danger"> * </span></label>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <input type="password" class="form-control rounded-3" id="userPassword" name="userPassword" placeholder="Password">
+                                <label for="userPassword">Password <span class="text-danger"> * </span></label>
+                            </div>
+                            {% if message_invalid_credentials %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ message_invalid_credentials }}
+                                </div>
+                            {% endif %}
+                            {% if message %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endif %}
+                            <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" id="signinButton" type="submit">Sign In</button>
+                            <small class="text-body"> Don't have an account? <a href="/signup" style="color:black"><br>Become a member!</a></small>
+                        </form>
+                    </div>
 
-                        </div>
-                        {% if message_invalid_credentials %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ message_invalid_credentials }}
-                            </div>
-                        {% endif %}
-                        {% if message %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ message }}
-                            </div>
-                        {% endif %}
-                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" id="signinButton" type="submit">Sign In</button>
-                        <small class="text-body"> Don't have an account? <a href="/signup" style="color:black">Become a member!</a></small>
-                    </form>
                 </div>
             </div>
         </div>
