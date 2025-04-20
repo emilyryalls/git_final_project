@@ -3,8 +3,18 @@
 {% block body_content %}
 
 <!--move to layout if we want an img like this one every page-->
-<div class="parallax" style="background-image: url('{{ url_for('static', filename='images/home_img/home_banner1.webp') }}');">
+<!--<div class="parallax" style="background-image: url('{{ url_for('static', filename='images/home_img/home_banner1.webp') }}');">-->
+<!--    <h1>Own Your Journey: RISE with Us</h1>-->
+<!--</div>-->
+
+<div class="parallax-video-container">
+  <video autoplay muted loop playsinline class="parallax-video">
+    <source src="{{ url_for('static', filename='videos/home_parallax.mp4') }}" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="parallax-video-overlay">
     <h1>Own Your Journey: RISE with Us</h1>
+  </div>
 </div>
 
 <div class="section-divider"></div>
