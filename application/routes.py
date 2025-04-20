@@ -11,6 +11,7 @@ from application.data_access.profile_data_access import get_db_connection, get_u
 # from application.data_access.user_data_access import get_user_by_id
 from application.data_access.workouts_data_access import get_workout_video, get_exercises, get_sets, get_reps, \
     get_member_fitness_goal, get_member_experience, get_days_of_week, update_workout_progress, get_workout_progress
+from application.data_access.dashboard_data_access import get_user_id, get_todays_meal_plan, get_todays_workout, get_latest_blogs, get_workout_progress_percent
 import re
 import json
 from datetime import datetime
@@ -648,3 +649,20 @@ def mark_workout_done():
     return redirect('/my_workouts')
 
 
+# <---- Dashboard ---->
+@app.route("/dashboard")
+def dashboard():
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect("/login")  # Redirect to login if user not logged in
+
+    today_day = datetime.today().strftime('%A')  # For display in the dashboard
+
+    # Pull today's data using your data_access functions
+    todays_meals = get_todays_meal_plan(user_id)
+    todays_workout = get_todays_workout(user_id)
+    progress_percent = get_workout_progress_percent(user_id)
+    latest_blogs = get_latest_blogs()
+
+    return render_template(
+        "dashboard.html", today=today_day, todays_meals=todays_meals, todays_workout=todays_workout, progress_percent=progress_percent, latest_blogs=latest_blogs)

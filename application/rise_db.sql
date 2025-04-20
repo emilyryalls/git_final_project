@@ -184,8 +184,6 @@ email_id bigint not null primary key auto_increment,
 email_address varchar(250) not null unique
 );
 
-INSERT INTO email (email_id, email_address) VALUES (1, 'zara.smith@example.com');
-
 select *
 from email;
 
@@ -208,10 +206,6 @@ experience_id bigint,
 foreign key (experience_id) references experience(experience_id),
 profile_pic varchar(500),
 member_since timestamp default current_timestamp
-);
-
-INSERT INTO member (first_name, last_name, email_id, date_of_birth, height, weight, goal_id, diet_id, experience_id, profile_pic)
-VALUES ('Zara', 'Smith', 1, '1995-08-12', 165.00, 60.50, 1, 1, 1, 'static/images/zara.jpeg'
 );
 
 select *
@@ -719,56 +713,12 @@ VALUES
 
  -- WORKOUT PLANS
 
-CREATE table exercise (
-    exercise_id bigint not null primary key auto_increment,
-    goal_id bigint not null,
-    exercise_name varchar(100) not null,
-    foreign key (goal_id) references goal(goal_id)
+CREATE TABLE day_of_week (
+    day_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    day VARCHAR(10) NOT NULL
 );
 
-
-INSERT INTO exercise (goal_id, exercise_name)
-VALUES
--- Build Muscle (goal_id = 1)
-(1, 'Barbell Squats, Pull Ups, Bench Press'),
-(1, 'Incline Dumbbell Press, One-Arm Dumbbell Row, Romanian Deadlifts'),
-(1, 'Deadlifts, Chin Ups, Dumbbell Chest Press'),
-(1, 'Barbell Rows, Lunges, Overhead Press'),
-(1, 'Dumbbell Lunges, Lat Pulldown, Dumbbell Shoulder Press'),
-(1, 'Romanian Deadlifts, Squats, Flat Bench Press'),
-
--- Improve Stamina (goal_id = 2)
-(2, 'Burpees, Jump Rope, Rowing Machine'),
-(2, 'Kettlebell Swings, Box Jumps, Treadmill Intervals'),
-(2, 'Treadmill Intervals, Jump Rope, Burpees'),
-(2, 'Jump Rope, Lateral Shuffles, Kettlebell Swings'),
-(2, 'Rowing Machine, Box Jumps, Burpees'),
-(2, 'Mountain Climbers, Sprint Intervals, Jump Rope'),
-
--- Lose Weight (goal_id = 3)
-(3, 'Jumping Jacks, Walking Lunges, Dumbbell Thrusters'),
-(3, 'Stair Climbs, Lateral Shuffles, Plank to Push-Up'),
-(3, 'Box Jumps, Mountain Climbers, Burpees'),
-(3, 'Dumbbell Thrusters, High Knees, Lateral Shuffles'),
-(3, 'Walking Lunges, Jumping Jacks, Plank to Push-Up'),
-(3, 'Lateral Shuffles, Dumbbell Thrusters, Jump Rope'),
-
--- Improve Core Strength (goal_id = 4)
-(4, 'Russian Twists, Bicycle Crunches, Superman Hold'),
-(4, 'Mountain Climbers, Side Plank with Reach, Leg Raises'),
-(4, 'Leg Raises, Side Plank with Reach, Flutter Kicks'),
-(4, 'Bicycle Crunches, V-Ups, Superman Hold'),
-(4, 'Side Plank with Reach, Russian Twists, Bicycle Crunches'),
-(4, 'Superman Hold, Mountain Climbers, Leg Raises');
-
-
-CREATE table day_of_week
-(
-day_id int not null primary key auto_increment,
-day varchar(10) not null
-);
-
-INSERT into day_of_week(day)
+INSERT INTO day_of_week (day)
 VALUES
 ('Monday'),
 ('Tuesday'),
@@ -778,8 +728,49 @@ VALUES
 ('Saturday'),
 ('Sunday');
 
+CREATE TABLE exercise (
+    exercise_id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    goal_id BIGINT NOT NULL,
+    day_id INT NOT NULL,
+    exercise_name VARCHAR(100) NOT NULL,
+    FOREIGN KEY (goal_id) REFERENCES goal(goal_id),
+    FOREIGN KEY (day_id) REFERENCES day_of_week(day_id)
+);
 
- CREATE table workout_progress
+-- Build Muscle (goal_id = 1)
+INSERT INTO exercise (goal_id, day_id, exercise_name) VALUES
+(1, 1, 'Barbell Squats, Pull Ups, Bench Press'),
+(1, 2, 'Incline Dumbbell Press, One-Arm Dumbbell Row, Romanian Deadlifts'),
+(1, 3, 'Deadlifts, Chin Ups, Dumbbell Chest Press'),
+(1, 4, 'Barbell Rows, Lunges, Overhead Press'),
+(1, 5, 'Dumbbell Lunges, Lat Pulldown, Dumbbell Shoulder Press'),
+(1, 6, 'Romanian Deadlifts, Squats, Flat Bench Press'),
+
+-- Improve Stamina (goal_id = 2)
+(2, 1, 'Burpees, Jump Rope, Rowing Machine'),
+(2, 2, 'Kettlebell Swings, Box Jumps, Treadmill Intervals'),
+(2, 3, 'Treadmill Intervals, Jump Rope, Burpees'),
+(2, 4, 'Jump Rope, Lateral Shuffles, Kettlebell Swings'),
+(2, 5, 'Rowing Machine, Box Jumps, Burpees'),
+(2, 6, 'Mountain Climbers, Sprint Intervals, Jump Rope'),
+
+-- Lose Weight (goal_id = 3)
+(3, 1, 'Jumping Jacks, Walking Lunges, Dumbbell Thrusters'),
+(3, 2, 'Stair Climbs, Lateral Shuffles, Plank to Push-Up'),
+(3, 3, 'Box Jumps, Mountain Climbers, Burpees'),
+(3, 4, 'Dumbbell Thrusters, High Knees, Lateral Shuffles'),
+(3, 5, 'Walking Lunges, Jumping Jacks, Plank to Push-Up'),
+(3, 6, 'Lateral Shuffles, Dumbbell Thrusters, Jump Rope'),
+
+-- Improve Core Strength (goal_id = 4)
+(4, 1, 'Russian Twists, Bicycle Crunches, Superman Hold'),
+(4, 2, 'Mountain Climbers, Side Plank with Reach, Leg Raises'),
+(4, 3, 'Leg Raises, Side Plank with Reach, Flutter Kicks'),
+(4, 4, 'Bicycle Crunches, V-Ups, Superman Hold'),
+(4, 5, 'Side Plank with Reach, Russian Twists, Bicycle Crunches'),
+(4, 6, 'Superman Hold, Mountain Climbers, Leg Raises');
+
+CREATE table workout_progress
  (
  progress_id bigint not null primary key auto_increment,
  member_id bigint not null,

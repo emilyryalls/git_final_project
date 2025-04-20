@@ -1,6 +1,85 @@
 {% extends "layout.html" %}
 
 {% block body_content %}
+<div class="container mt-5">
+    <h1 class="dashboard-title mb-5 text-black">🏋️‍♀️ R.I.S.E. Dashboard</h1>
 
+    <!-- Top Section: Meal + Workout -->
+    <div class="row g-4 mb-5">
+        <!-- Meal Plan -->
+        <div class="col-md-6">
+            <div class="dashboard-card">
+                <div class="card-header">🍽️ Today’s Meal Plan ({{ today }})</div>
+                <div class="card-body">
+                    {% if todays_meals %}
+                        <p><strong>Breakfast:</strong> {{ todays_meals.breakfast or "Not set" }}</p>
+                        <p><strong>Lunch:</strong> {{ todays_meals.lunch or "Not set" }}</p>
+                        <p><strong>Dinner:</strong> {{ todays_meals.dinner or "Not set" }}</p>
+                        <p><strong>Snacks:</strong> {{ todays_meals.snacks or "Not set" }}</p>
+                    {% else %}
+                        <p class="text-muted">No meal plan found for today.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
 
+        <!-- Workout Plan -->
+        <div class="col-md-6">
+            <div class="dashboard-card">
+                <div class="card-header">💪 Today’s Workout Plan ({{ today }})</div>
+                <div class="card-body">
+                    {% if todays_workout %}
+                        <ul class="list-unstyled">
+                            {% for exercise in todays_workout %}
+                                <li>• {{ exercise }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">Rest day or no exercises assigned for today.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weekly Progress -->
+    <div class="dashboard-card mb-5">
+        <div class="card-header">📊 Weekly Workout Progress</div>
+        <div class="card-body">
+            <div class="progress" style="height: 28px;">
+                <div class="progress-bar progress-bar-striped bg-warning fw-bold"
+                     role="progressbar"
+                     style="width: {{ progress_percent }}%;">
+                    {{ progress_percent }}%
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Section -->
+    <div class="mb-5">
+        <h4 class="dashboard-section-title">📰 Latest Reads</h4>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for blog in latest_blogs %}
+            <div class="col">
+                <div class="dashboard-card h-100 shadow-sm d-flex flex-column">
+                    <!-- Blog Image -->
+                    <img src="{{ url_for('static', filename=blog.image) }}" class="card-img-top" alt="Blog image" style="height: 200px; object-fit: cover;">
+
+                    <!-- Blog Content -->
+                    <div class="card-body flex-grow-1">
+                        <h5 class="card-title">{{ blog.title }}</h5>
+                        <p class="text-muted">{{ blog.summary[:100] }}...</p>
+                    </div>
+
+                    <!-- Blog Footer -->
+                    <div class="card-footer small text-muted">
+                        By {{ blog.author }} | {{ blog.created_at.strftime('%b %d, %Y') }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}
