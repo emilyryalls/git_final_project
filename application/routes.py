@@ -6,10 +6,9 @@ import os
 import random
 from flask import render_template, request, redirect, url_for, flash, session
 from application.data_access.blog_data_access import get_all_blogs,  get_blog_by_id
-from application.data_access.data_access import add_member, get_details_by_email, get_password_details_by_id, change_password, delete_account, delete_email
+from application.data_access.user_data_access import add_member, get_details_by_email, get_password_details_by_id, change_password, delete_account, delete_email
 from application.data_access.meal_plan_data_access import get_user_id, get_week_start_date, find_meal_plan_by_timestamp, get_db_connection
 from application.data_access.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences, update_profile_picture
-# from application.data_access.user_data_access import get_user_by_id
 from application.data_access.workouts_data_access import get_workout_video, get_exercises, get_sets, get_reps, \
     get_member_fitness_goal, get_member_experience, get_days_of_week, update_workout_progress, get_workout_progress
 from application.data_access.dashboard_data_access import get_user_id, get_todays_meal_plan, get_todays_workout, get_latest_blogs, get_workout_progress_percent
@@ -136,7 +135,7 @@ def reset_form():
                         if new_password == confirm_password:
                             hashed_new_password = generate_password_hash(new_password)
                             change_password(hashed_new_password, member_id)
-                            return render_template('login.html', title='Login')
+                            return render_template('profile.html', title='Profile')
                         else:
                             error_different_password = "Passwords do not match"
                     else:
@@ -584,7 +583,7 @@ def view_workout_videos():
     # request is a special object in flask that gives you access to data sent by the client (browser)
     # request.args is a dictionary-like object that holds all of the querey paramteres from the URL
     # example - .get('goal') retrieves the value of the goal parameter from the URL
-    # goal is a parameter defined in data_access.py
+    # goal is a parameter defined in user_data_access.py
     goal = request.args.get('goal')
     experience = request.args.get('experience')
     time = request.args.get('time')
