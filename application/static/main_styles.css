@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Quicksand:wght@300..700&display=swap');
 
 /* LAYOUT.HTML */
-
 html, body {
   margin: 0;
   padding: 0;
@@ -315,7 +314,6 @@ body.home-page .testimonial-name {
 
 
 /* SIGN UP PAGE */
-
 .form-floating>.form-control, .form-floating>.form-control-plaintext, .form-floating>.form-select {
     height: calc(3.1rem + calc(var(--bs-border-width) * 2));
     min-height: calc(3.1rem + calc(var(--bs-border-width) * 2));
@@ -432,8 +430,8 @@ body.home-page .testimonial-name {
   }
 }
 
-/* LOGIN PAGE */
 
+/* LOGIN PAGE */
 #modal-flex-container-signin, #modal-flex-container-reset, #modal-flex-container-delete {
     width: fit-content;
     justify-self: anchor-center;
@@ -456,22 +454,20 @@ body.home-page .testimonial-name {
 }
 #grid-delete-l{
         width: 41.66666667% !important;
-
-
 }
-}
-@media (min-width: 992px) {
+
+/* @media (min-width: 992px) {
     .container, .container-lg, .container-md, .container-sm {
         max-width: 960px;
     }
-}
+}*/
 
 #container-signin, #container-reset, {
   flex: 1;
   padding: 2rem;
 }
 
-/* RESET PAGE */
+/* PASSWORD RESET PAGE */
 @media (min-width: 768px) and (max-width: 1150px) {
     #reseting, #delete{
         display: flex;
@@ -481,9 +477,6 @@ body.home-page .testimonial-name {
         width: 80%;
     }
 }
-
-
-
 
 
 /* PROFILE PAGE */
@@ -558,7 +551,7 @@ body.home-page .testimonial-name {
 }
 
 
-/* Profile Settings */
+/* PROFILE SETTINGS */
 .btn-determine-goal {
   background-color: transparent;
   color: #121212; /* adjust if your body text is a different shade */
@@ -687,7 +680,6 @@ body.home-page .testimonial-name {
 
 /* BLOG PAGE */
 
-/* SIGN IN PAGE */
 
 /* DASHBOARD PAGE */
 .dashboard-title {

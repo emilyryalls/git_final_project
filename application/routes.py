@@ -652,53 +652,53 @@ def mark_workout_done():
 
 # <---- Dashboard ---->
 # FINAL ROUTE
-# @app.route("/dashboard")
-# def dashboard():
-#     user_id = session.get("user_id")
-#     if not user_id:
-#         return redirect("/login")  # Redirect to login if user not logged in
-#
-#     today_day = datetime.today().strftime('%A')  # For display in the dashboard
-#     day_number = datetime.today().isoweekday()
-#
-#     motivational_quote = random.choice(quotes)
-#
-#     # Pull today's data using your data_access functions
-#     todays_meals = get_todays_meal_plan(user_id)
-#     todays_workout = get_todays_workout(user_id)
-#     progress_percent = get_workout_progress_percent(user_id)
-#     latest_blogs = get_latest_blogs()
-#
-#     return render_template(
-#         "dashboard.html", today=today_day, day_number=day_number, motivational_quote=motivational_quote, todays_meals=todays_meals, todays_workout=todays_workout, progress_percent=progress_percent, latest_blogs=latest_blogs)
-
-# TEST ROUTE
 @app.route("/dashboard")
 def dashboard():
     user_id = session.get("user_id")
     if not user_id:
-        return redirect("/login")
+        return redirect("/login")  # Redirect to login if user not logged in
 
-    # 🛠 TEMP: Set to Tuesday this week (change year/month/day accordingly)
-    test_date = datetime(2025, 4, 15)  # ← e.g., Tuesday, April 15, 2025
+    today_day = datetime.today().strftime('%A')  # For display in the dashboard
+    day_number = datetime.today().isoweekday()
 
-    today_day = test_date.strftime('%A')
-    day_number = test_date.isoweekday()
     motivational_quote = random.choice(quotes)
 
-    # ⬇️ Pass test_date into both functions
-    todays_meals = get_todays_meal_plan(user_id, date=test_date)
-    todays_workout = get_todays_workout(user_id, date=test_date)
+    # Pull today's data using your data_access functions
+    todays_meals = get_todays_meal_plan(user_id)
+    todays_workout = get_todays_workout(user_id)
     progress_percent = get_workout_progress_percent(user_id)
     latest_blogs = get_latest_blogs()
 
     return render_template(
-        "dashboard.html",
-        today=today_day,
-        day_number=day_number,
-        motivational_quote=motivational_quote,
-        todays_meals=todays_meals,
-        todays_workout=todays_workout,
-        progress_percent=progress_percent,
-        latest_blogs=latest_blogs
-    )
+        "dashboard.html", today=today_day, day_number=day_number, motivational_quote=motivational_quote, todays_meals=todays_meals, todays_workout=todays_workout, progress_percent=progress_percent, latest_blogs=latest_blogs)
+
+# TEST ROUTE
+# @app.route("/dashboard")
+# def dashboard():
+#     user_id = session.get("user_id")
+#     if not user_id:
+#         return redirect("/login")
+#
+#     # 🛠 TEMP: Set to Tuesday this week (change year/month/day accordingly)
+#     test_date = datetime(2025, 4, 15)  # ← e.g., Tuesday, April 15, 2025
+#
+#     today_day = test_date.strftime('%A')
+#     day_number = test_date.isoweekday()
+#     motivational_quote = random.choice(quotes)
+#
+#     # ⬇️ Pass test_date into both functions
+#     todays_meals = get_todays_meal_plan(user_id, date=test_date)
+#     todays_workout = get_todays_workout(user_id, date=test_date)
+#     progress_percent = get_workout_progress_percent(user_id)
+#     latest_blogs = get_latest_blogs()
+#
+#     return render_template(
+#         "dashboard.html",
+#         today=today_day,
+#         day_number=day_number,
+#         motivational_quote=motivational_quote,
+#         todays_meals=todays_meals,
+#         todays_workout=todays_workout,
+#         progress_percent=progress_percent,
+#         latest_blogs=latest_blogs
+#     )

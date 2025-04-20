@@ -27,14 +27,14 @@ def get_user_id():
     return session.get("user_id")
 
 # 2. Get today's meal plan (latest plan, current day only)
-def get_todays_meal_plan(user_id, date=None):
+def get_todays_meal_plan(user_id):
     # remove next 3 lines to remove hardcoding/testing and remove date=None arg in function
-    if date is None:
-        date = datetime.today().date()
-    today = date.strftime('%A')
+    # if date is None:
+    #     date = datetime.today().date()
+    # today = date.strftime('%A')
 
     # uncomment this
-    # today = datetime.today().strftime('%A')
+    today = datetime.today().strftime('%A')
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
@@ -63,14 +63,14 @@ def get_member_goal_id(user_id):
     return result[0] if result else None
 
 # 4. Get today’s workout plan (exercise names)
-def get_todays_workout(user_id, date=None):
+def get_todays_workout(user_id):
     # remove next 3 lines to remove hardcoding/testing and remove date=None arg in function
-    if date is None:
-        date = datetime.today().date()
-    today = date.strftime('%A')
+    # if date is None:
+    #     date = datetime.today().date()
+    # today = date.strftime('%A')
 
     # uncomment this
-    # today = datetime.today().strftime('%A')
+    today = datetime.today().strftime('%A')
     goal_id = get_member_goal_id(user_id)
     if not goal_id:
         return []
