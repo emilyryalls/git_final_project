@@ -158,7 +158,7 @@ def delete_account_route():
            delete_email(emailid)
            session.clear()
            flash("Your account has been deleted. Your rise continues anytime.")
-           return render_template('login.html', title='settings')
+           return render_template('home.html', title='settings')
 
     return render_template('delete.html', title='Delete')
 
