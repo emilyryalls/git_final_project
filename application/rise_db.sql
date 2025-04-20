@@ -27,14 +27,17 @@ from goal;
 create table experience
 (
 experience_id bigint not null primary key auto_increment,
-user_experience varchar(30) not null
+user_experience varchar(30) not null,
+reps int not null,
+sets int not null
 );
 
-insert into experience(user_experience)
+insert into experience(user_experience, reps, sets)
 values
-('Beginner'),
-('Intermediate'),
-('Advanced');
+('Beginner', 8, 2),
+('Intermediate', 10, 3),
+('Advanced', 12, 4);
+
 
 select *
 from experience;
@@ -180,8 +183,6 @@ create table email
 email_id bigint not null primary key auto_increment,
 email_address varchar(250) not null unique
 );
-
-INSERT INTO email (email_id, email_address) VALUES (1, 'zara.smith@example.com');
 
 select *
 from email;
@@ -663,7 +664,6 @@ select * from blog;
 
 
                                     -- meal plan --
-
 CREATE TABLE meal_plans (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     member_id BIGINT NOT NULL,
@@ -673,6 +673,79 @@ CREATE TABLE meal_plans (
     created_at DATETIME,
     FOREIGN KEY (member_id) REFERENCES member(member_id) on delete cascade
 );
+
+
+ -- WORKOUT PLANS
+
+CREATE TABLE day_of_week (
+    day_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    day VARCHAR(10) NOT NULL
+);
+
+INSERT INTO day_of_week (day)
+VALUES
+('Monday'),
+('Tuesday'),
+('Wednesday'),
+('Thursday'),
+('Friday'),
+('Saturday'),
+('Sunday');
+
+CREATE TABLE exercise (
+    exercise_id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    goal_id BIGINT NOT NULL,
+    day_id INT NOT NULL,
+    exercise_name VARCHAR(100) NOT NULL,
+    FOREIGN KEY (goal_id) REFERENCES goal(goal_id),
+    FOREIGN KEY (day_id) REFERENCES day_of_week(day_id)
+);
+
+-- Build Muscle (goal_id = 1)
+INSERT INTO exercise (goal_id, day_id, exercise_name) VALUES
+(1, 1, 'Barbell Squats, Pull Ups, Bench Press'),
+(1, 2, 'Incline Dumbbell Press, One-Arm Dumbbell Row, Romanian Deadlifts'),
+(1, 3, 'Deadlifts, Chin Ups, Dumbbell Chest Press'),
+(1, 4, 'Barbell Rows, Lunges, Overhead Press'),
+(1, 5, 'Dumbbell Lunges, Lat Pulldown, Dumbbell Shoulder Press'),
+(1, 6, 'Romanian Deadlifts, Squats, Flat Bench Press'),
+
+-- Improve Stamina (goal_id = 2)
+(2, 1, 'Burpees, Jump Rope, Rowing Machine'),
+(2, 2, 'Kettlebell Swings, Box Jumps, Treadmill Intervals'),
+(2, 3, 'Treadmill Intervals, Jump Rope, Burpees'),
+(2, 4, 'Jump Rope, Lateral Shuffles, Kettlebell Swings'),
+(2, 5, 'Rowing Machine, Box Jumps, Burpees'),
+(2, 6, 'Mountain Climbers, Sprint Intervals, Jump Rope'),
+
+-- Lose Weight (goal_id = 3)
+(3, 1, 'Jumping Jacks, Walking Lunges, Dumbbell Thrusters'),
+(3, 2, 'Stair Climbs, Lateral Shuffles, Plank to Push-Up'),
+(3, 3, 'Box Jumps, Mountain Climbers, Burpees'),
+(3, 4, 'Dumbbell Thrusters, High Knees, Lateral Shuffles'),
+(3, 5, 'Walking Lunges, Jumping Jacks, Plank to Push-Up'),
+(3, 6, 'Lateral Shuffles, Dumbbell Thrusters, Jump Rope'),
+
+-- Improve Core Strength (goal_id = 4)
+(4, 1, 'Russian Twists, Bicycle Crunches, Superman Hold'),
+(4, 2, 'Mountain Climbers, Side Plank with Reach, Leg Raises'),
+(4, 3, 'Leg Raises, Side Plank with Reach, Flutter Kicks'),
+(4, 4, 'Bicycle Crunches, V-Ups, Superman Hold'),
+(4, 5, 'Side Plank with Reach, Russian Twists, Bicycle Crunches'),
+(4, 6, 'Superman Hold, Mountain Climbers, Leg Raises');
+
+CREATE table workout_progress
+ (
+ progress_id bigint not null primary key auto_increment,
+ member_id bigint not null,
+ day_id int not null,
+ is_done BOOLEAN not null,
+ FOREIGN KEY (member_id) REFERENCES member(member_id),
+ FOREIGN KEY (day_id) REFERENCES day_of_week(day_id)
+);
+
+ select *
+ from member;
 
 INSERT INTO meal_plans (member_id, name, description, meals, created_at)
 VALUES
@@ -706,4 +779,4 @@ VALUES
  '{"Monday": {"breakfast": "Oatmeal with Banana", "lunch": "Pasta with Pesto", "dinner": "Rice with Grilled Chicken", "snacks": "Granola Bar"}, "Tuesday": {"breakfast": "Bagels with Cream Cheese", "lunch": "Quinoa and Veggie Stir Fry", "dinner": "Baked Potato with Chili", "snacks": "Apple with Peanut Butter"}, "Wednesday": {"breakfast": "Smoothie with Spinach", "lunch": "Whole Wheat Sandwich", "dinner": "Spaghetti with Marinara Sauce", "snacks": "Carrot Sticks with Hummus"}, "Thursday": {"breakfast": "Toast with Avocado", "lunch": "Couscous Salad", "dinner": "Sweet Potato and Black Bean Tacos", "snacks": "Rice Cakes"}, "Friday": {"breakfast": "French Toast", "lunch": "Vegetable Soup", "dinner": "Risotto", "snacks": "Fruit Salad"}, "Saturday": {"breakfast": "Pancakes with Maple Syrup", "lunch": "Curry Rice", "dinner": "Chicken and Rice", "snacks": "Nuts and Dried Fruit"}, "Sunday": {"breakfast": "Muesli", "lunch": "Falafel Wrap", "dinner": "Veggie Burger", "snacks": "Granola"}}',
  '2025-03-31 08:45:00');
 
-select * from meal_plans;
+ select * from meal_plans;

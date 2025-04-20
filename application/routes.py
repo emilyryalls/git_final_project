@@ -3,13 +3,16 @@ from re import match
 from application import app
 import mysql.connector
 import os
+import random
 from flask import render_template, request, redirect, url_for, flash, session
 from application.data_access.blog_data_access import get_all_blogs,  get_blog_by_id
-from application.data_access.data_access import add_member, get_details_by_email, get_password_details_by_id, change_password, delete_account, delete_email
+from application.data_access.user_data_access import add_member, get_details_by_email, get_password_details_by_id, change_password, delete_account, delete_email
 from application.data_access.meal_plan_data_access import get_user_id, get_week_start_date, find_meal_plan_by_timestamp, get_db_connection
 from application.data_access.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences, update_profile_picture
-# from application.data_access.user_data_access import get_user_by_id
-from application.data_access.workouts_data_access import get_workout_video
+from application.data_access.workouts_data_access import get_workout_video, get_exercises, get_sets, get_reps, \
+    get_member_fitness_goal, get_member_experience, get_days_of_week, update_workout_progress, get_workout_progress
+from application.data_access.dashboard_data_access import get_user_id, get_todays_meal_plan, get_todays_workout, get_latest_blogs, get_workout_progress_percent
+from application.sample_data import quotes
 import re
 import json
 from datetime import datetime
@@ -44,6 +47,7 @@ def signup_submit():
         userpassword = request.form.get('userPassword')
         hashed_password = generate_password_hash(userpassword)
 
+
         if len(useremail) == 0 or len(userpassword) == 0 or len(userfirstname) == 0 or len(userlastname) == 0:
             error = 'Please supply all fields'
         elif add_member(userfirstname, userlastname, useremail, hashed_password):
@@ -57,7 +61,7 @@ def signup_submit():
     return render_template('membership.html', title='Sign Up', message = error, message_email_exist = error_email_exist)
 
 
-# <---- Login.logout ------->
+# <---- Login.logout ---->
 @app.route('/login', methods=['GET', 'POST'])
 def signin_form():
     return render_template('login.html', title='Login')
@@ -131,7 +135,7 @@ def reset_form():
                         if new_password == confirm_password:
                             hashed_new_password = generate_password_hash(new_password)
                             change_password(hashed_new_password, member_id)
-                            return render_template('login.html', title='Login')
+                            return render_template('profile.html', title='Profile')
                         else:
                             error_different_password = "Passwords do not match"
                     else:
@@ -155,7 +159,7 @@ def delete_account_route():
            delete_email(emailid)
            session.clear()
            flash("Your account has been deleted. Your rise continues anytime.")
-           return render_template('login.html', title='settings')
+           return render_template('home.html', title='settings')
 
     return render_template('delete.html', title='Delete')
 
@@ -572,16 +576,128 @@ def upload_profile_pic():
     return redirect(url_for('profile'))
 
 
-# <---- Workout videos ---->
+# Workout Videos
 # return all workout videos
 @app.route('/workouts', methods=['GET'])
 def view_workout_videos():
     # request is a special object in flask that gives you access to data sent by the client (browser)
     # request.args is a dictionary-like object that holds all of the querey paramteres from the URL
-    # .get(goal) retrieves the value of the goal parameter from the URL
-    # goal is a parameter defined in data_access.py
+    # example - .get('goal') retrieves the value of the goal parameter from the URL
+    # goal is a parameter defined in user_data_access.py
     goal = request.args.get('goal')
     experience = request.args.get('experience')
     time = request.args.get('time')
     workout_video = get_workout_video(goal, experience, time)
     return render_template('workout_videos.html', video=workout_video, title='Workout Videos')
+
+
+# Workout Plan
+@app.route('/my_workouts', methods=['GET'])
+def view_workout_plan():
+
+    # if user not logged in don't run the rest of the code
+    if not session.get("user_id"):
+        return redirect("/login")
+
+    fitness_goal = get_member_fitness_goal()
+    member_experience = get_member_experience()
+
+    # return different error messages if user hasn't picked a fitness goal and/or experience level. on the webpage they will be told to pick both to access their personalised workout plan. if statements used in member_workouts.html to return these error messages if goal and/or experience have no value
+
+    if fitness_goal is None and member_experience is None:
+        return render_template('member_workouts.html', fitness_goal=None, experience = None, error_message ="You need to select both your fitness goal and experience level to access your workout plan")
+
+    if fitness_goal is None:
+        return render_template('member_workouts.html', fitness_goal=None, experience= member_experience, error_message="You need to select a fitness goal to access your workout plan")
+
+    if member_experience is None:
+        return render_template('member_workouts.html', fitness_goal = fitness_goal, experience = None, error_message="You need to select your experience level to access your workout plan")
+
+
+    exercise_plan = get_exercises()
+    sets = get_sets()
+    reps = get_reps()
+    days = get_days_of_week()
+    workout_progress = get_workout_progress(session.get('user_id')) # session.get('user_id') used directly in the route and passed through as a parameter to get member_id
+    workout_video = get_workout_video(fitness_goal, member_experience)
+    # getting workouts that fit the member's fitness goal and experience level
+
+    return render_template('member_workouts.html', exercises = exercise_plan, sets = sets, reps = reps, fitness_goal = fitness_goal, experience = member_experience, days = days, workout_progress = workout_progress, video=workout_video)
+
+
+@app.route('/mark_workout_done', methods=['POST'])
+def mark_workout_done():
+    member_id = request.form.get('member_id')
+    # another way of getting member_id - it is passed through as a hidden value in the html form in member_workouts.html
+
+    # loop through day_ids 1 to 6 (7 is not inclusive) - Mon-Sat. Not Sunday as it is hard coded as a rest day in member_workouts.html
+    for day_id in range(1, 7):
+        checkbox_name = f'is_done_{day_id}' #generates strings is_done_1, is_done_2 etc. to is_done_6. they correspond to each checkbox in the html form, defined in member_workouts.html
+        is_done = checkbox_name in request.form
+        # request.form is a special object in flask that contains all the form data sent via POST method
+        # this checks if the checkbox for the current day_id exists in the request.form
+        # in html, checkboxes only appear in form data if they are checked
+        # if the box is checked in the form, is_done is True
+        # if the box is unchecked, is_done is False, as it doesn't exist in request.form
+
+        # update the workout_progress table in the database
+        # this function checks if an entry already exists for the day and user, and updates if it does, or inserts a new entry to the table if it doesn't
+        # this is included in the for loop, so this is done for every day_id, either True or False is given
+        update_workout_progress(member_id, day_id, is_done)
+
+    # stay on the /my_workouts page after checking a box to mark a day as complete
+    return redirect('/my_workouts')
+
+
+# <---- Dashboard ---->
+# FINAL ROUTE
+@app.route("/dashboard")
+def dashboard():
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect("/login")  # Redirect to login if user not logged in
+
+    today_day = datetime.today().strftime('%A')  # For display in the dashboard
+    day_number = datetime.today().isoweekday()
+
+    motivational_quote = random.choice(quotes)
+
+    # Pull today's data using your data_access functions
+    todays_meals = get_todays_meal_plan(user_id)
+    todays_workout = get_todays_workout(user_id)
+    progress_percent = get_workout_progress_percent(user_id)
+    latest_blogs = get_latest_blogs()
+
+    return render_template(
+        "dashboard.html", today=today_day, day_number=day_number, motivational_quote=motivational_quote, todays_meals=todays_meals, todays_workout=todays_workout, progress_percent=progress_percent, latest_blogs=latest_blogs)
+
+# TEST ROUTE
+# @app.route("/dashboard")
+# def dashboard():
+#     user_id = session.get("user_id")
+#     if not user_id:
+#         return redirect("/login")
+#
+#     # 🛠 TEMP: Set to Tuesday this week (change year/month/day accordingly)
+#     test_date = datetime(2025, 4, 15)  # ← e.g., Tuesday, April 15, 2025
+#
+#     today_day = test_date.strftime('%A')
+#     day_number = test_date.isoweekday()
+#     motivational_quote = random.choice(quotes)
+#
+#     # ⬇️ Pass test_date into both functions
+#     todays_meals = get_todays_meal_plan(user_id, date=test_date)
+#     todays_workout = get_todays_workout(user_id, date=test_date)
+#     progress_percent = get_workout_progress_percent(user_id)
+#     latest_blogs = get_latest_blogs()
+#
+#     return render_template(
+#         "dashboard.html",
+#         today=today_day,
+#         day_number=day_number,
+#         motivational_quote=motivational_quote,
+#         todays_meals=todays_meals,
+#         todays_workout=todays_workout,
+#         progress_percent=progress_percent,
+#         latest_blogs=latest_blogs
+#     )

@@ -1,6 +1,135 @@
 {% extends "layout.html" %}
 
 {% block body_content %}
+<div class="container mt-5">
+    <h1 class="dashboard-title mb-5 text-black">🏋️‍♀️ R.I.S.E. Dashboard</h1>
 
+    <!-- Top Section: Meal + Workout -->
+    <div class="row g-4 mb-5">
+        <!-- Meal Plan -->
+        <div class="col-md-6">
+            <div class="dashboard-card">
+                <div class="card-header">🍽️ Today’s Meal Plan ({{ today }})</div>
+                <div class="card-body">
+                    {% if todays_meals %}
+                        <p><strong>Breakfast:</strong> {{ todays_meals.breakfast or "Not set" }}</p>
+                        <p><strong>Lunch:</strong> {{ todays_meals.lunch or "Not set" }}</p>
+                        <p><strong>Dinner:</strong> {{ todays_meals.dinner or "Not set" }}</p>
+                        <p><strong>Snacks:</strong> {{ todays_meals.snacks or "Not set" }}</p>
+                    {% else %}
+                        <p class="text-muted">No meal plan found for today.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
 
+        <!-- Workout Plan -->
+        <div class="col-md-6">
+            <div class="dashboard-card">
+                <div class="card-header">💪 Today’s Workout Plan ({{ today }})</div>
+                <div class="card-body">
+                    {% if todays_workout %}
+                        <ul class="list-unstyled">
+                            {% for exercise in todays_workout %}
+                                {% for item in exercise.split(',') %}
+                                    <li class="d-flex align-items-center mb-2">
+                                        <img src="{{ url_for('static', filename='images/icons/dumbbell.png') }}"
+                                             alt="icon" width="24" height="24" class="me-2">
+                                        {{ item.strip() }}
+                                    </li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">Rest day; no workouts assigned for today.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weekly Progress Circle -->
+    <div class="dashboard-card mb-5">
+        <div class="card-header">📊 Weekly Workout Progress</div>
+        <div class="card-body d-flex justify-content-center align-items-center">
+            <!-- Day Number and Motivation -->
+            <div class="text-center mb-3">
+                <h5 class="fw-bold mb-1">Day {{ day_number }}</h5>
+                <p class="fst-italic text-muted">"{{ motivational_quote }}"</p>
+            </div>
+            <canvas id="progressChart" width="180" height="180"></canvas>
+        </div>
+    </div>
+
+    <!-- Latest Reads / Blog Posts -->
+    <div class="mb-5">
+        <h4 class="dashboard-section-title">📰 Latest Reads</h4>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for blog in latest_blogs %}
+            <div class="col">
+                <div class="dashboard-card h-100 shadow-sm">
+                    <!-- Blog Image -->
+                    <img src="{{ url_for('static', filename=blog.image) }}" class="card-img-top" alt="Blog image">
+
+                    <!-- Blog Content -->
+                    <div class="card-body">
+                        <h5 class="card-title">{{ blog.title }}</h5>
+                        <p class="text-muted">{{ blog.summary[:100] }}...</p>
+                    </div>
+
+                    <!-- Blog Footer -->
+                    <div class="card-footer small text-muted">
+                        By {{ blog.author }} | {{ blog.created_at.strftime('%b %d, %Y') }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+Chart.register({
+    id: 'centerText',
+    beforeDraw(chart) {
+        const { width, height, ctx } = chart;
+        ctx.restore();
+        const fontSize = (height / 130).toFixed(2);
+        ctx.font = `${fontSize}em sans-serif`;
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#212529';
+        const text = chart.config.options.plugins.centerText.text;
+        const textX = Math.round((width - ctx.measureText(text).width) / 2);
+        const textY = height / 2;
+        ctx.fillText(text, textX, textY);
+        ctx.save();
+    }
+});
+
+const ctx = document.getElementById('progressChart').getContext('2d');
+const progressChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        datasets: [{
+            data: [{{ progress_percent }}, {{ 100 - progress_percent }}],
+            backgroundColor: ['#ffc107', '#f0f0f0'],
+            borderWidth: 0,
+        }]
+    },
+    options: {
+        cutout: '70%',
+        responsive: false,
+        plugins: {
+            legend: { display: false },
+            tooltip: { enabled: false },
+            centerText: {
+                text: '{{ progress_percent }}%'
+            }
+        }
+    }
+});
+</script>
 {% endblock %}

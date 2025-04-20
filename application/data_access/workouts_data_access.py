@@ -1,5 +1,6 @@
 import sys
 import mysql
+from flask import session
 
 if sys.platform == "win32":
     mysql_password = "password"
@@ -93,6 +94,226 @@ def get_youtube_video_id(url):
     split_url = url.split('https://www.youtube.com/watch?v=')
     video_id = split_url[1]
     return video_id
+
+
+def get_member_goal_id():
+    """
+    This function returns the goal_id of the user from the current session.
+    goal_id can be null.
+    :return: int or None
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    user_id = session.get('user_id')
+    query = f"SELECT goal_id FROM member WHERE member_id = {user_id}"
+
+    cursor.execute(query)
+    result = cursor.fetchone()
+
+    return result[0] if result else None
+
+
+def get_member_fitness_goal():
+    """
+    This function returns the fitness goal of the user from the current session.
+    Fitness goal can be null
+    :return: str or None
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    goal_id = get_member_goal_id()
+
+    if goal_id is None:
+        return None
+
+    else:
+        query = f"SELECT fitness_goal FROM goal WHERE goal_id = {goal_id}"
+
+        cursor.execute(query)
+        result = cursor.fetchone()
+
+        return result[0] if result else None
+
+
+def get_member_experience_id():
+    """
+    This function returns the experience_id of the user from the current session.
+    experience_id can be null.
+    :return: int or None
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    user_id = session.get('user_id')
+    query = f"SELECT experience_id FROM member WHERE member_id = {user_id}"
+
+    cursor.execute(query)
+    result = cursor.fetchone()
+
+    return result[0] if result else None
+
+
+def get_member_experience():
+    """
+    This function returns the experience level of the user from the current session.
+    Experience level can be null
+    :return: str or None
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    experience_id = get_member_experience_id()
+
+    if experience_id is None:
+        return None
+
+    else:
+        query = f"SELECT user_experience FROM experience WHERE experience_id = {experience_id}"
+
+        cursor.execute(query)
+        result = cursor.fetchone()
+
+        if result:
+            return result[0]
+        else:
+            return None
+
+
+def get_exercises():
+    """
+    This function returns the exercises that relate to the fitness goal of the user in the current session.
+    :return: list[str]
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    goal = get_member_goal_id()
+    query = f"SELECT exercise_name FROM exercise WHERE goal_id = {goal}"
+
+    cursor.execute(query)
+    result = cursor.fetchall()
+
+    # get just the exercise names from the tuples
+    exercise_names = []
+    for row in result:
+        exercise_names.append(row[0])
+
+    return exercise_names
+
+
+def get_reps():
+    """
+    This function returns the reps for exercises based on the experience level of the user from the current session.
+    :return: int or None
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    experience = get_member_experience_id()
+    query = f"SELECT reps FROM experience WHERE experience_id = {experience}"
+
+    cursor.execute(query)
+    result = cursor.fetchone()
+
+    if result:
+        return result[0]
+    else:
+        return None
+
+
+def get_sets():
+    """
+    This function returns the reps for exercises based on the experience level of the user from the current session.
+    :return: int or None
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    experience = get_member_experience_id()
+    query = f"SELECT sets FROM experience WHERE experience_id = {experience}"
+
+    cursor.execute(query)
+    result = cursor.fetchone()
+
+    if result:
+        return result[0]
+    else:
+        return None
+
+
+def get_days_of_week():
+    """
+    This function returns the days of the week, Mon-Sun, stored as a list of strings.
+    :return lst[str]:
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    query = "SELECT day FROM day_of_week"
+
+    cursor.execute(query)
+    result = cursor.fetchall()
+
+    # get a list of just names of days of the week from the tuple
+    days_of_week = []
+    for row in result:
+        days_of_week.append(row[0])
+
+    return days_of_week
+
+
+def update_workout_progress(member_id, day_id, is_done):
+    """
+    This function updates or inserts into the 'workout_progress' table in the database to mark a day as done.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # check if a record for that user and day already exists
+    check_query = "SELECT * FROM workout_progress WHERE member_id = %s AND day_id = %s"
+    cursor.execute(check_query, (member_id, day_id))
+    result = cursor.fetchone()
+    # returns tuple (progress_id, member_id, day_id, is_done), and None if there is no entry for the user and day in the table
+
+    # if the record exists, update it. otherwise, insert a new record
+    if result:
+        update_query = "UPDATE workout_progress SET is_done = %s WHERE member_id = %s AND day_id = %s"
+        cursor.execute(update_query, (is_done, member_id, day_id))
+    else:
+        insert_query = "INSERT INTO workout_progress (member_id, day_id, is_done) VALUES (%s, %s, %s)"
+        cursor.execute(insert_query, (member_id, day_id, is_done))
+
+    # commit the changes to the database
+    conn.commit()
+
+
+
+def get_workout_progress(member_id):
+    """
+    This function checks the workout progress for a given member, stored in the database.
+    :return: dict
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    query = "SELECT day_id, is_done FROM workout_progress WHERE member_id = %s"
+
+    # (member_id,) is a tuple - passed into the query in place of %s
+    # unlike other functions above, member_id passed as parameter rather than included in function itself - just trying a different approach
+    # member_id assigned in the route where this function is used, using session.get('user_id')
+    cursor.execute(query, (member_id,))
+    result = cursor.fetchall()
+
+    # result is a list of tuples e.g. result = [(1, True), (2, False), (3, True)]
+    # convert to dictionary, storing is_done value for each day for the member
+    workout_progress = {}
+    for item in result:
+        # in the tuple, item[0] is the day_id and item[1] is True or False, depending if workout ticked as done that day
+        workout_progress[item[0]] = item[1]
+
+    return workout_progress
 
 
 
