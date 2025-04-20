@@ -168,6 +168,5 @@ def update_profile_picture(user_id, profile_pic_path):
     cursor.close()
     conn.close()
 
-
 if __name__ == "__main__":
     main()
