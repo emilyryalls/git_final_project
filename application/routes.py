@@ -592,7 +592,7 @@ def view_workout_videos():
     experience = request.args.get('experience')
     time = request.args.get('time')
     workout_video = get_workout_video(goal, experience, time)
-    return render_template('workout_videos.html', video=workout_video, title='Workout Videos')
+    return render_template('workout_videos.html', video=workout_video, title='Workout Videos', goal=goal, experience=experience, time=time)
 
 
 # Workout Plan

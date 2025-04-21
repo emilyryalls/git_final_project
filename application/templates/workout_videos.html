@@ -9,40 +9,90 @@
 <p>Filter for workouts based on your fitness goal, experience level, and time available!</p>
 <br>
 
-<form method="GET" action="/workouts" class="mb-4">
-    <div class="row">
-        <div class="col-md-3">
-            <label for="goal">Fitness Goal</label>
-            <select class="form-select" name="goal" id="goal">
-                <option value="">All</option>
-                <option value="Build muscle">Build muscle</option>
-                <option value="Improve stamina">Improve Stamina</option>
-                <option value="Lose weight">Lose Weight</option>
-                <option value="Improve core strength">Improve Core Strength</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <label for="experience">Experience</label>
-            <select class="form-select" name="experience" id="experience">
-                <option value="">All</option>
-                <option value="Beginner">Beginner</option>
-                <option value="Intermediate">Intermediate</option>
-                <option value="Advanced">Advanced</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <label for="time">Time</label>
-            <select class="form-select" name="time" id="time">
-                <option value="">All</option>
-                <option value="15 mins">15 mins</option>
-                <option value="30 mins">30 mins</option>
-                <option value="Over 30 mins">Over 30 mins</option>
-            </select>
-        </div>
-        <div class="col-md-3 align-self-end">
-            <button type="submit" class="cta-button">Filter</button>
-        </div>
+<!--<form method="GET" action="/workouts" class="mb-4">-->
+<!--    <div class="row">-->
+<!--        <div class="col-md-3">-->
+<!--            <label for="goal">Fitness Goal</label>-->
+<!--            <select class="form-select" name="goal" id="goal">-->
+<!--                <option value="">All</option>-->
+<!--                <option value="Build muscle">Build muscle</option>-->
+<!--                <option value="Improve stamina">Improve Stamina</option>-->
+<!--                <option value="Lose weight">Lose Weight</option>-->
+<!--                <option value="Improve core strength">Improve Core Strength</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--            <label for="experience">Experience</label>-->
+<!--            <select class="form-select" name="experience" id="experience">-->
+<!--                <option value="">All</option>-->
+<!--                <option value="Beginner">Beginner</option>-->
+<!--                <option value="Intermediate">Intermediate</option>-->
+<!--                <option value="Advanced">Advanced</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--            <label for="time">Time</label>-->
+<!--            <select class="form-select" name="time" id="time">-->
+<!--                <option value="">All</option>-->
+<!--                <option value="15 mins">15 mins</option>-->
+<!--                <option value="30 mins">30 mins</option>-->
+<!--                <option value="Over 30 mins">Over 30 mins</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--        <div class="col-md-3 align-self-end">-->
+<!--            <button type="submit" class="cta-button">Filter</button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</form>-->
+
+
+<form method="GET" action="/workouts" class="workout-filter-bar p-4 mb-5">
+  <div class="mb-3 ps-2">
+    <h5 class="fw-bold mb-0">Filter Videos</h5>
+  </div>
+
+  <div class="row align-items-end g-3">
+
+    <!-- Fitness Goal -->
+    <div class="col-md-3">
+      <select name="goal" class="form-select custom-dropdown-btn">
+        <option value="">🏋️ Fitness Goal</option>
+        <option value="Build muscle" {{ 'selected' if goal == 'Build muscle' else '' }}>💪 Build Muscle</option>
+        <option value="Improve stamina" {{ 'selected' if goal == 'Improve stamina' else '' }}>🏃 Improve Stamina</option>
+        <option value="Lose weight" {{ 'selected' if goal == 'Lose weight' else '' }}>⚖️ Lose Weight</option>
+        <option value="Improve core strength" {{ 'selected' if goal == 'Improve core strength' else '' }}>🧘 Improve Core Strength</option>
+      </select>
     </div>
+
+    <!-- Experience -->
+    <div class="col-md-3">
+      <select name="experience" class="form-select custom-dropdown-btn">
+        <option value="">📈 Experience</option>
+        <option value="Beginner" {{ 'selected' if experience == 'Beginner' else '' }}>🌱 Beginner</option>
+        <option value="Intermediate" {{ 'selected' if experience == 'Intermediate' else '' }}>🔥 Intermediate</option>
+        <option value="Advanced" {{ 'selected' if experience == 'Advanced' else '' }}>🚀 Advanced</option>
+      </select>
+    </div>
+
+    <!-- Duration -->
+    <div class="col-md-3">
+      <select name="time" class="form-select custom-dropdown-btn">
+        <option value="">⏳ Duration</option>
+        <option value="15 mins" {{ 'selected' if time == '15 mins' else '' }}>🕒 15 mins</option>
+        <option value="30 mins" {{ 'selected' if time == '30 mins' else '' }}>🕕 30 mins</option>
+        <option value="Over 30 mins" {{ 'selected' if time == 'Over 30 mins' else '' }}>⏱️ Over 30 mins</option>
+      </select>
+    </div>
+
+    <!-- Buttons -->
+    <div class="col-md-3 d-flex justify-content-between align-items-end">
+      <button type="submit" class="cta-button w-75">Filter</button>
+      <a href="/workouts" class="clear-filter-btn d-flex align-items-center text-muted text-decoration-none ms-2">
+        <i class="bi bi-x-circle-fill me-1"></i>
+        <span>Clear</span>
+      </a>
+    </div>
+  </div>
 </form>
 
 <div class="section-divider"></div>

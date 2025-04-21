@@ -1,6 +1,7 @@
+/* GLOBAL BASE STYLES */
+
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Quicksand:wght@300..700&display=swap');
 
-/* LAYOUT.HTML */
 html, body {
   margin: 0;
   padding: 0;
@@ -40,6 +41,47 @@ body {
     width: 80%;
     }
 
+.custom-dropdown-btn {
+  background-color: #fffaf7;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  color: #121212;
+  font-weight: 500;
+  padding: 10px 14px;
+  text-align: left;
+}
+
+.custom-dropdown-btn:hover,
+.custom-dropdown-btn:focus {
+  background-color: #ffe3dd;
+  color: #121212;
+  border-color: #f25c54;
+}
+
+/* Optional: Add a consistent focus style */
+.custom-dropdown-btn:focus-visible {
+  outline: 2px solid #f4845f;
+}
+
+/* Show default arrow normally — aesthetic only */
+.custom-dropdown-btn::after {
+  float: right;
+  margin-top: 8px;
+  margin-right: 6px;
+  border-top: 5px solid #333;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+  content: "";
+}
+
+/* Hide arrow if JS or class-based toggling is ever added */
+.custom-dropdown-btn.selected::after {
+  display: none !important;
+}
+
+
+
+
 /* CTA buttons */
 .cta-button {
     background-color: #F25C54;
@@ -55,6 +97,10 @@ body {
 .cta-button:hover {
     background-color: #F4845F;
     }
+
+
+/* ================== SHARED COMPONENTS ================== */
+/* LAYOUT.HTML */
 
 /* footer */
 .footer {
@@ -166,7 +212,7 @@ body {
   }
 }
 
-/* Dropdown menu styling */
+/* Dropdown menu styling
 .dropdown-menu {
   background-color: #1f1f1f;
   border: none;
@@ -183,7 +229,7 @@ body {
 .dropdown-item:hover {
   background-color: #292929;
   color: #ff6b6b;
-}
+} */
 
 /* Join button */
 .btn-join-filled {
@@ -213,7 +259,7 @@ body {
   border-color: #F4845F;
 }
 
-
+/* ================== PAGE-SPECIFIC STYLES ================== */
 /* HOME PAGE */
 body.home-page h1 {
     font-family: 'Bebas Neue', sans-serif;
@@ -696,14 +742,31 @@ body.home-page .testimonial-name {
   color: black;
 }
 
+.workout-filter-bar {
+    background-color: #ffe3dd;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
 
-/* ERRORS PAGE */
-.error-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-weight: 600;
-  font-size: 70px;
-  text-align: center;
-  color: #333;
+/* Dropdown & Button */
+.custom-filter-select {
+    height: 48px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    padding: 10px 14px;
+    border: 1px solid #f25c54;
+    border-radius: 8px;
+}
+
+.filter-btn {
+    height: 48px;
+    padding: 10px 18px;
+    font-size: 16px;
+}
+
+.clear-filter-btn {
+    transform: translateY(-2px); /* nudge it upward slightly */
+    font-size: 16px;
 }
 
 
