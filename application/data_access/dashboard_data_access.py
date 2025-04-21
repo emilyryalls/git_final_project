@@ -28,12 +28,6 @@ def get_user_id():
 
 # 2. Get today's meal plan (latest plan, current day only)
 def get_todays_meal_plan(user_id):
-    # remove next 3 lines to remove hardcoding/testing and remove date=None arg in function
-    # if date is None:
-    #     date = datetime.today().date()
-    # today = date.strftime('%A')
-
-    # uncomment this
     today = datetime.today().strftime('%A')
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
