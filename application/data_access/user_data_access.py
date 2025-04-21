@@ -143,5 +143,5 @@ def delete_email(emailid):
     finally:
         cursor.close()
         conn.close()
-        
+
     return True

@@ -137,6 +137,7 @@ def reset_form():
                         if new_password == confirm_password:
                             hashed_new_password = generate_password_hash(new_password)
                             change_password(hashed_new_password, member_id)
+                            flash("Your password has been updated.")
                             return redirect(url_for('profile'))
                             # return render_template('profile.html', title='Profile', user= )
                         else:
