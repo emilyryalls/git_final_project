@@ -8,7 +8,7 @@ from flask import render_template, request, redirect, url_for, flash, session
 from application.data_access.blog_data_access import get_all_blogs,  get_blog_by_id
 from application.data_access.user_data_access import add_member, get_details_by_email, get_password_details_by_id, change_password, delete_account, delete_email
 from application.data_access.meal_plan_data_access import get_user_id, get_week_start_date, find_meal_plan_by_timestamp, get_db_connection
-from application.data_access.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences, update_profile_picture
+from application.data_access.profile_data_access import get_db_connection, get_user_by_id, get_all_diets, get_all_goals, get_all_experience_levels, update_dob, update_height_weight, update_fitness_preferences, update_profile_picture, update_login_stats
 from application.data_access.workouts_data_access import get_workout_video, get_exercises, get_sets, get_reps, \
     get_member_fitness_goal, get_member_experience, get_days_of_week, update_workout_progress, get_workout_progress
 from application.data_access.dashboard_data_access import get_user_id, get_todays_meal_plan, get_todays_workout, get_latest_blogs, get_workout_progress_percent
@@ -90,6 +90,8 @@ def signin_submit():
                 session['loggedIn'] = True
 
                 if check_password_hash(stored_password, userpassword):
+                    update_login_stats(session['user_id'])
+
                     return redirect(url_for('profile'))
                 else:
                     error_invalid_credentials = 'Incorrect email or password. Please try again!'
@@ -485,6 +487,7 @@ def profile():
     else:
         return redirect(url_for('signin_form'))  # Redirect to signin if not logged in
 
+
 # Route to get profile settings page as well as to edit the profile details on it
 @app.route("/profile/settings", methods=["GET", "POST"])
 def profile_settings():
@@ -556,13 +559,13 @@ def upload_profile_pic():
     if file:
         filename = secure_filename(file.filename)
 
-        # ✅ Absolute path for saving the image
+        # Absolute path for saving the image
         upload_folder = os.path.join(app.root_path, 'static', 'images', 'uploads')
         os.makedirs(upload_folder, exist_ok=True)
 
         full_path = os.path.join(upload_folder, filename)
 
-        # ✅ Relative path for use in <img src=""> (convert backslashes to slashes)
+        # Relative path for use in <img src=""> (convert backslashes to slashes)
         relative_path = os.path.join('images', 'uploads', filename).replace("\\", "/")
 
         file.save(full_path)

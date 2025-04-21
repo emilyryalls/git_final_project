@@ -254,6 +254,35 @@ body.home-page section {
   padding: 100px 30px; /* Increase top/bottom padding */
 }
 
+.parallax-video-container {
+  position: relative;
+  height: 75vh;
+  overflow: hidden;
+}
+
+.parallax-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  z-index: 1;
+}
+
+.parallax-video-overlay {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: white;
+  text-shadow: 2px 2px 4px #000;
+  text-align: center;
+}
+
 body.home-page .parallax {
     width: 100%;
     margin: 0;
@@ -703,7 +732,6 @@ body.home-page .testimonial-name {
   text-align: center;
   color: #333;
 }
-
 
 /* DASHBOARD PAGE */
 .dashboard-title {
