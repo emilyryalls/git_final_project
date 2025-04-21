@@ -47,7 +47,7 @@ def get_user_by_id(user_id):
                m.member_since,
                m.profile_pic,
                m.last_login,
-               m.login_count
+               m.login_streak
         FROM member m
         LEFT JOIN goal g ON m.goal_id = g.goal_id
         LEFT JOIN diet d ON m.diet_id = d.diet_id
@@ -91,7 +91,7 @@ def get_user_by_id(user_id):
             "member_since": member_since,
             "profile_pic": row[11] or 'images/profile_img/default_profile.png',
             "last_login": row[12],
-            "login_count": row[13]
+            "login_streak": row[13]
         }
     else:
         return None
@@ -145,7 +145,7 @@ def update_height_weight(user_id, height, weight):
     :param user_id: (int): The member's ID.
     :param height: (float or str): The new height in cm.
     :param weight: (float or str): The new weight in kg.
-    :return:
+    :return: None
     """
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -167,7 +167,7 @@ def update_fitness_preferences(user_id, goal_name, experience_name, diet_name):
     :param goal_name: (str): Selected fitness goal name (can be empty).
     :param experience_name: (str): Selected experience level name (can be empty).
     :param diet_name: (str): Selected dietary requirement name (can be empty).
-    :return:
+    :return: None
     """
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -203,7 +203,7 @@ def update_dob(user_id, dob):
     Update the date of birth for a given user.
     :param user_id: (int): The member's ID.
     :param dob: (str or datetime): The new date of birth in YYYY-MM-DD format.
-    :return:
+    :return: None
     """
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -218,7 +218,7 @@ def update_profile_picture(user_id, profile_pic_path):
     Update the profile picture path for a given user.
     :param user_id: (int): The member's ID.
     :param profile_pic_path: (str): The path to the profile image file.
-    :return:
+    :return: None
     """
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -230,23 +230,57 @@ def update_profile_picture(user_id, profile_pic_path):
 
 def update_login_stats(member_id):
     """
-    Update the last login timestamp and increment login count for a given user.
-    :param member_id: (int): The member's ID.
-    :return:
+     Update user's login streak and last login timestamp.
+
+    If the user logs in on a consecutive day, the login streak (login_count) is incremented.
+    If the user logs in after skipping one or more days, the streak resets to 1.
+    If the user has already logged in today, no changes are made.
+    Always updates `last_login` only when logging in on a new day.
+
+    :param member_id: int: The unique ID of the member logging in.
+    :return: None
     """
     conn = get_db_connection()
-    cursor = conn.cursor()
+    cursor = conn.cursor(dictionary=True)
+
+    # Fetch current login data
+    cursor.execute("SELECT last_login, login_streak FROM member WHERE member_id = %s", (member_id,))
+    result = cursor.fetchone()
+
     now = datetime.now()
+    today = now.date()
 
-    cursor.execute("""
-        UPDATE member 
-        SET 
-            last_login = %s,
-            login_count = login_count + 1
-        WHERE member_id = %s
-    """, (now, member_id))
+    if result:
+        last_login = result['last_login']
+        streak = result['login_streak'] or 0
 
-    conn.commit()
+        if last_login:
+            last_login_date = last_login.date()
+            day_diff = (today - last_login_date).days
+
+            if day_diff == 0:
+                # Already logged in today — no update needed
+                conn.close()
+                return
+            elif day_diff == 1:
+                # Consecutive login
+                streak += 1
+            else:
+                # Missed a day
+                streak = 1
+        else:
+            # First-time login
+            streak = 1
+
+        # Update last_login and streak
+        cursor.execute("""
+            UPDATE member
+            SET last_login = %s, login_streak = %s
+            WHERE member_id = %s
+        """, (now, streak, member_id))
+
+        conn.commit()
+
     cursor.close()
     conn.close()
 

@@ -30,3 +30,12 @@ quotes = [
     "Be patient. Stay focused. Trust the process.",
     "This is your time. Make it count."
 ]
+
+exercise_icons = [
+    "dashboard_img/workout_icon_1.svg",
+    "dashboard_img/workout_icon_2.svg",
+    "dashboard_img/workout_icon_3.svg",
+    "dashboard_img/workout_icon_4.svg",
+    "dashboard_img/workout_icon_5.svg",
+    "dashboard_img/workout_icon_6.svg"
+]

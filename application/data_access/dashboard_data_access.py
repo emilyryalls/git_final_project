@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 from flask import session
 
+# Determine MySQL password based on OS
 if sys.platform == "win32":
     mysql_password = "password"
 else:
@@ -13,6 +14,12 @@ def main():
     return None
 
 def get_db_connection():
+    """
+    Establishes and returns a connection to the MySQL database.
+
+    Returns:
+        MySQLConnection: A connection object to the rise_db database.
+    """
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -21,13 +28,25 @@ def get_db_connection():
     )
     return mydb
 
-
-# 1. Get current user ID from session
 def get_user_id():
+    """
+    Retrieves the currently logged-in user's ID from the Flask session.
+
+    Returns:
+        int or None: The user_id if present in the session, else None.
+    """
     return session.get("user_id")
 
-# 2. Get today's meal plan (latest plan, current day only)
 def get_todays_meal_plan(user_id):
+    """
+    Retrieves the most recent meal plan for the user based on the current day of the week.
+
+    Args:
+        user_id (int): ID of the member.
+
+    Returns:
+        dict: A dictionary of meals for the current day, or an empty dict if no plan is found.
+    """
     today = datetime.today().strftime('%A')
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -47,8 +66,16 @@ def get_todays_meal_plan(user_id):
         return meals.get(today, {})
     return {}
 
-# 3. Get member's fitness goal ID
 def get_member_goal_id(user_id):
+    """
+    Fetches the fitness goal ID for the specified user.
+
+    Args:
+        user_id (int): ID of the member.
+
+    Returns:
+        int or None: The goal_id if found, otherwise None.
+    """
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT goal_id FROM member WHERE member_id = %s", (user_id,))
@@ -56,14 +83,22 @@ def get_member_goal_id(user_id):
     conn.close()
     return result[0] if result else None
 
-# 4. Get today’s workout plan (exercise names)
 def get_todays_workout(user_id):
+    """
+    Retrieves today's workout plan for the user based on their goal and experience level.
+    Splits compound exercise names into separate entries and includes reps and sets.
+
+    Args:
+        user_id (int): ID of the member.
+
+    Returns:
+        list[dict] or None: A list of workout dictionaries or None if user data is incomplete.
+    """
     today = datetime.today().strftime('%A')
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # Get the user's goal and experience ID
     cursor.execute("""
         SELECT goal_id, experience_id
         FROM member
@@ -78,7 +113,6 @@ def get_todays_workout(user_id):
     goal_id = user_data['goal_id']
     experience_id = user_data['experience_id']
 
-    # Now get today's exercises + reps/sets based on experience
     cursor.execute("""
         SELECT e.exercise_name, x.reps, x.sets
         FROM exercise e
@@ -90,7 +124,6 @@ def get_todays_workout(user_id):
     result = cursor.fetchall()
     conn.close()
 
-    # Split exercises into individual items
     workout = []
     for row in result:
         for name in row['exercise_name'].split(','):
@@ -102,8 +135,13 @@ def get_todays_workout(user_id):
 
     return workout
 
-# 5. Get latest 3 blog posts
 def get_latest_blogs():
+    """
+    Retrieves the latest 3 blog posts with author details.
+
+    Returns:
+        list[dict]: A list of dictionaries, each representing a blog post.
+    """
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("""
@@ -122,34 +160,43 @@ def get_latest_blogs():
     conn.close()
     return blogs
 
-# 6. Get % progress for the week (6 workout days)
 def get_workout_progress_percent(user_id):
+    """
+    Calculates the percentage of workouts completed by the user for the current week (Mon–Sat).
+
+    Args:
+        user_id (int): ID of the member.
+
+    Returns:
+        int: Completion percentage out of 6 workout days.
+    """
     conn = get_db_connection()
     cursor = conn.cursor()
-
-    # Only count completed days from Monday to Saturday (day_id 1 to 6)
     cursor.execute("""
         SELECT COUNT(*) 
         FROM workout_progress 
         WHERE member_id = %s AND is_done = TRUE AND day_id BETWEEN 1 AND 6
     """, (user_id,))
-
     result = cursor.fetchone()
     conn.close()
 
     if result and result[0]:
-        return int((result[0] / 6) * 100)  # Always divide by 6 (not result[1] or total)
+        return int((result[0] / 6) * 100)
     return 0
 
-# 7. Get full list of weekdays (for reference)
 def get_days_of_week():
+    """
+    Retrieves the list of weekdays from the database.
+
+    Returns:
+        list[str]: List of day names (e.g. Monday, Tuesday).
+    """
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT day FROM day_of_week")
     result = cursor.fetchall()
     conn.close()
     return [row[0] for row in result]
-
 
 if __name__ == "__main__":
     main()

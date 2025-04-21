@@ -11,8 +11,15 @@ if sys.platform == "win32":
 else:
     mysql_password = ""
 
+
 # MySQL connection
 def get_db_connection():
+    """
+    Establishes and returns a connection to the MySQL database.
+
+    Returns:
+        mysql.connector.connection.MySQLConnection: The database connection object.
+    """
     return mysql.connector.connect(
         host="localhost",
         user="root",
@@ -20,18 +27,45 @@ def get_db_connection():
         database="rise_db"
     )
 
+
 # Get current user's ID from session
 def get_user_id():
+    """
+    Retrieves the currently logged-in user's ID from the Flask session.
+
+    Returns:
+        int or None: The user ID if available, otherwise None.
+    """
     return session.get('user_id')
+
 
 # Week start calculation
 def get_week_start_date(date=None):
+    """
+    Calculates the start date (Monday) of the week for a given date.
+
+    Args:
+        date (datetime, optional): A specific date. Defaults to today if not provided.
+
+    Returns:
+        datetime: The date of the Monday of the week.
+    """
     if not date:
         date = datetime.now()
     return date - timedelta(days=date.weekday())
 
+
 # Load the 4 most recent meal plans from DB
 def load_user_meal_plans(user_id):
+    """
+    Retrieves the 4 most recent meal plans for a specific user.
+
+    Args:
+        user_id (int): The user's ID.
+
+    Returns:
+        list: A list of dictionaries, each containing meal plan details.
+    """
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
@@ -58,8 +92,19 @@ def load_user_meal_plans(user_id):
 
     return meal_plans
 
+
 # Find a specific meal plan by timestamp from DB
 def find_meal_plan_by_timestamp(user_id, timestamp):
+    """
+    Finds and returns a specific meal plan by its creation timestamp.
+
+    Args:
+        user_id (int): The user's ID.
+        timestamp (datetime): The creation timestamp of the meal plan.
+
+    Returns:
+        dict or None: The meal plan data as a dictionary if found, otherwise None.
+    """
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
@@ -92,8 +137,16 @@ def find_meal_plan_by_timestamp(user_id, timestamp):
 
     return None
 
+
 # Save a new meal plan to the database
 def save_meal_plan_to_db(user_id, plan):
+    """
+    Saves a new meal plan to the database for a specific user.
+
+    Args:
+        user_id (int): The user's ID.
+        plan (dict): A dictionary containing the meal plan data.
+    """
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -113,8 +166,17 @@ def save_meal_plan_to_db(user_id, plan):
     conn.commit()
     conn.close()
 
+
 # Update an existing meal plan
 def update_meal_plan_in_db(user_id, timestamp, updated_plan):
+    """
+    Updates an existing meal plan in the database using the timestamp as a unique identifier.
+
+    Args:
+        user_id (int): The user's ID.
+        timestamp (datetime): The creation timestamp of the meal plan to update.
+        updated_plan (dict): A dictionary containing the updated meal plan data.
+    """
     conn = get_db_connection()
     cursor = conn.cursor()
 

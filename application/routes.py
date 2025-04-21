@@ -1,5 +1,3 @@
-from re import match
-
 from application import app
 import mysql.connector
 import os
@@ -12,7 +10,7 @@ from application.data_access.profile_data_access import get_db_connection, get_u
 from application.data_access.workouts_data_access import get_workout_video, get_exercises, get_sets, get_reps, \
     get_member_fitness_goal, get_member_experience, get_days_of_week, update_workout_progress, get_workout_progress
 from application.data_access.dashboard_data_access import get_user_id, get_todays_meal_plan, get_todays_workout, get_latest_blogs, get_workout_progress_percent
-from application.sample_data import quotes
+from application.sample_data import quotes, exercise_icons
 import re
 import json
 from datetime import datetime
@@ -480,10 +478,12 @@ def profile():
         # Sync session with latest profile pic (useful for navbar display)
         session['profile_pic'] = user.get('profile_pic')
 
+        random_quote = random.choice(quotes)
+
         # Check if redirected from settings with success message
         updated = request.args.get("updated")
 
-        return render_template("profile.html", user=user, updated=updated)
+        return render_template("profile.html", user=user, updated=updated, quote=random_quote)
     else:
         return redirect(url_for('signin_form'))  # Redirect to signin if not logged in
 
@@ -654,54 +654,24 @@ def mark_workout_done():
 
 
 # <---- Dashboard ---->
-# FINAL ROUTE
 @app.route("/dashboard")
 def dashboard():
     user_id = session.get("user_id")
     if not user_id:
         return redirect("/login")  # Redirect to login if user not logged in
 
-    today_day = datetime.today().strftime('%A')  # For display in the dashboard
-    day_number = datetime.today().isoweekday()
-
-    motivational_quote = random.choice(quotes)
+    # Set fixed random icon order for the day
+    random.seed(datetime.today().strftime('%Y-%m-%d'))  # Stable for the day
+    daily_icons = random.sample(exercise_icons, 3)
 
     # Pull today's data using your data_access functions
     todays_meals = get_todays_meal_plan(user_id)
     todays_workout = get_todays_workout(user_id)
     progress_percent = get_workout_progress_percent(user_id)
     latest_blogs = get_latest_blogs()
+    today_day = datetime.today().strftime('%A')  # For display in the dashboard
+    day_number = datetime.today().isoweekday()
+    motivational_quote = random.choice(quotes)
 
     return render_template(
-        "dashboard.html", today=today_day, day_number=day_number, motivational_quote=motivational_quote, todays_meals=todays_meals, todays_workout=todays_workout, progress_percent=progress_percent, latest_blogs=latest_blogs)
-
-# TEST ROUTE
-# @app.route("/dashboard")
-# def dashboard():
-#     user_id = session.get("user_id")
-#     if not user_id:
-#         return redirect("/login")
-#
-#     # 🛠 TEMP: Set to Tuesday this week (change year/month/day accordingly)
-#     test_date = datetime(2025, 4, 15)  # ← e.g., Tuesday, April 15, 2025
-#
-#     today_day = test_date.strftime('%A')
-#     day_number = test_date.isoweekday()
-#     motivational_quote = random.choice(quotes)
-#
-#     # ⬇️ Pass test_date into both functions
-#     todays_meals = get_todays_meal_plan(user_id, date=test_date)
-#     todays_workout = get_todays_workout(user_id, date=test_date)
-#     progress_percent = get_workout_progress_percent(user_id)
-#     latest_blogs = get_latest_blogs()
-#
-#     return render_template(
-#         "dashboard.html",
-#         today=today_day,
-#         day_number=day_number,
-#         motivational_quote=motivational_quote,
-#         todays_meals=todays_meals,
-#         todays_workout=todays_workout,
-#         progress_percent=progress_percent,
-#         latest_blogs=latest_blogs
-#     )
+            "dashboard.html", today=today_day, day_number=day_number, motivational_quote=motivational_quote, todays_meals=todays_meals, todays_workout=todays_workout, progress_percent=progress_percent, latest_blogs=latest_blogs, daily_icons=daily_icons)

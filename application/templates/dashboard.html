@@ -8,7 +8,7 @@
     <div class="row g-4 mb-5">
         <!-- Meal Plan -->
         <div class="col-md-6">
-            <a href="{{ url_for('profile_settings') }}" class="text-decoration-none text-dark">
+            <a href="{{ url_for('meal_plan_dashboard') }}" class="text-decoration-none text-dark">
                 <div class="dashboard-card h-100 hover-shadow">
                     <div class="card-header">🍽️ Today’s Meal Plan ({{ today }})</div>
                     <div class="card-body">
@@ -25,10 +25,9 @@
             </a>
         </div>
 
-
         <!-- Workout plan -->
         <div class="col-md-6">
-            <a href="{{ url_for('profile_settings') }}" class="text-decoration-none text-dark">
+            <a href="{{ url_for('view_workout_plan') }}" class="text-decoration-none text-dark">
                 <div class="dashboard-card h-100 hover-shadow">
                     <div class="card-header">💪 Today’s Workout Plan ({{ today }})</div>
                     <div class="card-body">
@@ -41,17 +40,18 @@
                                 in your profile to see today's recommended workouts.
                             </p>
                         {% elif todays_workout %}
-                            <ul class="list-unstyled">
+                            <div class="row text-center">
                                 {% for item in todays_workout %}
-                                    <li class="d-flex align-items-center mb-2">
-                                        <img src="{{ url_for('static', filename='images/dashboard_img') }}"
-                                             alt="icon" width="24" height="24" class="me-2">
-                                        <span>
-                                            {{ item.exercise }} <small class="text-muted ms-1">({{ item.sets }} sets × {{ item.reps }} reps)</small>
-                                        </span>
-                                    </li>
+                                <div class="col-4 d-flex flex-column align-items-center">
+                                    <img src="{{ url_for('static', filename='images/' ~ daily_icons[loop.index0 % 3]) }}"
+                                         alt="icon"
+                                         width="48" height="48"
+                                         class="mb-2">
+                                    <span class="fw-semibold">{{ item.exercise }}</span>
+                                    <small class="text-muted">{{ item.sets }} sets × {{ item.reps }} reps</small>
+                                </div>
                                 {% endfor %}
-                            </ul>
+                            </div>
                         {% else %}
                             <p class="text-muted">Rest day; no workouts assigned for today.</p>
                         {% endif %}
