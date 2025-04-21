@@ -733,6 +733,21 @@ body.home-page .testimonial-name {
   color: #333;
 }
 
+/* Remove blue tinge and background on the accordion buttons */
+.accordion-button {
+    background-color: #F4845F
+    border: #F4845F ;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #F4845F; /* Keep the button background when expanded */
+}
+
+
 /* DASHBOARD PAGE */
 .dashboard-title {
     font-family: 'Bebas Neue', sans-serif;
