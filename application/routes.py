@@ -24,46 +24,83 @@ from urllib.parse import unquote
 @app.route('/')
 @app.route('/home')
 def home():
-    if not session.get('loggedIn'):
+    """
+    Renders the home page of the website. Checks if the user is logged in
+    and adjusts the rendering based on their logged-in status.
+
+    Returns:
+        render_template: The home page with logged-in status information.
+    """
+
+    if not session.get('loggedIn'): # Check if user is logged in
+        # If not logged in, render home page with loggedin=False
         return render_template('home.html', title='Home', loggedin=False)
 
+    # If logged in, render home page with loggedin=True
     return render_template('home.html', title='Home', loggedin=True)
 
 
 # <---- Sign up / membership ---->
 @app.route('/membership', methods=['GET'])
 def signup_form():
+    """
+    Renders the sign-up form for new users.
+
+    Returns:
+        render_template: The sign-up page for new users.
+    """
+
+    # Render the membership sign-up form
     return render_template('membership.html', title='Membership')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup_submit():
-    error = ""
-    error_email_exist = ""
+    """
+    Handles the submission of the sign-up form. Validates the user's input
+    and adds a new member if the details are valid.
+
+    Returns:
+        render_template: A page confirming successful sign-up or showing an error message.
+    """
+
+    error = ""  # Variable to store general error messages
+    error_email_exist = ""  # Variable to store email already existing error message
+
     if request.method == 'POST':
+        # Get form data for user details
         userfirstname = request.form.get('userName')
         userlastname = request.form.get('userLastname')
         useremail = request.form.get('userEmail')
         userpassword = request.form.get('userPassword')
-        hashed_password = generate_password_hash(userpassword)
+        hashed_password = generate_password_hash(userpassword) # Hash the password before storing
 
-
+        # Validate form fields
         if len(useremail) == 0 or len(userpassword) == 0 or len(userfirstname) == 0 or len(userlastname) == 0:
-            error = 'Please supply all fields'
+            error = 'Please supply all fields'   # Error message if any field is missing
         elif add_member(userfirstname, userlastname, useremail, hashed_password):
-            error_email_exist = 'Already part of the family! Log in instead 😊'
+            error_email_exist = 'Already part of the family! Log in instead 😊'   # Error if email already exists
         elif not re.match(r"^[A-Za-zÀ-ÿ\s'-]+$", userfirstname) or not re.match(r"^[A-Za-zÀ-ÿ\s'-]+$", userlastname):
-            error = 'First name and last name can only contain letters, spaces, apostrophes (\'), and hyphens (-).'
+            error = 'First name and last name can only contain letters, spaces, apostrophes (\'), and hyphens (-).'   # Name format validation
         else:
-            add_member(userfirstname, userlastname, useremail, hashed_password)
-            return render_template('signedup.html')
+            add_member(userfirstname, userlastname, useremail, hashed_password)   # Add new member to the system
+            return render_template('signedup.html')   # Show success page
 
+    # Render the sign-up form with error messages if validation fails
     return render_template('membership.html', title='Sign Up', message = error, message_email_exist = error_email_exist)
 
 
 # <---- Login.logout ---->
 @app.route('/login', methods=['GET', 'POST'])
 def signin_form():
+    """
+    Renders the login form for users to enter their credentials.
+
+    Returns:
+        render_template: The login page for users to input their credentials.
+    """
+
+    # Render the login form for the user
     return render_template('login.html', title='Login')
 
 
@@ -71,38 +108,58 @@ def signin_form():
 def signin_submit():
     error = ""
     error_invalid_credentials = ""
+    """
+    Handles the login form submission. Validates user credentials and logs
+    the user in if successful.
+
+    Returns:
+        render_template: The login page with error messages if invalid credentials
+        or redirects to the profile if successful.
+    """
 
     if request.method == 'POST':
+        # Get form data for login
         useremail = request.form.get('userEmail')
         userpassword = request.form.get('userPassword')
 
+        # Validate if fields are not empty
         if len(useremail) == 0 or len(userpassword) == 0:
             error = 'Please supply all fields'
         else:
-            saved_details = get_details_by_email(useremail)
+            saved_details = get_details_by_email(useremail)   # Get user details by email
 
-            if saved_details: #if email exist
-                stored_password = saved_details[0]
+            if saved_details: # If email exists in the database
+                stored_password = saved_details[0]   # Get the stored password
                 session['email'] = saved_details[2]
                 session['user'] = saved_details[1]
                 session['user_id'] = saved_details[3]
                 session['email_id'] = saved_details[4]
                 session['loggedIn'] = True
 
+                # Validate password against the stored hash
                 if check_password_hash(stored_password, userpassword):
-                    update_login_stats(session['user_id'])
-
+                    update_login_stats(session['user_id'])   # Update login stats if successful
                     return redirect(url_for('profile'))
                 else:
                     error_invalid_credentials = 'Incorrect email or password. Please try again!'
             else:
                 error_invalid_credentials = 'Incorrect email or password. Please try again!'
+        # Render the login page with error messages
         return render_template('login.html', title='Sign In', message = error, message_invalid_credentials = error_invalid_credentials)
+    # Render the login page when the method is GET
     return render_template('login.html', title='Sign In')
 
 
 @app.route('/loggedout')
 def logged_out():
+    """
+    Logs the user out by clearing session data and redirects to the home page.
+
+    Returns:
+        redirect: Redirects the user to the home page after logging out.
+    """
+
+    # Clear session data to log the user out
     session.pop('email', None)
     session.pop('user', None)
     session.pop('user_id', None)
@@ -112,34 +169,44 @@ def logged_out():
 
 @app.route('/reset', methods=['GET', 'POST'])
 def reset_form():
-    if not session.get('loggedIn'):
+    """
+    Renders the form for resetting the user's password. It ensures the user
+    is logged in before proceeding and validates the reset request.
+
+    Returns:
+        render_template: The password reset page with any error messages.
+    """
+
+    if not session.get('loggedIn'):   # Ensure the user is logged in
         return redirect(url_for('signin_form'))
+
+    # Initialize error variables for different types of errors
     error_missing = ""
     error_different_password = ""
     error_invalid_password = ""
 
     if request.method == 'POST':
+        # Get the form data for the password reset
         current_password = request.form.get('currentPassword')
         new_password = request.form.get('newPassword')
         confirm_password = request.form.get('confirmPassword')
         member_id = session['user_id']
 
         if not member_id:
-            return redirect(url_for('signin_form'))
+            return redirect(url_for('signin_form'))   # Ensure member ID is available
         else:
-            password_details = get_password_details_by_id(member_id)
-            if password_details:
-                stored_password = password_details[0]
+            password_details = get_password_details_by_id(member_id)   # Get the current password details from the database
+            if password_details:                        # If not empty
+                stored_password = password_details[0]   # Get the stored password hash
                 if len(current_password) == 0 or len(new_password) == 0 or len(confirm_password) == 0:
                     error_missing = 'Please supply all fields'
                 else:
-                    if check_password_hash(stored_password, current_password):
-                        if new_password == confirm_password:
-                            hashed_new_password = generate_password_hash(new_password)
-                            change_password(hashed_new_password, member_id)
+                    if check_password_hash(stored_password, current_password):   # Check if current password match save password
+                        if new_password == confirm_password:                      # Check if new password and confirm match
+                            hashed_new_password = generate_password_hash(new_password)   # Hash the new password
+                            change_password(hashed_new_password, member_id)              # Update the password
                             flash("Your password has been updated.")
                             return redirect(url_for('profile'))
-                            # return render_template('profile.html', title='Profile', user= )
                         else:
                             error_different_password = "Passwords do not match"
                     else:
@@ -150,18 +217,28 @@ def reset_form():
 
 @app.route('/delete', methods=['GET', 'POST'])
 def delete_account_route():
+    """
+    Handles the deletion of the user's account. Requires the user to be logged in.
+    Deletes user-related data and clears the session.
+
+    Returns:
+        render_template: The account deletion confirmation page.
+    """
+
     if not session.get('loggedIn'):
         return redirect(url_for('signin_form'))
 
     if request.method == 'POST':
+        # Get user details for deletion
        member_id = session.get('user_id')
        emailid = session.get('email_id')
        if not member_id:
            return redirect(url_for('signin_form'))
        else:
+           # Delete the user's account and email from the system
            delete_account(member_id)
            delete_email(emailid)
-           session.clear()
+           session.clear()   # Clear session data after deletion
            flash("Your account has been deleted.")
            return render_template('home.html', title='settings')
 
