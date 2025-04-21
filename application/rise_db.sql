@@ -3,8 +3,6 @@ create database rise_db;
 
 use rise_db;
 
--- WORKOUT VIDEOS
-
 -- goal table
 create table goal
 (
@@ -205,7 +203,11 @@ foreign key (diet_id) references diet(diet_id),
 experience_id bigint,
 foreign key (experience_id) references experience(experience_id),
 profile_pic varchar(500),
-member_since timestamp default current_timestamp
+member_since timestamp default current_timestamp,
+last_login datetime default null,
+login_count int default 0,
+profile_setup_complete BOOLEAN default false,
+goal_set BOOLEAN default false
 );
 
 select *

@@ -96,13 +96,28 @@
             <h4 class="card-title mb-4">
               <i class="bi bi-flag-fill me-2"></i>Milestones
             </h4>
+
             {% if user.member_since %}
-            <p><strong>🏁 Joined:</strong> {{ user.member_since.strftime('%B %Y') }}</p>
+              <p><strong>🏁 Joined:</strong> {{ user.member_since.strftime('%B %Y') }}</p>
             {% else %}
-            <p>Member since: Not available</p>
+              <p>Joined: Not available</p>
             {% endif %}
-            <p><strong>💪 Profile Setup:</strong> <span class="badge bg-success">Completed</span></p>
-            <p><strong>🎯 Goal:</strong> <span class="badge bg-info">Fitness goal selected</span></p>
+
+            {% set profile_complete = user.dob and user.height and user.weight %}
+            <p>
+              <strong>💪 Profile Setup:</strong>
+              <span class="badge bg-{{ 'success' if profile_complete else 'secondary' }}">
+                {{ 'Completed' if profile_complete else 'Incomplete' }}
+              </span>
+            </p>
+
+            <p>
+              <strong>🎯 Goal:</strong>
+              <span class="badge bg-{{ 'info' if user.goal else 'secondary' }}">
+                {{ user.goal if user.goal else 'Not set' }}
+              </span>
+            </p>
+
             <div class="mt-auto pt-3">
               <a href="/dashboard" class="btn btn-join-filled">
                 <i class="bi bi-star-fill me-2"></i>Your Fitness Journey
@@ -119,8 +134,14 @@
             <h4 class="card-title mb-4">
               <i class="bi bi-activity me-2"></i>Your Activity at a Glance
             </h4>
-            <p><strong>Days Logged In:</strong> 6</p>
-            <p><strong>Last Login:</strong> Today</p>
+            <p><strong>Days Logged In:</strong> <span class="badge bg-success">{{ user.login_count or 0 }}</span></p>
+            <p><strong>Last Login:</strong>
+              {% if user.last_login %}
+                <span class="badge bg-secondary">{{ user.last_login.strftime('%d %b %Y – %I:%M %p') }}</span>
+              {% else %}
+                <span class="text-muted">Never</span>
+              {% endif %}
+            </p>
             <p><strong>Favourite Activity:</strong> Yoga</p>
             <div class="mt-auto pt-3">
               <a href="/dashboard" class="btn btn-join-filled">

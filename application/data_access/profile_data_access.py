@@ -45,7 +45,9 @@ def get_user_by_id(user_id):
                d.dietary_requirement,
                ex.user_experience,
                m.member_since,
-               m.profile_pic
+               m.profile_pic,
+               m.last_login,
+               m.login_count
         FROM member m
         LEFT JOIN goal g ON m.goal_id = g.goal_id
         LEFT JOIN diet d ON m.diet_id = d.diet_id
@@ -87,7 +89,9 @@ def get_user_by_id(user_id):
             "diet": row[8],
             "experience": row[9],
             "member_since": member_since,
-            "profile_pic": row[11] or 'images/profile_img/default_profile.png'
+            "profile_pic": row[11] or 'images/profile_img/default_profile.png',
+            "last_login": row[12],
+            "login_count": row[13]
         }
     else:
         return None
@@ -219,6 +223,29 @@ def update_profile_picture(user_id, profile_pic_path):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE member SET profile_pic = %s WHERE member_id = %s", (profile_pic_path, user_id))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+def update_login_stats(member_id):
+    """
+    Update the last login timestamp and increment login count for a given user.
+    :param member_id: (int): The member's ID.
+    :return:
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    now = datetime.now()
+
+    cursor.execute("""
+        UPDATE member 
+        SET 
+            last_login = %s,
+            login_count = login_count + 1
+        WHERE member_id = %s
+    """, (now, member_id))
+
     conn.commit()
     cursor.close()
     conn.close()

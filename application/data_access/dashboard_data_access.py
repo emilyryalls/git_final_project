@@ -64,31 +64,49 @@ def get_member_goal_id(user_id):
 
 # 4. Get today’s workout plan (exercise names)
 def get_todays_workout(user_id):
-    # remove next 3 lines to remove hardcoding/testing and remove date=None arg in function
-    # if date is None:
-    #     date = datetime.today().date()
-    # today = date.strftime('%A')
-
-    # uncomment this
     today = datetime.today().strftime('%A')
-    goal_id = get_member_goal_id(user_id)
-    if not goal_id:
-        return []
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
+    # Get the user's goal and experience ID
     cursor.execute("""
-        SELECT e.exercise_name
+        SELECT goal_id, experience_id
+        FROM member
+        WHERE member_id = %s
+    """, (user_id,))
+    user_data = cursor.fetchone()
+
+    if not user_data or not user_data['goal_id'] or not user_data['experience_id']:
+        conn.close()
+        return None
+
+    goal_id = user_data['goal_id']
+    experience_id = user_data['experience_id']
+
+    # Now get today's exercises + reps/sets based on experience
+    cursor.execute("""
+        SELECT e.exercise_name, x.reps, x.sets
         FROM exercise e
         JOIN day_of_week d ON e.day_id = d.day_id
+        JOIN experience x ON x.experience_id = %s
         WHERE e.goal_id = %s AND d.day = %s
-    """, (goal_id, today))
+    """, (experience_id, goal_id, today))
 
     result = cursor.fetchall()
     conn.close()
 
-    return [row['exercise_name'] for row in result]
+    # Split exercises into individual items
+    workout = []
+    for row in result:
+        for name in row['exercise_name'].split(','):
+            workout.append({
+                'exercise': name.strip(),
+                'reps': row['reps'],
+                'sets': row['sets']
+            })
+
+    return workout
 
 # 5. Get latest 3 blog posts
 def get_latest_blogs():
