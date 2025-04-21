@@ -91,10 +91,10 @@
               <label for="goal" class="form-label">Fitness Goal</label>
               <select class="form-select" name="goal" id="goal">
                 <option disabled {% if not user.goal %}selected{% endif %}>Select your fitness goal</option>
-                <option value="Build Muscle" {% if user.goal == 'Build Muscle' %}selected{% endif %}>Build Muscle</option>
-                <option value="Improve Stamina" {% if user.goal == 'Improve Stamina' %}selected{% endif %}>Improve Stamina</option>
-                <option value="Lose Weight" {% if user.goal == 'Lose Weight' %}selected{% endif %}>Lose Weight</option>
-                <option value="Improve Core Strength" {% if user.goal == 'Improve Core Strength' %}selected{% endif %}>Improve Core Strength</option>
+                <option value="Build Muscle" {% if user.goal == 'Build muscle' %}selected{% endif %}>Build Muscle</option>
+                <option value="Improve Stamina" {% if user.goal == 'Improve stamina' %}selected{% endif %}>Improve Stamina</option>
+                <option value="Lose Weight" {% if user.goal == 'Lose weight' %}selected{% endif %}>Lose Weight</option>
+                <option value="Improve Core Strength" {% if user.goal == 'Improve core strength' %}selected{% endif %}>Improve Core Strength</option>
               </select>
             </div>
 
