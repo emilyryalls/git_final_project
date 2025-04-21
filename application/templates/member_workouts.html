@@ -3,7 +3,7 @@
 {% block body_content %}
 
 <div class="container mt-5">
-    <h2 class="text-center mb-4">{{ session.user }}'s Workout Plan</h2>
+    <div class="workout-video-title">{{ session.user }}'s Workout Plan</div>
 
     {% if fitness_goal is none and experience is none %}
     <div class="d-flex flex-column" style="min-height: 100vh;">
