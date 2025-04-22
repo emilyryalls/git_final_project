@@ -10,7 +10,7 @@
     <div class="row g-4 mb-5">
         <!-- Meal Plan -->
         <div class="col-md-6">
-            <a href="{{ url_for('profile_settings') }}" class="text-decoration-none text-dark">
+            <a href="{{ url_for('meal_plan_dashboard') }}" class="text-decoration-none text-dark">
                 <div class="dashboard-card h-100 hover-shadow">
                     <div class="card-header">🍽️ Today’s Meal Plan ({{ today }})</div>
                     <div class="card-body">
@@ -30,7 +30,7 @@
 
         <!-- Workout plan -->
         <div class="col-md-6">
-            <a href="{{ url_for('profile_settings') }}" class="text-decoration-none text-dark">
+            <a href="{{ url_for('view_workout_plan') }}" class="text-decoration-none text-dark">
                 <div class="dashboard-card h-100 hover-shadow">
                     <div class="card-header">💪 Today’s Workout Plan ({{ today }})</div>
                     <div class="card-body">
