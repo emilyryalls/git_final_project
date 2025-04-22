@@ -1,5 +1,3 @@
-from re import match
-
 from application import app
 import mysql.connector
 import os
@@ -245,10 +243,20 @@ def delete_account_route():
     return render_template('delete.html', title='Delete')
 
 
-
 # <--Newsletter subscription-->
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
+    """
+    Handles the subscription process for the newsletter.
+    - Checks if the provided email is valid.
+    - Adds the email to the 'email' table if not already present.
+    - Inserts the email into the 'newsletter' table if not already subscribed.
+    - Provides feedback to the user via flash messages.
+
+    Returns:
+        redirect: Redirects the user back to the blog page after processing the subscription.
+    """
+
     email = request.form.get('email')
 
     if not email:
@@ -266,10 +274,10 @@ def subscribe():
         if existing:
             email_id = existing[0]
         else:
-            # Add to email table
+            # If the email does not exist, insert it into the 'email' table
             cursor.execute("INSERT INTO email (email_address) VALUES (%s)", (email,))
             conn.commit()
-            email_id = cursor.lastrowid
+            email_id = cursor.lastrowid   # Get the id of the newly inserted email
 
         # Insert into newsletter table (if not already subscribed)
         cursor.execute("SELECT * FROM newsletter WHERE email_id = %s", (email_id,))
@@ -297,6 +305,16 @@ def subscribe():
 # <-- all blogs and filter-->
 @app.route('/blog_home', methods=['GET'])
 def blogs():
+    """
+    Renders the blog home page by retrieving blogs from the database.
+
+    - If a category is provided as a query parameter, it filters blogs by that category.
+    - If no category is provided, it retrieves all blogs.
+
+    Returns:
+        render_template: Renders the 'blog_home.html' template with the list of blogs.
+    """
+
     # Retrieve the 'category' parameter
     category = request.args.get('category')
 
@@ -310,6 +328,20 @@ def blogs():
 # <--individual blog based on the blog ID-->
 @app.route('/blog/<int:blog_id>', methods=['GET'])
 def view_blog(blog_id):
+    """
+    Renders the individual blog page by retrieving blog details from the database.
+
+    - Takes the blog ID from the URL and fetches the corresponding blog from the database.
+    - If no blog is found, redirects the user to the blog home page.
+
+    Args:
+        blog_id (int): The ID of the blog to be retrieved from the database.
+
+    Returns:
+        render_template: Renders the 'view_blog.html' template with the blog data, or
+                         redirects to the blog home page if no blog is found.
+    """
+
     # Call the data access function to get the blog details
     blog = get_blog_by_id(blog_id)
 
@@ -329,6 +361,15 @@ DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sun
 
 @app.route('/meal_planner_form')
 def meal_planner():
+    """
+    Route to show the meal planner form. Redirects to the dashboard if the user is logged in.
+    If not logged in, redirects to the signin form.
+
+    Returns:
+    - Redirect to the meal plan dashboard if the user is logged in.
+    - Redirect to the signin form if the user is not logged in.
+    """
+
     if not get_user_id():
         return redirect(url_for('signin_form'))
     return redirect(url_for('meal_plan_dashboard'))
@@ -336,6 +377,15 @@ def meal_planner():
 
 @app.route('/save_meal_plan', methods=['POST'])
 def save_meal_plan():
+    """
+    Route to save the meal plan submitted from the meal planner form.
+    Saves the user's meal plan data to the database and redirects to the dashboard.
+
+    Returns:
+    - Redirect to the meal plan dashboard with the newly saved meal plan's timestamp.
+    - Redirect to the signin form if the user is not logged in.
+    """
+
     if not get_user_id():
         return redirect(url_for('signin_form'))
 
@@ -381,9 +431,19 @@ def save_meal_plan():
     flash("Meal Plan Saved!", "success")
     return redirect(url_for('meal_plan_dashboard', timestamp=created_at))
 
+
 # Route to display the dashboard
 @app.route('/meal_plan_dashboard', methods=['GET'])
 def meal_plan_dashboard():
+    """
+    Route to display the user's meal plan dashboard.
+    Displays a list of saved meal plans and allows users to select a specific plan to view.
+
+    Returns:
+    - Rendered HTML template 'meal_plan_dashboard.html' displaying the user's meal plans.
+    - Redirect to the signin form if the user is not logged in.
+    """
+
     user_id = get_user_id()
     if not user_id:
         return redirect(url_for('signin_form'))
@@ -421,9 +481,22 @@ def meal_plan_dashboard():
                            plan_name=plan_name,
                            days=DAYS)
 
+
 # <-- View a Specific Meal Plan -->
 @app.route('/meal_plan_view/<timestamp>', methods=['GET'])
 def view_meal_plan(timestamp):
+    """
+    Route to view a specific meal plan by its timestamp.
+    Displays the detailed view of the selected meal plan.
+
+    Parameters:
+    - timestamp (str): The timestamp of the meal plan to view.
+
+    Returns:
+    - Rendered HTML template 'view_meal_plan.html' displaying the selected meal plan.
+    - Redirect to the meal plan dashboard if the meal plan is not found.
+    """
+
     user_id = get_user_id()
 
     conn = get_db_connection()
@@ -446,9 +519,22 @@ def view_meal_plan(timestamp):
 
     return render_template('meal_plan/view_meal_plan.html', selected_meal_plan=selected_meal_plan)
 
+
 @app.route('/edit_meal_plan/<timestamp>', methods=['GET', 'POST'])
 def edit_meal_plan(timestamp):
-    timestamp = unquote(timestamp)  # <-- Add this line
+    """
+    Route to edit a specific meal plan. If the method is POST, updates the meal plan
+    in the database with new details such as name, description, and meals for each day.
+
+    Parameters:
+    - timestamp (str): The timestamp of the meal plan to be edited.
+
+    Returns:
+    - Rendered HTML template: 'edit_meal_plan.html' with the selected meal plan and days.
+    - Redirect to meal plan dashboard on successful update.
+    """
+
+    timestamp = unquote(timestamp)
     user_id = get_user_id()
     if not user_id:
         return redirect(url_for('signin_form'))
@@ -486,6 +572,7 @@ def edit_meal_plan(timestamp):
             timestamp
         ))
         conn.commit()
+        cursor.close()
         conn.close()
 
         flash("Meal Plan Updated!", "success")
@@ -500,6 +587,19 @@ def edit_meal_plan(timestamp):
 
 @app.route('/clone_meal_plan/<timestamp>', methods=['GET', 'POST'])
 def clone_meal_plan(timestamp):
+    """
+    Route to clone an existing meal plan. If the method is POST, inserts a new meal
+    plan into the database based on the selected meal plan, including the name, description,
+    and meals for each day.
+
+    Parameters:
+    - timestamp (str): The timestamp of the meal plan to be cloned.
+
+    Returns:
+    - Rendered HTML template: 'clone_meal_plan.html' with the selected meal plan and days.
+    - Redirect to meal plan dashboard on successful cloning.
+    """
+
     timestamp = unquote(timestamp)
     user_id = get_user_id()
     selected_meal_plan = find_meal_plan_by_timestamp(user_id, timestamp)
@@ -536,6 +636,7 @@ def clone_meal_plan(timestamp):
             json.dumps(meals)
         ))
         conn.commit()
+        cursor.close()
         conn.close()
 
         flash("Meal Plan Cloned!", "success")
@@ -551,6 +652,15 @@ def clone_meal_plan(timestamp):
 # Route to display the user profile
 @app.route("/profile", methods=["GET"])
 def profile():
+    """
+    Route to display the user's profile. If the user is logged in, retrieves the user's
+    information from the database and updates the session with the latest profile picture.
+
+    Returns:
+    - Rendered HTML template: 'profile.html' displaying the user's profile information.
+    - Redirect to the sign-in page if the user is not logged in.
+    """
+
     if 'loggedIn' in session and session['loggedIn']:
         user_id = session.get('user_id')
         user = get_user_by_id(user_id)
@@ -569,6 +679,18 @@ def profile():
 # Route to get profile settings page as well as to edit the profile details on it
 @app.route("/profile/settings", methods=["GET", "POST"])
 def profile_settings():
+    """
+    Route for displaying and handling the user's profile settings.
+
+    - If the user is not logged in, redirects to the sign-in form.
+    - Handles the form submissions to update the user's profile information:
+        - Account Information: Updates the user's date of birth and validates the age (must be at least 18).
+        - Body Metrics: Updates the user's height and weight.
+        - Preferences: Updates the user's fitness goals, experience level, and diet preferences.
+
+    After a successful update, the user is redirected to their settings page with a success message.
+    """
+
     # TEMP: Assume user_id = 1 for development/testing
     if 'loggedIn' not in session:
         return redirect(url_for('signin_form'))
@@ -622,6 +744,19 @@ def profile_settings():
 
 @app.route('/upload_profile_pic', methods=['POST'])
 def upload_profile_pic():
+    """
+    Route to handle uploading and updating the user's profile picture.
+
+    - If the user is not logged in or the user_id is not in the session, redirects to the sign-in form.
+    - Checks if a profile picture file is present in the request.
+    - If no file is selected or uploaded, a warning message is shown.
+    - If a valid file is uploaded:
+        - The file is saved to the server in a specific directory.
+        - The user's profile picture path in the database is updated.
+        - The relative path to the saved file is stored in the session.
+    - After successful upload, the user is redirected to their profile page with a success message.
+    """
+
     if 'loggedIn' not in session or 'user_id' not in session:
         return redirect(url_for('signin_form'))
 
@@ -662,6 +797,24 @@ def upload_profile_pic():
 # return all workout videos
 @app.route('/workouts', methods=['GET'])
 def view_workout_videos():
+    """
+    Route to view workout videos based on user-defined parameters.
+
+    - Accepts three query parameters from the URL:
+      - 'goal': Specifies the user's fitness goal (e.g., weight loss, strength training).
+      - 'experience': Specifies the user's fitness experience level (e.g., beginner, intermediate).
+      - 'time': Specifies the duration of the workout in minutes.
+
+    - Retrieves the appropriate workout video based on the provided parameters using the get_workout_video function.
+    - Renders the 'workout_videos.html' template, passing the video and title information to the template.
+
+    Query parameters example:
+    - /workouts?goal=weight_loss&experience=beginner&time=30
+
+    Returns:
+    - Renders the workout videos page with the appropriate workout video.
+    """
+
     # request is a special object in flask that gives you access to data sent by the client (browser)
     # request.args is a dictionary-like object that holds all of the querey paramteres from the URL
     # example - .get('goal') retrieves the value of the goal parameter from the URL
@@ -676,6 +829,16 @@ def view_workout_videos():
 # Workout Plan
 @app.route('/my_workouts', methods=['GET'])
 def view_workout_plan():
+    """
+    Displays a personalized workout plan based on the user's fitness goal and experience level.
+
+    - If the user is not logged in, redirects to the login page.
+    - If the user has not selected a fitness goal or experience level, displays an error message.
+    - Otherwise, retrieves and displays the user's workout plan, progress, and a workout video.
+
+    Returns:
+        Rendered 'member_workouts.html' template with workout plan, progress, and video or error messages.
+    """
 
     # if user not logged in don't run the rest of the code
     if not session.get("user_id"):
@@ -709,6 +872,21 @@ def view_workout_plan():
 
 @app.route('/mark_workout_done', methods=['POST'])
 def mark_workout_done():
+    """
+    Marks the completion status of a user's workout for each day of the week (Monday to Saturday).
+
+    This function processes a form submission where checkboxes correspond to the days of the week
+    (Monday to Saturday). It checks if the user has completed the workout on a given day and updates
+    the workout progress in the database accordingly. If a checkbox is checked, it marks the day as done,
+    otherwise it marks it as not done.
+
+    - Loops through days (Monday to Saturday) and updates the workout progress table in the database.
+    - After updating the progress, redirects back to the 'my_workouts' page.
+
+    Returns:
+        Redirects to '/my_workouts' page after processing the form.
+    """
+
     member_id = request.form.get('member_id')
     # another way of getting member_id - it is passed through as a hidden value in the html form in member_workouts.html
 
@@ -735,6 +913,22 @@ def mark_workout_done():
 # FINAL ROUTE
 @app.route("/dashboard")
 def dashboard():
+    """
+    Route for the user dashboard.
+
+    - Ensures the user is logged in by checking the session.
+    - Retrieves and formats the current day and its number in the week.
+    - Selects a random motivational quote.
+    - Gathers data for the dashboard:
+      - Today's meal plan
+      - Today's workout
+      - Workout progress percentage
+      - Latest blog posts
+
+    Returns:
+    - Renders 'dashboard.html' with all the above data.
+    """
+
     user_id = session.get("user_id")
     if not user_id:
         return redirect("/login")  # Redirect to login if user not logged in
