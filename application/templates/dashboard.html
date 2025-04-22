@@ -2,7 +2,9 @@
 
 {% block body_content %}
 <div class="container mt-5">
-    <h1 class="dashboard-title mb-5 text-black">🏋️‍♀️ R.I.S.E. Dashboard</h1>
+    <div class="blog-home-title">
+            <p>R.I.S.E. Dashboard</p>
+        </div>
 
     <!-- Top section: meal + workout -->
     <div class="row g-4 mb-5">
@@ -37,15 +39,12 @@
                                 No workout plan found. Update your
                                 <a href="{{ url_for('profile_settings') }}" class="text-decoration-underline">
                                     fitness preferences
-                                </a>
-                                in your profile to see today's recommended workouts.
+                                </a>in your profile to see today's recommended workouts.
                             </p>
                         {% elif todays_workout %}
                             <ul class="list-unstyled">
                                 {% for item in todays_workout %}
                                     <li class="d-flex align-items-center mb-2">
-                                        <img src="{{ url_for('static', filename='images/dashboard_img') }}"
-                                             alt="icon" width="24" height="24" class="me-2">
                                         <span>
                                             {{ item.exercise }} <small class="text-muted ms-1">({{ item.sets }} sets × {{ item.reps }} reps)</small>
                                         </span>

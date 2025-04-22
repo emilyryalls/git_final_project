@@ -111,12 +111,14 @@
 
             <!-- Meal Plan History -->
             <div class="mt-5">
-                <h4 class="mb-3">📚 Meal Plan History</h4>
+                <div class="workout-video-title">
+                    <p>📚 Meal Plan History</p>
+                </div>
 
-                <!-- Search -->
-                <form method="GET" action="" class="mb-3">
-                    <input type="text" class="form-control" name="search" placeholder="🔍 Search meal plans by name/date...">
-                </form>
+<!--                &lt;!&ndash; Search &ndash;&gt;-->
+<!--                <form method="GET" action="" class="mb-3">-->
+<!--                    <input type="text" class="form-control" name="search" placeholder="🔍 Search meal plans by name/date...">-->
+<!--                </form>-->
 
                 {% if meal_plans %}
                     <div class="accordion" id="historyAccordion">
@@ -154,4 +156,6 @@
         </div>
     </div>
 </div>
+
+<div class="mb-5"></div>
 {% endblock %}
