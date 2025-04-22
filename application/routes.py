@@ -1,5 +1,3 @@
-from re import match
-
 from application import app
 import mysql.connector
 import os
@@ -19,6 +17,10 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from urllib.parse import unquote
+
+from application.exceptions.experience_exception import ExperienceException
+from application.exceptions.goal_and_experience_exception import GoalAndExperienceException
+from application.exceptions.goal_exception import GoalException
 
 
 @app.route('/')
@@ -684,16 +686,15 @@ def view_workout_plan():
     fitness_goal = get_member_fitness_goal()
     member_experience = get_member_experience()
 
-    # return different error messages if user hasn't picked a fitness goal and/or experience level. on the webpage they will be told to pick both to access their personalised workout plan. if statements used in member_workouts.html to return these error messages if goal and/or experience have no value
-
+    # exception handling - return different error messages if user hasn't picked a fitness goal and/or experience level
     if fitness_goal is None and member_experience is None:
-        return render_template('member_workouts.html', fitness_goal=None, experience = None, error_message ="You need to select both your fitness goal and experience level to access your workout plan")
+        raise GoalAndExperienceException()
 
     if fitness_goal is None:
-        return render_template('member_workouts.html', fitness_goal=None, experience= member_experience, error_message="You need to select a fitness goal to access your workout plan")
+        raise GoalException()
 
     if member_experience is None:
-        return render_template('member_workouts.html', fitness_goal = fitness_goal, experience = None, error_message="You need to select your experience level to access your workout plan")
+        raise ExperienceException()
 
 
     exercise_plan = get_exercises()

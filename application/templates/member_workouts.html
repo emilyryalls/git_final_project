@@ -5,22 +5,10 @@
 <div class="container mt-5">
     <div class="workout-video-title">{{ session.user }}'s Workout Plan</div>
 
-    {% if fitness_goal is none and experience is none %}
+    {% if error_message %}
     <div class="d-flex flex-column" style="min-height: 100vh;">
         <p class="text-center text-danger">{{ error_message }}</p>
         <p>You can select your goal and experience level in your <a href="/profile/settings"> profile settings</a></p>
-    </div>
-
-    {% elif fitness_goal is none %}
-    <div class="d-flex flex-column" style="min-height: 100vh;">
-        <p class="text-center text-danger">{{ error_message }}</p>
-        <p>You can select a goal in your <a href="/profile/settings"> profile settings</a></p>
-    </div>
-
-    {% elif experience is none %}
-    <div class="d-flex flex-column" style="min-height: 100vh;">
-        <p class="text-center text-danger">{{ error_message }}</p>
-        <p>You can select your experience level in your <a href="/profile/settings"> profile settings</a></p>
     </div>
 
     {% else %}
