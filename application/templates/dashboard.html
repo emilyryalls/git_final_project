@@ -13,7 +13,7 @@
             <a href="{{ url_for('meal_plan_dashboard') }}" class="text-decoration-none text-dark">
                 <div class="dashboard-card h-100 hover-shadow">
                     <div class="card-header">🍽️ Today’s Meal Plan ({{ today }})</div>
-                    <div class="card-body">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
                         {% if todays_meals %}
                             <p><strong>Breakfast:</strong> {{ todays_meals.breakfast or "Not set" }}</p>
                             <p><strong>Lunch:</strong> {{ todays_meals.lunch or "Not set" }}</p>
@@ -33,7 +33,7 @@
             <a href="{{ url_for('view_workout_plan') }}" class="text-decoration-none text-dark">
                 <div class="dashboard-card h-100 hover-shadow">
                     <div class="card-header">💪 Today’s Workout Plan ({{ today }})</div>
-                    <div class="card-body">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
                         {% if todays_workout is none %}
                             <p>
                                 No workout plan found. Update your
@@ -44,7 +44,7 @@
                         {% elif todays_workout %}
                             <ul class="list-unstyled">
                                 {% for item in todays_workout %}
-                                    <li class="d-flex align-items-center mb-2">
+                                    <li class=" text-center mb-2">
                                         <span>
                                             {{ item.exercise }} <small class="text-muted ms-1">({{ item.sets }} sets × {{ item.reps }} reps)</small>
                                         </span>

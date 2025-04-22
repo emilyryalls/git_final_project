@@ -24,11 +24,11 @@
 
 
     <!-- Blog Summary -->
-    <p class="lead text-center">{{ blog.summary }}</p>
+    <p class="lead text-justify">{{ blog.summary }}</p>
 
 
     <!-- Blog Content -->
-    <div class="blog-content">
+    <div class="blog-content" style="text-align:justify;">
         <!-- Loop through each paragraph and display it in its own paragraph -->
         {% for paragraph in blog.content.split('\n') %}
             <p>{{ paragraph }}</p>
