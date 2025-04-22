@@ -146,7 +146,7 @@ def reset_form():
 
 
 @app.route('/delete', methods=['GET', 'POST'])
-def delete_account_route():
+def delete_account():
     if not session.get('loggedIn'):
         return redirect(url_for('signin_form'))
 
@@ -491,7 +491,6 @@ def profile():
 # Route to get profile settings page as well as to edit the profile details on it
 @app.route("/profile/settings", methods=["GET", "POST"])
 def profile_settings():
-    # TEMP: Assume user_id = 1 for development/testing
     if 'loggedIn' not in session:
         return redirect(url_for('signin_form'))
 
@@ -514,7 +513,6 @@ def profile_settings():
                     return redirect(url_for("profile_settings"))
 
                 update_dob(user_id, dob)
-
 
         elif form_type == "body_metrics":
             height = request.form.get("height")
@@ -541,7 +539,7 @@ def profile_settings():
 
     return render_template("profile_settings.html", user=user, fitness_goals=fitness_goals, experiences=experiences, diets=diets)
 
-
+# Route to upload profile picture on profile page
 @app.route('/upload_profile_pic', methods=['POST'])
 def upload_profile_pic():
     if 'loggedIn' not in session or 'user_id' not in session:
@@ -660,6 +658,9 @@ def dashboard():
     if not user_id:
         return redirect("/login")  # Redirect to login if user not logged in
 
+    # Retrieve user data from the database using the user_id
+    user = get_user_by_id(user_id)
+
     # Set fixed random icon order for the day
     random.seed(datetime.today().strftime('%Y-%m-%d'))  # Stable for the day
     daily_icons = random.sample(exercise_icons, 3)
@@ -674,4 +675,4 @@ def dashboard():
     motivational_quote = random.choice(quotes)
 
     return render_template(
-            "dashboard.html", today=today_day, day_number=day_number, motivational_quote=motivational_quote, todays_meals=todays_meals, todays_workout=todays_workout, progress_percent=progress_percent, latest_blogs=latest_blogs, daily_icons=daily_icons)
+            "dashboard.html", user=user, today=today_day, day_number=day_number, motivational_quote=motivational_quote, todays_meals=todays_meals, todays_workout=todays_workout, progress_percent=progress_percent, latest_blogs=latest_blogs, daily_icons=daily_icons)

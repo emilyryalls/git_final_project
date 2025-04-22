@@ -1,135 +1,306 @@
 {% extends "layout.html" %}
-{% block body_content %}
 
-<!-- Settings banner -->
-<div class="w-100 text-center py-5">
-  <h2 class="mb-1 text-dark"><i class="bi bi-gear-fill me-2"></i>Profile Settings</h2>
-  <p class="text-muted">Manage your account preferences below</p>
+{% block body_content %}
+<!-- Hero banner -->
+<div class="hero-wrapper" style="position:relative;">
+  <div class="hero-banner w-100 text-white d-flex justify-content-center align-items-center flex-wrap text-start"></div>
+
+  <!-- Hero card -->
+  <div class="hero-card">
+    <div class="text-content" style="flex: 1; padding: 30px 40px 30px 30px;">
+      <h1>Profile Settings</h1>
+      <h2>Make your journey yours</h2>
+      <p id="hero-description">Tailor every aspect of your profile — from personal info to fitness goals — to unlock your full potential.</p>
+    </div>
+    <div class="hero-img">
+      <img src="{{ url_for('static', filename='images/banner_img/settings.png') }}" alt="Blog banner image" style="width: 100%; height: 100%; object-fit: contain;">
+    </div>
+  </div>
 </div>
 
-<div class="container mt-5">
-  <div class="row g-4">
+<!--&lt;!&ndash; Main content container &ndash;&gt;-->
+<!--<div class="main-background-card">-->
 
-    <!-- Left column -->
-    <div class="col-md-6 d-flex flex-column">
-      <div class="d-flex flex-column h-100 justify-content-between">
+<!--    &lt;!&ndash; Left column &ndash;&gt;-->
+<!--    <div class="col-md-6 d-flex flex-column">-->
+<!--      <div class="d-flex flex-column h-100 justify-content-between">-->
 
-        <!-- Account info (fills top half) -->
-        <div class="card shadow-sm flex-fill mb-4">
-          <div class="card-body px-4 py-4 d-flex flex-column">
-            <h4 class="card-title text-center mb-4"><i class="bi bi-person-circle me-2"></i>Your Account Info</h4>
-            <form action="{{ url_for('profile_settings') }}" method="post">
-              <input type="hidden" name="form_type" value="account_info">
-              <div class="mb-3 text-start">
-                <label for="first_name" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.firstname }}">
-              </div>
-              <div class="mb-3 text-start">
-                <label for="last_name" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.lastname }}">
-              </div>
-              <div class="mb-3 text-start">
-                <label for="email" class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
-              </div>
-              <div class="mb-3 text-start">
-                <label for="dob" class="form-label">Date of Birth</label>
-                <input type="date" class="form-control" id="dob" name="dob"
-                  value="{% if user.dob %}{{ user.dob.strftime('%Y-%m-%d') }}{% else %}{{ '' }}{% endif %}">
-              </div>
-              <div class="mt-3">
-                <button type="submit" class="btn btn-join-filled">Save Account Info</button>
-              </div>
-            </form>
-          </div>
-        </div>
+<!--        &lt;!&ndash; Account info (fills top half) &ndash;&gt;-->
+<!--        <div class="card shadow-sm flex-fill mb-4">-->
+<!--          <div class="card-body px-4 py-4 d-flex flex-column">-->
+<!--            <h4 class="card-title text-center mb-4"><i class="bi bi-person-circle me-2"></i>Your Account Info</h4>-->
+<!--            <form action="{{ url_for('profile_settings') }}" method="post">-->
+<!--              <input type="hidden" name="form_type" value="account_info">-->
+<!--              <div class="mb-3 text-start">-->
+<!--                <label for="first_name" class="form-label">First Name</label>-->
+<!--                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.firstname }}">-->
+<!--              </div>-->
+<!--              <div class="mb-3 text-start">-->
+<!--                <label for="last_name" class="form-label">Last Name</label>-->
+<!--                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.lastname }}">-->
+<!--              </div>-->
+<!--              <div class="mb-3 text-start">-->
+<!--                <label for="email" class="form-label">Email Address</label>-->
+<!--                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">-->
+<!--              </div>-->
+<!--              <div class="mb-3 text-start">-->
+<!--                <label for="dob" class="form-label">Date of Birth</label>-->
+<!--                <input type="date" class="form-control" id="dob" name="dob"-->
+<!--                  value="{% if user.dob %}{{ user.dob.strftime('%Y-%m-%d') }}{% else %}{{ '' }}{% endif %}">-->
+<!--              </div>-->
+<!--              <div class="mt-3">-->
+<!--                <button type="submit" class="btn btn-join-filled">Save Account Info</button>-->
+<!--              </div>-->
+<!--            </form>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <!-- Security settings (fills bottom half) -->
-        <div class="card shadow-sm flex-fill">
-          <div class="card-body px-4 py-4">
-            <h4 class="card-title text-center mb-4"><i class="bi bi-shield-lock-fill me-2"></i>Security Settings</h4>
-            <div class="d-flex flex-column align-items-center">
-              <a href="/reset" class="btn btn-outline-secondary mb-3">Change Password</a>
-              <a href="/delete" class="btn btn-outline-danger">Delete Account</a>
-            </div>
-          </div>
-        </div>
+<!--        &lt;!&ndash; Security settings (fills bottom half) &ndash;&gt;-->
+<!--        <div class="card shadow-sm flex-fill">-->
+<!--          <div class="card-body px-4 py-4">-->
+<!--            <h4 class="card-title text-center mb-4"><i class="bi bi-shield-lock-fill me-2"></i>Security Settings</h4>-->
+<!--            <div class="d-flex flex-column align-items-center">-->
+<!--              <a href="/reset" class="btn btn-outline-secondary mb-3">Change Password</a>-->
+<!--              <a href="/delete" class="btn btn-outline-danger">Delete Account</a>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Right column &ndash;&gt;-->
+<!--    &lt;!&ndash; Body metrics (fills top half) &ndash;&gt;-->
+<!--    <div class="col-md-6 d-flex flex-column">-->
+<!--      <div class="card shadow-sm mb-4 flex-fill">-->
+<!--        <div class="card-body px-4 py-4 d-flex flex-column">-->
+<!--          <h4 class="card-title text-center mb-4"><i class="bi bi-rulers me-2"></i>Body Metrics</h4>-->
+<!--          <form action="{{ url_for('profile_settings') }}" method="post">-->
+<!--            <input type="hidden" name="form_type" value="body_metrics">-->
+<!--            <div class="mb-3 text-start">-->
+<!--              <label for="height" class="form-label">Height (cm)</label>-->
+<!--              <input type="number" class="form-control" id="height" name="height" value="{{ user.height if user.height is not none else '' }}" placeholder="Enter your height">-->
+<!--            </div>-->
+<!--            <div class="mb-3 text-start">-->
+<!--              <label for="weight" class="form-label">Weight (kg)</label>-->
+<!--              <input type="number" class="form-control" id="weight" name="weight" value="{{ user.weight if user.weight is not none else '' }}" placeholder="Enter your weight">-->
+<!--            </div>-->
+<!--            <div class="mt-3">-->
+<!--              <button type="submit" class="btn btn-join-filled">Update Measurements</button>-->
+<!--            </div>-->
+<!--          </form>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Fitness preferences (fills bottom half) &ndash;&gt;-->
+<!--      <div class="card shadow-sm flex-fill">-->
+<!--        <div class="card-body px-4 py-4 d-flex flex-column">-->
+<!--          <h4 class="card-title text-center mb-4"><i class="bi bi-activity me-2"></i>Your Fitness Preferences</h4>-->
+<!--          <form action="{{ url_for('profile_settings') }}" method="post">-->
+<!--            <input type="hidden" name="form_type" value="preferences">-->
+<!--            <div class="mb-3 text-start">-->
+<!--              <label for="goal" class="form-label">Fitness Goal</label>-->
+<!--              <select class="form-select" name="goal" id="goal">-->
+<!--                <option value="" disabled {% if not user.goal %}selected{% endif %} hidden>Select your fitness goal</option>-->
+<!--                <option value="Build Muscle" {% if user.goal == 'Build muscle' %}selected{% endif %}>Build Muscle</option>-->
+<!--                <option value="Improve Stamina" {% if user.goal == 'Improve stamina' %}selected{% endif %}>Improve Stamina</option>-->
+<!--                <option value="Lose Weight" {% if user.goal == 'Lose weight' %}selected{% endif %}>Lose Weight</option>-->
+<!--                <option value="Improve Core Strength" {% if user.goal == 'Improve core strength' %}selected{% endif %}>Improve Core Strength</option>-->
+<!--              </select>-->
+<!--            </div>-->
+
+<!--            <div class="mb-3 text-start">-->
+<!--              <label for="experience" class="form-label">Experience Level</label>-->
+<!--              <select class="form-select" name="experience" id="experience">-->
+<!--                <option disabled {% if not user.experience %}selected{% endif %}>Select your experience level</option>-->
+<!--                <option value="Beginner" {% if user.experience == 'Beginner' %}selected{% endif %}>Beginner</option>-->
+<!--                <option value="Intermediate" {% if user.experience == 'Intermediate' %}selected{% endif %}>Intermediate</option>-->
+<!--                <option value="Advanced" {% if user.experience == 'Advanced' %}selected{% endif %}>Advanced</option>-->
+<!--              </select>-->
+<!--            </div>-->
+
+<!--            <div class="mb-3 text-start">-->
+<!--              <label for="diet" class="form-label">Dietary Requirement</label>-->
+<!--              <select class="form-select" name="diet" id="diet">-->
+<!--                <option disabled {% if not user.diet %}selected{% endif %}>Select your dietary preference</option>-->
+<!--                <option value="No preference" {% if user.diet == 'No preference' %}selected{% endif %}>No preference</option>-->
+<!--                <option value="Vegan" {% if user.diet == 'Vegan' %}selected{% endif %}>Vegan</option>-->
+<!--              </select>-->
+<!--            </div>-->
+
+<!--            <div class="mt-auto d-flex justify-content-center gap-2 flex-wrap">-->
+<!--              <button type="submit" class="btn btn-join-filled">Update Preferences</button>-->
+<!--              <a href="#" class="btn btn-determine-goal" data-bs-toggle="modal" data-bs-target="#fitnessGoalModal">-->
+<!--                <i class="bi bi-question-circle me-1"></i> Determine Fitness Goal-->
+<!--              </a>-->
+<!--            </div>-->
+<!--          </form>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<!-- Main content container -->
+<div class="main-background-card py-5">
+  <div class="container-fluid">
+    <div class="row g-4 align-items-stretch">
+
+      <!-- Left Nav (tabs) -->
+      <div class="col-md-3 d-flex">
+        <ul class="nav nav-pills flex-column w-100 h-100" id="settingsTabs" role="tablist">
+          <!-- Account Info -->
+          <li class="nav-item mb-2" role="presentation">
+            <button class="nav-link active" id="tab-account" data-bs-toggle="pill" data-bs-target="#pane-account" type="button" role="tab">
+              <i class="bi bi-person-circle me-1"></i>Account Info
+            </button>
+          </li>
+          <!-- Body Metrics -->
+          <li class="nav-item mb-2" role="presentation">
+            <button class="nav-link" id="tab-metrics" data-bs-toggle="pill" data-bs-target="#pane-metrics" type="button" role="tab">
+              <i class="bi bi-rulers me-1"></i>Body Metrics
+            </button>
+          </li>
+          <!-- Fitness Preferences -->
+          <li class="nav-item mb-2" role="presentation">
+            <button class="nav-link" id="tab-prefs" data-bs-toggle="pill" data-bs-target="#pane-prefs" type="button" role="tab">
+              <i class="bi bi-activity me-1"></i>Fitness
+            </button>
+          </li>
+          <!-- Security -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-security" data-bs-toggle="pill" data-bs-target="#pane-security" type="button" role="tab">
+              <i class="bi bi-shield-lock-fill me-1"></i>Security
+            </button>
+          </li>
+        </ul>
       </div>
-    </div>
 
-    <!-- Right column -->
-    <!-- Body metrics (fills top half) -->
-    <div class="col-md-6 d-flex flex-column">
-      <div class="card shadow-sm mb-4 flex-fill">
-        <div class="card-body px-4 py-4 d-flex flex-column">
-          <h4 class="card-title text-center mb-4"><i class="bi bi-rulers me-2"></i>Body Metrics</h4>
-          <form action="{{ url_for('profile_settings') }}" method="post">
-            <input type="hidden" name="form_type" value="body_metrics">
-            <div class="mb-3 text-start">
-              <label for="height" class="form-label">Height (cm)</label>
-              <input type="number" class="form-control" id="height" name="height" value="{{ user.height if user.height is not none else '' }}" placeholder="Enter your height">
-            </div>
-            <div class="mb-3 text-start">
-              <label for="weight" class="form-label">Weight (kg)</label>
-              <input type="number" class="form-control" id="weight" name="weight" value="{{ user.weight if user.weight is not none else '' }}" placeholder="Enter your weight">
-            </div>
-            <div class="mt-3">
-              <button type="submit" class="btn btn-join-filled">Update Measurements</button>
-            </div>
-          </form>
-        </div>
-      </div>
+      <!-- Right tab‑content -->
+      <div class="col-md-9">
+        <div class="tab-content" id="settingsTabsContent">
 
-      <!-- Fitness preferences (fills bottom half) -->
-      <div class="card shadow-sm flex-fill">
-        <div class="card-body px-4 py-4 d-flex flex-column">
-          <h4 class="card-title text-center mb-4"><i class="bi bi-activity me-2"></i>Your Fitness Preferences</h4>
-          <form action="{{ url_for('profile_settings') }}" method="post">
-            <input type="hidden" name="form_type" value="preferences">
-            <div class="mb-3 text-start">
-              <label for="goal" class="form-label">Fitness Goal</label>
-              <select class="form-select" name="goal" id="goal">
-                <option disabled {% if not user.goal %}selected{% endif %}>Select your fitness goal</option>
-                <option value="Build Muscle" {% if user.goal == 'Build Muscle' %}selected{% endif %}>Build Muscle</option>
-                <option value="Improve Stamina" {% if user.goal == 'Improve Stamina' %}selected{% endif %}>Improve Stamina</option>
-                <option value="Lose Weight" {% if user.goal == 'Lose Weight' %}selected{% endif %}>Lose Weight</option>
-                <option value="Improve Core Strength" {% if user.goal == 'Improve Core Strength' %}selected{% endif %}>Improve Core Strength</option>
-              </select>
+          <!-- Account Info Pane -->
+          <div class="tab-pane fade show active" id="pane-account" role="tabpanel">
+            <div class="card shadow-sm mb-4">
+              <div class="card-body">
+                <h4 class="card-title text-center mb-4">Your Account Info</h4>
+                <form method="post" action="{{ url_for('profile_settings') }}">
+                  <input type="hidden" name="form_type" value="account_info">
+                  <!-- first, last, email, dob fields -->
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">First Name</label>
+                      <input class="form-control" name="first_name" value="{{ user.firstname }}">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Last Name</label>
+                      <input class="form-control" name="last_name" value="{{ user.lastname }}">
+                    </div>
+                    <div class="col-12">
+                      <label class="form-label">Email Address</label>
+                      <input type="email" class="form-control" name="email" value="{{ user.email }}">
+                    </div>
+                    <div class="col-12">
+                      <label class="form-label">Date of Birth</label>
+                      <input type="date" class="form-control" name="dob"
+                        value="{{ user.dob and user.dob.strftime('%Y-%m-%d') }}">
+                    </div>
+                  </div>
+                  <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-join-filled">Save</button>
+                  </div>
+                </form>
+              </div>
             </div>
+          </div>
 
-            <div class="mb-3 text-start">
-              <label for="experience" class="form-label">Experience Level</label>
-              <select class="form-select" name="experience" id="experience">
-                <option disabled {% if not user.experience %}selected{% endif %}>Select your experience level</option>
-                <option value="Beginner" {% if user.experience == 'Beginner' %}selected{% endif %}>Beginner</option>
-                <option value="Intermediate" {% if user.experience == 'Intermediate' %}selected{% endif %}>Intermediate</option>
-                <option value="Advanced" {% if user.experience == 'Advanced' %}selected{% endif %}>Advanced</option>
-              </select>
+          <!-- Body Metrics Pane -->
+          <div class="tab-pane fade" id="pane-metrics" role="tabpanel">
+            <div class="card shadow-sm mb-4">
+              <div class="card-body">
+                <h4 class="card-title text-center mb-4">Body Metrics</h4>
+                <form method="post" action="{{ url_for('profile_settings') }}">
+                  <input type="hidden" name="form_type" value="body_metrics">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">Height (cm)</label>
+                      <input type="number" class="form-control" name="height" placeholder="e.g. 170"
+                        value="{{ user.height or '' }}">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Weight (kg)</label>
+                      <input type="number" class="form-control" name="weight" placeholder="e.g. 65"
+                        value="{{ user.weight or '' }}">
+                    </div>
+                  </div>
+                  <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-join-filled">Update</button>
+                  </div>
+                </form>
+              </div>
             </div>
+          </div>
 
-            <div class="mb-3 text-start">
-              <label for="diet" class="form-label">Dietary Requirement</label>
-              <select class="form-select" name="diet" id="diet">
-                <option disabled {% if not user.diet %}selected{% endif %}>Select your dietary preference</option>
-                <option value="No preference" {% if user.diet == 'No preference' %}selected{% endif %}>No preference</option>
-                <option value="Vegan" {% if user.diet == 'Vegan' %}selected{% endif %}>Vegan</option>
-              </select>
+          <!-- Fitness Preferences Pane -->
+          <div class="tab-pane fade" id="pane-prefs" role="tabpanel">
+            <div class="card shadow-sm mb-4">
+              <div class="card-body">
+                <h4 class="card-title text-center mb-4">Fitness Preferences</h4>
+                <form method="post" action="{{ url_for('profile_settings') }}">
+                  <input type="hidden" name="form_type" value="preferences">
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <label class="form-label">Goal</label>
+                      <select class="form-select" name="goal">
+                        <option value="">Select</option>
+                        {% for g in fitness_goals %}<option value="{{g}}" {% if user.goal==g %}selected{%endif%}>{{g}}</option>{% endfor %}
+                      </select>
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label">Experience</label>
+                      <select class="form-select" name="experience">
+                        <option value="">Select</option>
+                        {% for e in experiences %}<option value="{{e}}" {% if user.experience==e %}selected{%endif%}>{{e}}</option>{% endfor %}
+                      </select>
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label">Diet</label>
+                      <select class="form-select" name="diet">
+                        <option value="">Select</option>
+                        {% for d in diets %}<option value="{{d}}" {% if user.diet==d %}selected{%endif%}>{{d}}</option>{% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-join-filled">Save Preferences</button>
+                  </div>
+                </form>
+              </div>
             </div>
+          </div>
 
-            <div class="mt-auto d-flex justify-content-center gap-2 flex-wrap">
-              <button type="submit" class="btn btn-join-filled">Update Preferences</button>
-              <a href="#" class="btn btn-determine-goal" data-bs-toggle="modal" data-bs-target="#fitnessGoalModal">
-                <i class="bi bi-question-circle me-1"></i> Determine Fitness Goal
-              </a>
+          <!-- Security Pane -->
+          <div class="tab-pane fade" id="pane-security" role="tabpanel">
+            <div class="card shadow-sm mb-4">
+              <div class="card-body text-center">
+                <h4 class="card-title mb-4">Security Settings</h4>
+                <a href="{{ url_for('reset_form') }}" class="btn btn-outline-secondary mb-3">Change Password</a><br>
+                <a href="{{ url_for('delete_account') }}" class="btn btn-outline-danger">Delete Account</a>
+              </div>
             </div>
-          </form>
+          </div>
+
         </div>
       </div>
 
     </div>
   </div>
 </div>
+
+
 
 
 <!-- Fitness goal quiz (modal) -->
@@ -301,6 +472,14 @@ function retryQuiz() {
   // Clear the form fields so the user can try again from scratch
   document.getElementById("goalQuizForm").reset();
 }
+</script>
+
+<!--JS to have tabs/pane-->
+<script>
+  var triggerTabList = [].slice.call(document.querySelectorAll('#settingsTabs button'))
+  triggerTabList.forEach(function (triggerEl) {
+    new bootstrap.Tab(triggerEl)
+  })
 </script>
 
 {% endblock %}

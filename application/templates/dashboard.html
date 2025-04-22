@@ -1,103 +1,129 @@
 {% extends "layout.html" %}
 
 {% block body_content %}
-<div class="container mt-5">
-    <h1 class="dashboard-title mb-5 text-black">🏋️‍♀️ R.I.S.E. Dashboard</h1>
+<!-- Hero banner -->
+<div class="hero-wrapper" style="position:relative;">
+  <div class="hero-banner w-100 text-white d-flex justify-content-center align-items-center flex-wrap text-start"></div>
 
-    <!-- Top section: meal + workout -->
-    <div class="row g-4 mb-5">
-        <!-- Meal Plan -->
-        <div class="col-md-6">
-            <a href="{{ url_for('meal_plan_dashboard') }}" class="text-decoration-none text-dark">
-                <div class="dashboard-card h-100 hover-shadow">
-                    <div class="card-header">🍽️ Today’s Meal Plan ({{ today }})</div>
-                    <div class="card-body">
-                        {% if todays_meals %}
-                            <p><strong>Breakfast:</strong> {{ todays_meals.breakfast or "Not set" }}</p>
-                            <p><strong>Lunch:</strong> {{ todays_meals.lunch or "Not set" }}</p>
-                            <p><strong>Dinner:</strong> {{ todays_meals.dinner or "Not set" }}</p>
-                            <p><strong>Snacks:</strong> {{ todays_meals.snacks or "Not set" }}</p>
-                        {% else %}
-                            <p class="text-muted">No meal plan found for today.</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Workout plan -->
-        <div class="col-md-6">
-            <a href="{{ url_for('view_workout_plan') }}" class="text-decoration-none text-dark">
-                <div class="dashboard-card h-100 hover-shadow">
-                    <div class="card-header">💪 Today’s Workout Plan ({{ today }})</div>
-                    <div class="card-body">
-                        {% if todays_workout is none %}
-                            <p>
-                                No workout plan found. Update your
-                                <a href="{{ url_for('profile_settings') }}" class="text-decoration-underline">
-                                    fitness preferences
-                                </a>
-                                in your profile to see today's recommended workouts.
-                            </p>
-                        {% elif todays_workout %}
-                            <div class="row text-center">
-                                {% for item in todays_workout %}
-                                <div class="col-4 d-flex flex-column align-items-center">
-                                    <img src="{{ url_for('static', filename='images/' ~ daily_icons[loop.index0 % 3]) }}"
-                                         alt="icon"
-                                         width="48" height="48"
-                                         class="mb-2">
-                                    <span class="fw-semibold">{{ item.exercise }}</span>
-                                    <small class="text-muted">{{ item.sets }} sets × {{ item.reps }} reps</small>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            <p class="text-muted">Rest day; no workouts assigned for today.</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </a>
-        </div>
+  <!-- Hero card -->
+  <div class="hero-card">
+    <div class="text-content" style="flex: 1; padding: 30px 40px 30px 30px;">
+      <h1>Your Dashboard</h1>
+        <h2>Hi, {{ user.firstname }}</h2>
+        <p id="hero-description">Welcome to your dashboard — find your personalised workouts, meal plans, and progress tracker all in one place!</p>
     </div>
 
-    <!-- Weekly progress circle -->
-    <div class="dashboard-card mb-5">
-        <div class="card-header">📊 Weekly Workout Progress</div>
-        <div class="card-body d-flex justify-content-center align-items-center">
+    <!-- Banner image -->
+    <div class="hero-img">
+      <img src="{{ url_for('static', filename='images/banner_img/dashboard.png') }}" alt="Dashboard image" style="width: 100%; height: 100%; object-fit: contain;">
+    </div>
+  </div>
+</div>
+
+<!-- Main content container -->
+<div class="main-background-card">
+  <div class="row">
+    <!-- Flex container to place Meal + Workout cards on the left, Progress Circle on the right -->
+    <div class="row g-4 mb-5">
+      <!-- Left side: Meal Plan and Workout Plan -->
+      <div class="col-md-8">
+        <div class="row g-4">
+          <!-- Meal Plan -->
+          <div class="col-12">
+            <a href="{{ url_for('meal_plan_dashboard') }}" class="text-decoration-none text-dark">
+              <div class="dashboard-card h-100 hover-shadow" style="width: 100%;">
+                <div class="card-header">🍽️ Today’s Meal Plan ({{ today }})</div>
+                <div class="card-body">
+                  {% if todays_meals %}
+                    <p><strong>Breakfast:</strong> {{ todays_meals.breakfast or "Not set" }}</p>
+                    <p><strong>Lunch:</strong> {{ todays_meals.lunch or "Not set" }}</p>
+                    <p><strong>Dinner:</strong> {{ todays_meals.dinner or "Not set" }}</p>
+                    <p><strong>Snacks:</strong> {{ todays_meals.snacks or "Not set" }}</p>
+                  {% else %}
+                    <p class="text-muted">No meal plan found for today.</p>
+                  {% endif %}
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- Workout Plan -->
+          <div class="col-12">
+            <a href="{{ url_for('view_workout_plan') }}" class="text-decoration-none text-dark">
+              <div class="dashboard-card h-100 hover-shadow" style="width: 100%;">
+                <div class="card-header">💪 Today’s Workout Plan ({{ today }})</div>
+                <div class="card-body">
+                  {% if todays_workout is none %}
+                    <p>No workout plan found. Update your
+                      <a href="{{ url_for('profile_settings') }}" class="text-decoration-underline">
+                        fitness preferences
+                      </a>
+                      in your profile to see today's recommended workouts.
+                    </p>
+                  {% elif todays_workout %}
+                    <div class="row text-center">
+                      {% for item in todays_workout %}
+                        <div class="col-4 d-flex flex-column align-items-center">
+                          <img src="{{ url_for('static', filename='images/' ~ daily_icons[loop.index0 % 3]) }}"
+                               alt="icon" width="48" height="48" class="mb-2">
+                          <span class="fw-semibold">{{ item.exercise }}</span>
+                          <small class="text-muted">{{ item.sets }} sets × {{ item.reps }} reps</small>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    <p class="text-muted">Rest day; no workouts assigned for today.</p>
+                  {% endif %}
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right side: Progress Circle -->
+      <div class="col-md-4">
+        <div class="dashboard-card mb-5" style="width: 100%;">
+          <div class="card-header">📊 Weekly Workout Progress</div>
+          <div class="card-body d-flex justify-content-center align-items-center">
             <!-- Day Number and Motivation -->
             <div class="text-center mb-3">
-                <h5 class="fw-bold mb-1">Day {{ day_number }}</h5>
-                <p class="fst-italic text-muted">"{{ motivational_quote }}"</p>
+              <h5 class="fw-bold mb-1">Day {{ day_number }}</h5>
+              <p class="fst-italic text-muted">"{{ motivational_quote }}"</p>
             </div>
             <canvas id="progressChart" width="180" height="180"></canvas>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Latest reads / Blogposts -->
     <div class="mb-5">
-        <h4 class="dashboard-section-title">📰 Latest Reads</h4>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            {% for blog in latest_blogs %}
-            <div class="col">
-                <div class="dashboard-card h-100 shadow-sm">
-                    <!-- Blog image -->
-                    <img src="{{ url_for('static', filename=blog.image) }}" class="card-img-top" alt="Blog image">
+      <h4 class="dashboard-section-title">📰 Latest Reads</h4>
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for blog in latest_blogs %}
+        <div class="col">
+          <div class="dashboard-card h-100 shadow-sm">
+            <!-- Blog image -->
+            <img src="{{ url_for('static', filename=blog.image) }}" class="card-img-top" alt="Blog image">
 
-                    <!-- Blog content -->
-                    <div class="card-body">
-                        <h5 class="card-title">{{ blog.title }}</h5>
-                        <p class="text-muted">{{ blog.summary[:500] }}</p>
-                    </div>
-                    <div class="card-footer small text-muted">
-                        By {{ blog.author }} | {{ blog.created_at.strftime('%b %d, %Y') }}
-                    </div>
-                </div>
+            <!-- Blog content -->
+            <div class="card-body">
+              <h5 class="card-title">{{ blog.title }}</h5>
+              <p class="text-muted">{{ blog.summary[:500] }}</p>
             </div>
-            {% endfor %}
+            <div class="card-footer small text-muted">
+              By {{ blog.author }} | {{ blog.created_at.strftime('%b %d, %Y') }}
+            </div>
+          </div>
         </div>
+        {% endfor %}
+      </div>
     </div>
+  </div>
 </div>
+
+<div class="mb-5"></div>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -143,4 +169,5 @@ const progressChart = new Chart(ctx, {
     }
 });
 </script>
+
 {% endblock %}

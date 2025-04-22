@@ -1,9 +1,27 @@
 {% extends "layout.html" %}
 
 {% block body_content %}
+<!-- Hero banner -->
+<div class="hero-wrapper" style="position:relative;">
+    <div class="hero-banner w-100 text-white d-flex justify-content-center align-items-center flex-wrap text-start"></div>
+
+    <!-- Hero card -->
+    <div class="hero-card">
+      <div class="text-content" style="flex: 1; padding: 30px 40px 30px 30px;">
+        <h1>Your Workouts</h1>
+        <h2>Move with purpose</h2>
+        <p id="hero-description">Customised routines built around your schedule and fitness level, keeping you motivated, challenged, and always leveling up.</p>
+      </div>
+      <div class="hero-img">
+        <img src="{{ url_for('static', filename='images/banner_img/member_workouts.png') }}" alt="Blog banner image" style="width: 100%; height: 100%; object-fit: contain;">
+      </div>
+    </div>
+</div>
+
 
 <div class="container mt-5">
-    <div class="workout-video-title">{{ session.user }}'s Workout Plan</div>
+  <h1 class="workout-video-title">{{ session.user }}'s Workout Plan</h1>
+</div>
 
     {% if fitness_goal is none and experience is none %}
     <div class="d-flex flex-column" style="min-height: 100vh;">

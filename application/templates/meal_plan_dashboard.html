@@ -1,11 +1,27 @@
 {% extends "layout.html" %}
 
 {% block body_content %}
+<!-- Hero banner -->
+<div class="hero-wrapper" style="position:relative;">
+    <div class="hero-banner w-100 text-white d-flex justify-content-center align-items-center flex-wrap text-start"></div>
 
-<div class="container mt-5">
-    <div class="blog-home-title">
-        <p>🍽️ Meal Plan </p>
+    <!-- Hero card -->
+    <div class="hero-card">
+      <div class="text-content" style="flex: 1; padding: 30px 40px 30px 30px;">
+        <h1>Your Meal Plans</h1>
+        <h2>Fuel your progress</h2>
+        <p id="hero-description">Benefit from nutritious, delicious plans custom‑built around your goals—so every bite takes you closer to your best self.</p>
+      </div>
+      <div class="hero-img">
+        <img src="{{ url_for('static', filename='images/banner_img/meal_plans.png') }}" alt="Blog banner image" style="width: 100%; height: 100%; object-fit: contain;">
+      </div>
     </div>
+</div>
+
+<!-- Main content container -->
+<div class="container mt-5">
+  <h1 class="workout-video-title">{{ session.user }}'s Meal Plan</h1>
+</div>
 
     <!-- Toast Notification -->
     <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">

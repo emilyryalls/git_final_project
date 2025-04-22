@@ -1,130 +1,102 @@
 {% extends "layout.html" %}
 
 {% block body_content %}
-<div class="container mt-5">
-<div class="workout-video-title">
-    <p>Workout Videos</p>
+<!-- Hero banner -->
+<div class="hero-wrapper" style="position:relative;">
+  <div class="hero-banner w-100 text-white d-flex justify-content-center align-items-center flex-wrap text-start"></div>
+
+    <!-- Hero card -->
+    <div class="hero-card">
+      <div class="text-content" style="flex: 1; padding: 30px 40px 30px 30px;">
+        <h1>Workout Videos</h1>
+          <h2>Let's get active</h2>
+          <p id="hero-description">Explore our extensive library of workouts and filter based on your fitness goal, experience level, and the time you have!</p>
+      </div>
+   <!-- Banner image -->
+    <div class="hero-img">
+      <img src="{{ url_for('static', filename='images/banner_img/workout_videos.png') }}" alt="Dashboard image" style="width: 100%; height: 100%; object-fit: contain;">
+    </div>
+  </div>
 </div>
 
-<p>Filter for workouts based on your fitness goal, experience level, and time available!</p>
-<br>
+<!-- Main content container -->
+<div class="main-background-card">
+  <div class="row">
+    <form method="GET" action="/workouts" class="p-4 mb-5">
+      <div class="mb-3 ps-2">
+        <h3>Filter Videos</h3>
+      </div>
 
-<!--<form method="GET" action="/workouts" class="mb-4">-->
-<!--    <div class="row">-->
-<!--        <div class="col-md-3">-->
-<!--            <label for="goal">Fitness Goal</label>-->
-<!--            <select class="form-select" name="goal" id="goal">-->
-<!--                <option value="">All</option>-->
-<!--                <option value="Build muscle">Build muscle</option>-->
-<!--                <option value="Improve stamina">Improve Stamina</option>-->
-<!--                <option value="Lose weight">Lose Weight</option>-->
-<!--                <option value="Improve core strength">Improve Core Strength</option>-->
-<!--            </select>-->
-<!--        </div>-->
-<!--        <div class="col-md-3">-->
-<!--            <label for="experience">Experience</label>-->
-<!--            <select class="form-select" name="experience" id="experience">-->
-<!--                <option value="">All</option>-->
-<!--                <option value="Beginner">Beginner</option>-->
-<!--                <option value="Intermediate">Intermediate</option>-->
-<!--                <option value="Advanced">Advanced</option>-->
-<!--            </select>-->
-<!--        </div>-->
-<!--        <div class="col-md-3">-->
-<!--            <label for="time">Time</label>-->
-<!--            <select class="form-select" name="time" id="time">-->
-<!--                <option value="">All</option>-->
-<!--                <option value="15 mins">15 mins</option>-->
-<!--                <option value="30 mins">30 mins</option>-->
-<!--                <option value="Over 30 mins">Over 30 mins</option>-->
-<!--            </select>-->
-<!--        </div>-->
-<!--        <div class="col-md-3 align-self-end">-->
-<!--            <button type="submit" class="cta-button">Filter</button>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</form>-->
+      <div class="d-flex flex-wrap align-items-end gap-3">
 
+        <!-- Fitness Goal -->
+        <div class="flex-fill">
+          <select name="goal" class="form-select custom-dropdown-btn w-100">
+            <option value="">🏋️ Fitness Goal</option>
+            <option value="Build muscle" {{ 'selected' if goal == 'Build muscle' else '' }}>💪 Build Muscle</option>
+            <option value="Improve stamina" {{ 'selected' if goal == 'Improve stamina' else '' }}>🏃 Improve Stamina</option>
+            <option value="Lose weight" {{ 'selected' if goal == 'Lose weight' else '' }}>⚖️ Lose Weight</option>
+            <option value="Improve core strength" {{ 'selected' if goal == 'Improve core strength' else '' }}>🧘 Improve Core Strength</option>
+          </select>
+        </div>
 
-<form method="GET" action="/workouts" class="workout-filter-bar p-4 mb-5">
-  <div class="mb-3 ps-2">
-    <h5 class="fw-bold mb-0">Filter Videos</h5>
-  </div>
+        <!-- Experience -->
+        <div class="flex-fill">
+          <select name="experience" class="form-select custom-dropdown-btn w-100">
+            <option value="">📈 Experience</option>
+            <option value="Beginner" {{ 'selected' if experience == 'Beginner' else '' }}>🌱 Beginner</option>
+            <option value="Intermediate" {{ 'selected' if experience == 'Intermediate' else '' }}>🔥 Intermediate</option>
+            <option value="Advanced" {{ 'selected' if experience == 'Advanced' else '' }}>🚀 Advanced</option>
+          </select>
+        </div>
 
-  <div class="row align-items-end g-3">
+        <!-- Duration -->
+        <div class="flex-fill">
+          <select name="time" class="form-select custom-dropdown-btn w-100">
+            <option value="">⏳ Duration</option>
+            <option value="15 mins" {{ 'selected' if time == '15 mins' else '' }}>🕒 15 mins</option>
+            <option value="30 mins" {{ 'selected' if time == '30 mins' else '' }}>🕕 30 mins</option>
+            <option value="Over 30 mins" {{ 'selected' if time == 'Over 30 mins' else '' }}>⏱️ Over 30 mins</option>
+          </select>
+        </div>
 
-    <!-- Fitness Goal -->
-    <div class="col-md-3">
-      <select name="goal" class="form-select custom-dropdown-btn">
-        <option value="">🏋️ Fitness Goal</option>
-        <option value="Build muscle" {{ 'selected' if goal == 'Build muscle' else '' }}>💪 Build Muscle</option>
-        <option value="Improve stamina" {{ 'selected' if goal == 'Improve stamina' else '' }}>🏃 Improve Stamina</option>
-        <option value="Lose weight" {{ 'selected' if goal == 'Lose weight' else '' }}>⚖️ Lose Weight</option>
-        <option value="Improve core strength" {{ 'selected' if goal == 'Improve core strength' else '' }}>🧘 Improve Core Strength</option>
-      </select>
-    </div>
+        <!-- Buttons -->
+        <div class="flex-fill">
+          <button type="submit" class="cta-button w-100">Filter</button>
+        </div>
 
-    <!-- Experience -->
-    <div class="col-md-3">
-      <select name="experience" class="form-select custom-dropdown-btn">
-        <option value="">📈 Experience</option>
-        <option value="Beginner" {{ 'selected' if experience == 'Beginner' else '' }}>🌱 Beginner</option>
-        <option value="Intermediate" {{ 'selected' if experience == 'Intermediate' else '' }}>🔥 Intermediate</option>
-        <option value="Advanced" {{ 'selected' if experience == 'Advanced' else '' }}>🚀 Advanced</option>
-      </select>
-    </div>
-
-    <!-- Duration -->
-    <div class="col-md-3">
-      <select name="time" class="form-select custom-dropdown-btn">
-        <option value="">⏳ Duration</option>
-        <option value="15 mins" {{ 'selected' if time == '15 mins' else '' }}>🕒 15 mins</option>
-        <option value="30 mins" {{ 'selected' if time == '30 mins' else '' }}>🕕 30 mins</option>
-        <option value="Over 30 mins" {{ 'selected' if time == 'Over 30 mins' else '' }}>⏱️ Over 30 mins</option>
-      </select>
-    </div>
-
-    <!-- Buttons -->
-    <div class="col-md-3 d-flex justify-content-between align-items-end">
-      <button type="submit" class="cta-button w-75">Filter</button>
-      <a href="/workouts" class="clear-filter-btn d-flex align-items-center text-muted text-decoration-none ms-2">
-        <i class="bi bi-x-circle-fill me-1"></i>
-        <span>Clear</span>
-      </a>
-    </div>
-  </div>
-</form>
-
-<div class="section-divider"></div>
-
-<section>
-  <div class="container">
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-      {% for v_workout_videos in video %}
-      <div class="col">
-        <div class="card h-100 workout-card">
-          {% if v_workout_videos.video_link %}
-          <div class="ratio ratio-16x9">
-            <iframe class="card-img-top" src="{{ v_workout_videos.video_link }}" allowfullscreen></iframe>
-          </div>
-          {% endif %}
-          <div class="card-body">
-            <h5 class="card-title text-center">{{ v_workout_videos.video_name }}</h5>
-            <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
-              <span class="badge tag-goal">{{ v_workout_videos.fitness_goal }}</span>
-              <span class="badge tag-experience">{{ v_workout_videos.experience }}</span>
-              <span class="badge tag-time">{{ v_workout_videos.time }}</span>
-            </div>
-          </div>
+        <div class="flex-fill">
+            <a href="/workouts" class="cta-button-clear w-100 d-flex justify-content-center align-items-center text-decoration-none ms-2">Clear</a>
         </div>
       </div>
-      {% endfor %}
+    </form>
+
+    <section class="mb-5">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+          {% for v_workout_videos in video %}
+          <div class="col">
+            <div class="card h-100 workout-card">
+              {% if v_workout_videos.video_link %}
+              <div class="ratio ratio-16x9">
+                <iframe class="card-img-top" src="{{ v_workout_videos.video_link }}" allowfullscreen></iframe>
+              </div>
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title text-center">{{ v_workout_videos.video_name }}</h5>
+                <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
+                  <span class="badge tag-goal">{{ v_workout_videos.fitness_goal }}</span>
+                  <span class="badge tag-experience">{{ v_workout_videos.experience }}</span>
+                  <span class="badge tag-time">{{ v_workout_videos.time }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
     </div>
-  </div>
-</section>
-
-
-
 </div>
-<br>
+
+<div class="mb-5"></div>
+
 {% endblock %}

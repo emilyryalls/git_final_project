@@ -3,7 +3,7 @@
 {% block body_content %}
     <div class="container mt-5">
         <div class="blog-home-title">
-            <p>Edit Meal Plan</p>
+            <h1>Edit Your Meal Plan</h1>
         </div>
 
         <form method="POST" action="{{ url_for('edit_meal_plan', timestamp=selected_meal_plan.created_at | urlencode) }}">

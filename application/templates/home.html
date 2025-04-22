@@ -1,11 +1,7 @@
 {% extends "layout.html" %}
+
 {% set body_class = "home-page" %}
 {% block body_content %}
-
-<!--<div class="parallax" style="background-image: url('{{ url_for('static', filename='images/home_img/home_banner1.webp') }}');">-->
-<!--    <h1>Own Your Journey: RISE with Us</h1>-->
-<!--</div>-->
-
 <div class="parallax-video-container">
   <video autoplay muted loop playsinline class="parallax-video">
     <source src="{{ url_for('static', filename='videos/home_parallax_vid.mp4') }}" type="video/mp4">
@@ -18,8 +14,7 @@
 
 <div class="section-divider"></div>
 
-
-<section>
+<section class="text-center">
     <h2>Join the Movement</h2>
     <p>Be part of a supportive fitness community. Create your free profile to unlock your personalised dashboard, track progress, access meal plans, and save your favourite workouts.</p>
         <form action="/membership" method="get" style="display:inline;">
@@ -28,24 +23,54 @@
 </section>
 
 
-<section style="background-color: #ffe3dd; padding: 100px 30px; margin-bottom: 60px; width: 100%; margin-left: calc(-50vw + 50%); border-radius: 0;">
-  <h2>Why R.I.S.E.?</h2>
-    <br>
-  <div class="row text-center">
-    <div class="col-md-4">
-      <img src="{{ url_for('static', filename='images/home_img/home_icon_empowerment.png') }}" alt="Empowerment icon" width="80">
-      <p class="body-copy"><strong>Empowering Workouts</strong><br>Designed for every body, at every level.</p>
-    </div>
-    <div class="col-md-4">
-      <img src="{{ url_for('static', filename='images/home_img/home_icon_nutrition.png') }}" alt="Nutrition icon" width="80">
-      <p class="body-copy"><strong>Balanced Nutrition</strong><br>Realistic, flexible meal planning support.</p>
-    </div>
-    <div class="col-md-4">
-      <img src="{{ url_for('static', filename='images/home_img/home_icon_wellbeing.png') }}" alt="Wellbeing icon" width="80">
-      <p class="body-copy"><strong>Mind & Body Wellness</strong><br>Mindful living tools and uplifting blogs.</p>
+<!--<section style="background-color: #ffe3dd; padding: 100px 30px; margin-bottom: 60px; width: 100%; margin-left: calc(-50vw + 50%); border-radius: 0;">-->
+<!--  <h2>Why R.I.S.E.?</h2>-->
+<!--    <br>-->
+<!--  <div class="row text-center">-->
+<!--    <div class="col-md-4">-->
+<!--      <img src="{{ url_for('static', filename='images/home_img/home_icon_empowerment.png') }}" alt="Empowerment icon" width="80">-->
+<!--      <p class="body-copy"><strong>Empowering Workouts</strong><br>Designed for every body, at every level.</p>-->
+<!--    </div>-->
+<!--    <div class="col-md-4">-->
+<!--      <img src="{{ url_for('static', filename='images/home_img/home_icon_nutrition.png') }}" alt="Nutrition icon" width="80">-->
+<!--      <p class="body-copy"><strong>Balanced Nutrition</strong><br>Realistic, flexible meal planning support.</p>-->
+<!--    </div>-->
+<!--    <div class="col-md-4">-->
+<!--      <img src="{{ url_for('static', filename='images/home_img/home_icon_wellbeing.png') }}" alt="Wellbeing icon" width="80">-->
+<!--      <p class="body-copy"><strong>Mind & Body Wellness</strong><br>Mindful living tools and uplifting blogs.</p>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</section>-->
+
+
+<!-- full–width peach band -->
+<div class="container-fluid bg-peach py-5 mb-5">
+  <!-- centered content -->
+  <div class="container">
+    <h2 class="text-center mb-4">Why R.I.S.E.?</h2>
+    <div class="row text-center gy-4">
+
+      <div class="col-md-4">
+        <img src="{{ url_for('static', filename='images/home_img/home_icon_empowerment.png') }}"
+             alt="Empowerment icon" width="80" class="mb-3">
+        <p class="body-copy"><strong>Empowering Workouts</strong><br>Designed for every body, at every level.</p>
+      </div>
+
+      <div class="col-md-4">
+        <img src="{{ url_for('static', filename='images/home_img/home_icon_nutrition.png') }}"
+             alt="Nutrition icon" width="80" class="mb-3">
+        <p class="body-copy"><strong>Balanced Nutrition</strong><br>Realistic, flexible meal planning support.</p>
+      </div>
+
+      <div class="col-md-4">
+        <img src="{{ url_for('static', filename='images/home_img/home_icon_wellbeing.png') }}"
+             alt="Wellbeing icon" width="80" class="mb-3">
+        <p class="body-copy"><strong>Mind &amp; Body Wellness</strong><br>Mindful living tools and uplifting blogs.</p>
+      </div>
+
     </div>
   </div>
-</section>
+</div>
 
 <div class="section-divider"></div>
 
@@ -55,7 +80,7 @@
 
 <div class="section-divider"></div>
 
-<section>
+<section class="text-center">
     <h2>Workouts That Work for You</h2>
     <p>From beginner to advanced, explore our library of empowering workouts designed to fit your lifestyle. Whether it’s strength training, cardio, or a quick 15-minute stretch — we’ve got you covered.</p>
     <form action="/workouts" method="get" style="display:inline;">
@@ -71,7 +96,7 @@
 
 <div class="section-divider"></div>
 
-<section>
+<section class="text-center">
     <h2>Healthy Living Blog</h2>
     <p>Your go-to space for tips on nutrition, mental wellness, motivation, and more. We believe in a balanced approach to fitness — one that uplifts your body and your mind.</p>
     <form action="/blog_home" method="get" style="display:inline;">
