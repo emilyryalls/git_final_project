@@ -243,6 +243,25 @@ def delete_account_route():
     return render_template('delete.html', title='Delete')
 
 
+@app.route('/get_started', methods=['GET'])
+def get_started():
+    """
+    Redirects the user based on their login status.
+
+    If the user is logged in (i.e., session['loggedIn'] is True),
+    they are redirected to their dashboard. Otherwise, they are
+    redirected to the membership page to sign up or learn more.
+
+    Returns:
+        Response object: A redirect to the appropriate page based on login status.
+    """
+
+    if session.get('loggedIn'):
+        return redirect(url_for('profile'))
+    else:
+        return redirect(url_for('signup_form'))
+
+
 # <--Newsletter subscription-->
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
