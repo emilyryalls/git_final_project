@@ -1,5 +1,8 @@
 import sys
 import mysql
+import random
+from datetime import date
+from application.sample_data import exercise_icons
 from flask import session
 
 if sys.platform == "win32":
@@ -183,24 +186,43 @@ def get_member_experience():
 
 def get_exercises():
     """
-    This function returns the exercises that relate to the fitness goal of the user in the current session.
-    :return: list[str]
+    Returns {1‑6: [ {exercise, icon}, … ]}
+    – Icons are unique *within* each day.
     """
-    conn = get_db_connection()
-    cursor = conn.cursor()
+    conn, cursor = get_db_connection(), None
+    try:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT day_id, exercise_name
+            FROM   exercise
+            WHERE  goal_id = %s
+            ORDER  BY day_id
+        """, (get_member_goal_id(),))
+        rows = cursor.fetchall()
 
-    goal = get_member_goal_id()
-    query = f"SELECT exercise_name FROM exercise WHERE goal_id = {goal}"
+        exercises_by_day = {d: [] for d in range(1, 7)}
 
-    cursor.execute(query)
-    result = cursor.fetchall()
+        for day_id, exercise_names in rows:
+            if day_id > 6:        # Sunday is the rest‑day tab
+                continue
 
-    # get just the exercise names from the tuples
-    exercise_names = []
-    for row in result:
-        exercise_names.append(row[0])
+            names = [n.strip() for n in exercise_names.split(',') if n.strip()]
+            # ―― shuffle a mini‑deck for THIS day ――
+            random.seed(f"{date.today()}-{day_id}")      # stable all day long
+            icons_pool = random.sample(exercise_icons,
+                                       min(len(names), len(exercise_icons)))
 
-    return exercise_names
+            # zip names -> icons  (no duplicates because we sampled)
+            for name, icon in zip(names, icons_pool):
+                exercises_by_day[day_id].append({
+                    "exercise": name,
+                    "icon"    : icon
+                })
+
+        return exercises_by_day
+    finally:
+        if cursor: cursor.close()
+        conn.close()
 
 
 def get_reps():

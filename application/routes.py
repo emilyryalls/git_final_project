@@ -49,9 +49,9 @@ def signup_submit():
         if len(useremail) == 0 or len(userpassword) == 0 or len(userfirstname) == 0 or len(userlastname) == 0:
             error = 'Please supply all fields'
         elif add_member(userfirstname, userlastname, useremail, hashed_password):
-            error_email_exist = 'Already part of the family! Log in instead 😊'
+            error_email_exist = "You're already part of the R.I.S.E. family! Log in instead 😊"
         elif not re.match(r"^[A-Za-zÀ-ÿ\s'-]+$", userfirstname) or not re.match(r"^[A-Za-zÀ-ÿ\s'-]+$", userlastname):
-            error = 'First name and last name can only contain letters, spaces, apostrophes (\'), and hyphens (-).'
+            error = 'First and last name can only contain letters, spaces, apostrophes (\'), and hyphens (-).'
         else:
             add_member(userfirstname, userlastname, useremail, hashed_password)
             return render_template('signedup.html')
@@ -594,37 +594,41 @@ def view_workout_videos():
 
 
 # Workout Plan
-@app.route('/my_workouts', methods=['GET'])
+@app.route("/my_workouts")
 def view_workout_plan():
-
-    # if user not logged in don't run the rest of the code
     if not session.get("user_id"):
         return redirect("/login")
 
     fitness_goal = get_member_fitness_goal()
     member_experience = get_member_experience()
 
-    # return different error messages if user hasn't picked a fitness goal and/or experience level. on the webpage they will be told to pick both to access their personalised workout plan. if statements used in member_workouts.html to return these error messages if goal and/or experience have no value
-
     if fitness_goal is None and member_experience is None:
-        return render_template('member_workouts.html', fitness_goal=None, experience = None, error_message ="You need to select both your fitness goal and experience level to access your workout plan")
+        return render_template(
+            "member_workouts.html",
+            fitness_goal=None, experience=None, error_message="Please select both your fitness goal *and* experience level to access your workout plan."
+        )
 
     if fitness_goal is None:
-        return render_template('member_workouts.html', fitness_goal=None, experience= member_experience, error_message="You need to select a fitness goal to access your workout plan")
+        return render_template(
+            "member_workouts.html",
+            fitness_goal=None, experience=member_experience, error_message="Please select a fitness goal to access your workout plan."
+        )
 
     if member_experience is None:
-        return render_template('member_workouts.html', fitness_goal = fitness_goal, experience = None, error_message="You need to select your experience level to access your workout plan")
-
+        return render_template(
+            "member_workouts.html",
+            fitness_goal=fitness_goal, experience=None, error_message="Please select your experience level to access your workout plan."
+        )
 
     exercise_plan = get_exercises()
     sets = get_sets()
     reps = get_reps()
-    days = get_days_of_week()
-    workout_progress = get_workout_progress(session.get('user_id')) # session.get('user_id') used directly in the route and passed through as a parameter to get member_id
+    days = get_days_of_week()   # ['Monday', … 'Sunday']
     workout_video = get_workout_video(fitness_goal, member_experience)
-    # getting workouts that fit the member's fitness goal and experience level
+    workout_progress = get_workout_progress(session["user_id"])
 
-    return render_template('member_workouts.html', exercises = exercise_plan, sets = sets, reps = reps, fitness_goal = fitness_goal, experience = member_experience, days = days, workout_progress = workout_progress, video=workout_video)
+    return render_template(
+        "member_workouts.html", exercises=exercise_plan, sets=sets, reps=reps, fitness_goal=fitness_goal, experience=member_experience, days=days, workout_progress=workout_progress, video=workout_video)
 
 
 @app.route('/mark_workout_done', methods=['POST'])
@@ -674,5 +678,4 @@ def dashboard():
     day_number = datetime.today().isoweekday()
     motivational_quote = random.choice(quotes)
 
-    return render_template(
-            "dashboard.html", user=user, today=today_day, day_number=day_number, motivational_quote=motivational_quote, todays_meals=todays_meals, todays_workout=todays_workout, progress_percent=progress_percent, latest_blogs=latest_blogs, daily_icons=daily_icons)
+    return render_template("dashboard.html", user=user, today=today_day, day_number=day_number, motivational_quote=motivational_quote, todays_meals=todays_meals, todays_workout=todays_workout, progress_percent=progress_percent, latest_blogs=latest_blogs, daily_icons=daily_icons)

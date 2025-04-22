@@ -8,7 +8,7 @@
     <!-- Hero card -->
     <div class="hero-card">
       <div class="text-content" style="flex: 1; padding: 30px 40px 30px 30px;">
-        <h1>Your Workouts</h1>
+        <h1>Your Workout Plan</h1>
         <h2>Move with purpose</h2>
         <p id="hero-description">Customised routines built around your schedule and fitness level, keeping you motivated, challenged, and always leveling up.</p>
       </div>
@@ -19,119 +19,148 @@
 </div>
 
 
-<div class="container mt-5">
-  <h1 class="workout-video-title">{{ session.user }}'s Workout Plan</h1>
-</div>
-
+<!-- Main container content -->
+<div class="main-background-card py-5">
     {% if fitness_goal is none and experience is none %}
-    <div class="d-flex flex-column" style="min-height: 100vh;">
-        <p class="text-center text-danger">{{ error_message }}</p>
-        <p>You can select your goal and experience level in your <a href="/profile/settings"> profile settings</a></p>
-    </div>
+        <div class="d-flex flex-column" style="min-height: 100vh;">
+          <p class="text-center text-danger">{{ error_message }}</p>
+          <p>You can select your goal and experience level in your <a href="/profile/settings">profile settings</a>.</p>
+        </div>
 
     {% elif fitness_goal is none %}
-    <div class="d-flex flex-column" style="min-height: 100vh;">
-        <p class="text-center text-danger">{{ error_message }}</p>
-        <p>You can select a goal in your <a href="/profile/settings"> profile settings</a></p>
-    </div>
+        <div class="d-flex flex-column" style="min-height: 100vh;">
+          <p class="text-center text-danger">{{ error_message }}</p>
+          <p>You can select your goal in your <a href="/profile/settings">profile settings</a>.</p>
+        </div>
 
     {% elif experience is none %}
-    <div class="d-flex flex-column" style="min-height: 100vh;">
-        <p class="text-center text-danger">{{ error_message }}</p>
-        <p>You can select your experience level in your <a href="/profile/settings"> profile settings</a></p>
-    </div>
+        <div class="d-flex flex-column" style="min-height: 100vh;">
+          <p class="text-center text-danger">{{ error_message }}</p>
+          <p>You can select your experience level in your <a href="/profile/settings">profile settings</a>.</p>
+        </div>
 
     {% else %}
-    <p>Welcome to your personalised Workout Plan!</p>
-    <p>This is based on your chosen fitness goal: <strong>{{ fitness_goal|title }}</strong>
-    <br>
-    and your chosen experience level: <strong>{{ experience|title }}</strong></p>
-    <p> You can amend your goal and experience level in your <a href="/profile/settings"> profile settings</a></p>
+        <div class="workout-overview mb-5">
+          <p>Welcome to your personalised workout plan! This is generated based on your chosen fitness goal: <strong>{{ fitness_goal|title }}</strong> and  experience level: <strong>{{ experience|title }}</strong>.</p>
+          <p>You can amend your goal and experience level in your <a href="/profile/settings">profile settings</a>.</p><br>
+
+
+    <!-- Workout plan table/tabs -->
+    <form action="{{ url_for('mark_workout_done') }}" method="POST">
+      <input type="hidden" name="member_id" value="{{ session['user_id'] }}">
+
+      <div class="card mb-4" style="border-radius:.25rem; border:none;">
+        <div class="card-body">
+
+          <!-- Tab navigation -->
+          <div id="settingsTabs" class="mb-4" style="border:none;">
+            <ul class="nav nav-pills justify-content-between mb-4" id="workoutTabs" role="tablist">
+              {% for day_id in range(1,8) %}
+                <li class="nav-item flex-fill text-center" role="presentation">
+                  <a class="nav-link py-2 {{ 'active' if day_id==1 }}"
+                     id="day-{{day_id}}-tab"
+                     data-bs-toggle="pill"
+                     href="#day-{{day_id}}"
+                     role="tab"
+                     aria-selected="{{ 'true' if day_id==1 else 'false' }}">
+                    {{ days[day_id-1] }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <!-- Tab content -->
+          <div class="tab-content" id="workoutTabsContent">
+            {# 1‑6 = workout days #}
+            {% for day_id in range(1,7) %}
+              <div class="tab-pane fade {{ 'show active' if day_id==1 }}"
+                   id="day-{{day_id}}" role="tabpanel" aria-labelledby="day-{{day_id}}-tab">
+
+                <div class="table-responsive">
+                  <table class="table text-center align-middle">
+                    <thead>
+                      <tr>
+                        <th>Exercises</th><th>Reps</th><th>Sets</th><th>Completed?</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if exercises[day_id] %}
+                        {% for exercise in exercises[day_id][:3] %}
+                          <tr>
+                            <td>
+                              <div class="d-flex flex-column align-items-center">
+                                <img src="{{ url_for('static', filename='images/' ~ exercise.icon) }}"
+                                     alt="icon" width="48" height="48" class="mb-2">
+                                <span class="fw-semibold">{{ exercise.exercise }}</span>
+                              </div>
+                            </td>
+                            <td>{{ reps }}</td>
+                            <td>{{ sets }}</td>
+                            <td>
+                              <input type="checkbox" name="is_done_{{ day_id }}"
+                                     {% if workout_progress.get(day_id) %}checked{% endif %}>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                      {% else %}
+                        <tr><td colspan="4">No exercises for this day</td></tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Save button (only in Mon‑Sat panes) -->
+                <div class="d-flex justify-content-end mt-3">
+                  <button type="submit" class="btn cta-button">Save Progress</button>
+                </div>
+              </div>
+            {% endfor %}
+
+            {# Rest‑day pane – no button #}
+            <div class="tab-pane fade" id="day-7" role="tabpanel" aria-labelledby="day-7-tab">
+              <p class="text-muted text-center">
+                Rest Day / Active Recovery (light cycling, walking, stretching)
+              </p>
+            </div>
+          </div>
+
+        </div>  {# /card-body #}
+      </div>    {# /card #}
+    </form>
 
     <div class="section-divider"></div>
 
-<form action="/mark_workout_done" method="POST">
-     <!-- hidden data not visible to website user in browser, but important info submitted to database when form submitted-->
-   <input type="hidden" name="member_id" value="{{ session.user_id }}">
-    <div class = "table-responsive">
-        <table class="table table-bordered text-center">
-           <thead class="thead-light">
-               <tr>
-                   <th>Day</th>
-                   <th>Exercises</th>
-                   <th>Reps</th>
-                   <th>Sets</th>
-                   <th>Completed?</th>
-               </tr>
-           </thead>
-           <tbody>
-               {% for item in range(6) %} <!-- Index values 0, 1, 2, 3, 4, 5 -->
-                   <tr>
-                       <td>{{ days[item] }}</td>
-                       <td>{{ exercises[item] }}</td>
-                       <td>{{ reps }}</td>
-                       <td>{{ sets }}</td>
-                       <td>
-                           <input type="checkbox"
-                                  name="is_done_{{ item+1 }}"
-                                  value="True"
-                                  {% if workout_progress.get(item+1) %}checked{% endif %}> <!-- item +1 so it aligns with the id in the database - id will be 1 higher than the index in a collection e.g. list, dict, tup etc., and this code is referencing the day_id (key in the workout_progress dict), not an index. same with the name, we want the number to match the day_id as this is used in routes.py-->
-                                    <!-- This code gets the is_done value for each day from the workout_progress dictionary . If the return is true, the checked attribute is added to the input tag, which makes the checkbox visually checked on the webpage-->
-                                    <!-- when a user checks or unchecks a box, this is updated in the database first, and then the page is reloaded, meaning the data passed into this template will be up to date with the database-->
-                                    <!-- workout_progress available to use as passed through render template in routes.py for this html file-->
-                        </td>
-                    </tr>
-                {% endfor %}
-                <tr>
-                    <td>{{ days[6] }}</td> <!-- index value 6 for Sunday, not the day_id-->
-                    <td colspan="3" class="text-muted fst-italic">
-                        Rest Day / Active Recovery (e.g., light cycling, walking, stretching)
-                    </td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="d-flex justify-content-end">
-        <button type="submit" class="cta-button">Save Workout Progress</button>
-    </div>
-</form>
-
-        <div class="section-divider"></div>
-
-    {% endif %}
-
-{% if fitness_goal and experience %}
-    <h2 class="text-center">Recommended Video Workouts</h2>
-    <p>Here are some recommended video workouts based on your fitness goal and experience level</p><br>
-
-    <div class="container">
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-      {% for v_workout_videos in video %}
-      <div class="col">
-        <div class="card h-100 workout-card">
-          {% if v_workout_videos.video_link %}
-          <div class="ratio ratio-16x9">
-            <iframe class="card-img-top" src="{{ v_workout_videos.video_link }}" allowfullscreen></iframe>
-          </div>
-          {% endif %}
-          <div class="card-body">
-            <h5 class="card-title text-center">{{ v_workout_videos.video_name }}</h5>
-            <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
-              <span class="badge tag-goal">{{ v_workout_videos.fitness_goal }}</span>
-              <span class="badge tag-experience">{{ v_workout_videos.experience }}</span>
-              <span class="badge tag-time">{{ v_workout_videos.time }}</span>
+      <!-- Recommended videos -->
+      <h3 class="text-center">Recommended Video Workouts</h3>
+      <div class="container">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+          {% for v_workout_videos in video %}
+            <div class="col">
+              <div class="card h-100 workout-card">
+                {% if v_workout_videos.video_link %}
+                <div class="ratio ratio-16x9">
+                  <iframe class="card-img-top" src="{{ v_workout_videos.video_link }}" allowfullscreen></iframe>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title text-center">{{ v_workout_videos.video_name }}</h5>
+                  <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
+                    <span class="badge tag-goal">{{ v_workout_videos.fitness_goal }}</span>
+                    <span class="badge tag-experience">{{ v_workout_videos.experience }}</span>
+                    <span class="badge tag-time">{{ v_workout_videos.time }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          {% endfor %}
         </div>
       </div>
-      {% endfor %}
-    </div>
-    </div>
-{% endif %}
 
-<br>
-
+    {% endif %}
+  </div>
 </div>
+
+<div class="mb-5"></div>
 
 {% endblock %}

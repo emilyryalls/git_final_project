@@ -250,39 +250,31 @@ def update_login_stats(member_id):
     now = datetime.now()
     today = now.date()
 
-    if result:
-        last_login = result['last_login']
-        streak = result['login_streak'] or 0
-
-        if last_login:
-            last_login_date = last_login.date()
-            day_diff = (today - last_login_date).days
-
-            if day_diff == 0:
-                # Already logged in today — no update needed
-                conn.close()
-                return
-            elif day_diff == 1:
-                # Consecutive login
-                streak += 1
-            else:
-                # Missed a day
-                streak = 1
-        else:
-            # First-time login
+    streak = 1
+    if result and result['last_login']:
+        last_date = result['last_login'].date()
+        diff = (today - last_date).days
+        if diff == 1:
+            streak = (result['login_streak'] or 0) + 1
+        elif diff > 1:
             streak = 1
+        else:
+            # same‑day login — keep existing streak
+            streak = result['login_streak'] or 1
 
-        # Update last_login and streak
-        cursor.execute("""
+    # Always update the timestamp, and write the (possibly adjusted) streak
+    cursor.execute("""
             UPDATE member
-            SET last_login = %s, login_streak = %s
-            WHERE member_id = %s
+               SET last_login = %s,
+                   login_streak = %s
+             WHERE member_id = %s
         """, (now, streak, member_id))
 
-        conn.commit()
+    conn.commit()
 
     cursor.close()
     conn.close()
+
 
 if __name__ == "__main__":
     main()

@@ -62,11 +62,11 @@
 
         <!-- Buttons -->
         <div class="flex-fill">
-          <button type="submit" class="cta-button w-100">Filter</button>
+          <button type="submit" class="btn cta-button w-100">Filter</button>
         </div>
 
         <div class="flex-fill">
-            <a href="/workouts" class="cta-button-clear w-100 d-flex justify-content-center align-items-center text-decoration-none ms-2">Clear</a>
+            <a href="/workouts" class="btn cta-button-clear w-100 d-flex justify-content-center align-items-center text-decoration-none ms-2">Clear</a>
         </div>
       </div>
     </form>
@@ -82,7 +82,7 @@
               </div>
               {% endif %}
               <div class="card-body">
-                <h5 class="card-title text-center">{{ v_workout_videos.video_name }}</h5>
+                <h4 class="card-title text-center mb-4">{{ v_workout_videos.video_name }}</h4>
                 <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
                   <span class="badge tag-goal">{{ v_workout_videos.fitness_goal }}</span>
                   <span class="badge tag-experience">{{ v_workout_videos.experience }}</span>

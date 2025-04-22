@@ -66,7 +66,7 @@ position: relative;
     padding: 50px;
     border-radius: 4px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin: 190px auto 0;
+    margin: 170px auto 0;
     z-index: 0;
 }
 
@@ -93,14 +93,25 @@ h3 {
     font-weight: bold;
     font-size: 24px;
     color: #333;
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    letter-spacing: 0.4px;
+}
+
+h4 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    color: #333;
+    margin-top: 10px;
+    margin-bottom: 10px;
     letter-spacing: 0.4px;
 }
 
 p {
   text-align: center;
   font-size: 18px;
+  color: #212529;
 }
 
 body {
@@ -133,12 +144,12 @@ body {
 .cta-button {
     background-color: #F25C54;
     color: white;
-    padding: 11px 24px;
+    padding: 10px 22px;
     border: none;
     border-radius: 4px;
     font-weight: normal;
-    font-size: 18px;
-    transition: background-color 0.3s ease;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
     }
 
 .cta-button:hover {
@@ -148,12 +159,12 @@ body {
 .cta-button-clear {
     background-color: #adb5bd;
     color: #212529;
-    padding: 11px 24px;
+    padding: 10px 22px;
     border: none;
     border-radius: 4px;
     font-weight: normal;
-    font-size: 18px;
-    transition: background-color 0.3s ease;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .cta-button-clear:hover {
@@ -236,7 +247,7 @@ body {
     background-color: #F25C54;
     color: white;
     padding: 6px 20px;
-    border-radius: 6px;
+    border-radius: 4px;
     font-size: 16px;
     transition: all 0.3s ease;
     }
@@ -257,6 +268,20 @@ body {
 .btn-sign-in:hover {
     background-color: #F4845F;
     border-color: #F4845F;
+}
+
+.btn-clear-filled {
+    background-color: #adb5bd;
+    color: #212529;
+    padding: 6px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-clear-filled:hover {
+    background-color: #6c757d;
+    color: #ffffff;
 }
 
 /* Navbar styling when mobile size */
@@ -365,8 +390,8 @@ body.home-page h1 {
 
 body.home-page h2 {
     font-family: 'Quicksand', sans-serif;
-    font-weight: 500;
-    font-size: 45px;
+    font-weight: bold;
+    font-size: 40px;
     color: #333;
     margin-top: 20px;
     margin-bottom: 10px;
@@ -497,10 +522,26 @@ body.home-page .testimonial-name {
 }
 
 
+/* SIGN UP / BECOME A MEMBER PAGE */
+.custom-input {
+    background-color: #fffaf7;
+    border: 1px solid #ddd;
+    color: #121212;
+    font-weight: 500;
+    padding: 10px 14px;
+    transition: background-color .3s ease, border-color .3s ease;
+}
 
+.custom-input::placeholder {
+    color: #9b9b9b;
+}
 
+.custom-input:focus {
+    background-color: #ffe3dd;
+    border-color: #f25c54;
+    box-shadow: none;
+}
 
-/* SIGN UP PAGE */
 .form-floating>.form-control, .form-floating>.form-control-plaintext, .form-floating>.form-select {
     height: calc(3.1rem + calc(var(--bs-border-width) * 2));
     min-height: calc(3.1rem + calc(var(--bs-border-width) * 2));
@@ -517,7 +558,7 @@ body.home-page .testimonial-name {
 
 .modal-content {
   flex-direction: row;
-  background-color: #ffe3dd;
+  background-color: #fef6e4;
 }
 
 .modal-body {
@@ -549,25 +590,13 @@ body.home-page .testimonial-name {
 
 }
 
+/*
 #signupText, #signinText, #resetText, #deleteText, #loginText{
   font-family: 'Quicksand';
   color: #333333;
   text-shadow: none;
   font-weight: 440;
-}
-
-#signupButton, #signinButton, #resetButton, #deleteButton{
-  background-color: #F25C54;
-  border-color: #F25C54;
-  font-weight: bold;
-  font-size: 18px;
-  transition: background-color 0.3s ease;
-}
-
-#signupButton:hover, #signinButton:hover, #resetButton:hover, #deleteButton:hover {
-  background-color: #F4845F;
-  border-color: #F4845F;
-}
+}*/
 
 .text-body-secondary{
   font-family: 'Quicksand';
@@ -596,6 +625,18 @@ body.home-page .testimonial-name {
     padding: 1rem;
   }
 
+#signup-image {
+    max-height: 400px;  /* Adjust this value to your preference */
+    max-width: 400px;   /* Adjust this value to your preference */
+    width: auto;
+    height: auto;
+}
+
+/* Ensure the rest of the layout is consistent */
+#signup-heading {
+    margin-top: 20px;  /* Positioning heading to align properly */
+}
+
   #container-signup {
     flex: 1;
     padding: 2rem;
@@ -607,7 +648,7 @@ body.home-page .testimonial-name {
 @media (max-width: 1150px) {
   .modal-content{
     flex-wrap: wrap;
-    /*background-color: yellow;*/
+    background-color: yellow;
     padding-right: 0px;
 
   }
@@ -617,13 +658,13 @@ body.home-page .testimonial-name {
   }
 }
 
-
 /* LOGIN PAGE */
 #modal-flex-container-signin, #modal-flex-container-reset, #modal-flex-container-delete, #modal-flex-container-login {
-    width: fit-content;
-    justify-self: anchor-center;
-    padding-left: 20px;
-    padding-right: 20px;
+    max-width: 850px;  /* new width */
+    width: 100%;
+    margin: auto;
+    padding: 2rem;
+    border-radius: 1rem;
 }
 
 @media (min-width: 1150px) {
@@ -642,12 +683,12 @@ body.home-page .testimonial-name {
     }
 }
 
-/*
+
 @media (min-width: 992px) {
     .container, .container-lg, .container-md, .container-sm {
         max-width: 960px;
     }
-}*/
+}
 
 #container-signin, #container-reset, #container-login{
   flex: 1;
@@ -665,6 +706,75 @@ body.home-page .testimonial-name {
     }
 }
 
+#modal-flex-container-reset {
+    display: flex;
+    flex-direction: row; /* Ensures two parts are side by side */
+    background-color: #fef6e4;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 100%;
+}
+
+/* Left Section (Message + Image) */
+#container-img {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+}
+
+#container-img img {
+    max-width: 300px;
+    max-height: 250px;
+}
+
+/* Right Section (Form) */
+#container-signup {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 2rem;
+}
+
+/* Modal Header Style */
+#modal-header-signup {
+    padding-bottom: 0.5rem;
+}
+
+/* Form Input Styles */
+.custom-input {
+    background-color: #fffaf7;
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.custom-input:focus {
+    background-color: #ffe3dd;
+    border-color: #f25c54;
+    box-shadow: none;
+}
+
+/* Modal Footer */
+.cta-button {
+    background-color: #F25C54;
+    color: white;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 4px;
+    font-weight: normal;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #F4845F;
+}
 
 /* PROFILE PAGE*/
 .profile-card {
@@ -682,12 +792,17 @@ body.home-page .testimonial-name {
     margin-top: 1rem;
 }
 
+.joined-badge {
+  background-color: #0056B3;
+  color: #fff;
+}
+
 .milestone-badge {
     font-family: 'Quicksand', sans-serif;
     font-size: 18px;
     font-weight: 500;
     padding: .5em 1.2em;
-    border-radius: 0.4rem;
+    border-radius: 4px;
     margin-bottom: .5rem;
 }
 
@@ -705,40 +820,44 @@ body.home-page .testimonial-name {
 
 /* PROFILE SETTINGS */
 #settingsTabs {
-  /* give the whole pill group a card‑like container */
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: .25rem;
-  padding: .5rem;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: .25rem;
+    padding: .5rem;
 }
 
 #settingsTabs .nav-link {
-  /* dark text & light bg so you can see inactive tabs */
-  color: #333 !important;
-  background: #f8f9fa;
-  margin-bottom: .25rem;        /* little spacing between pills */
-  border-radius: .25rem;
+    color: #333 !important;
+    background: #f8f9fa;
+    display: block;
+    width: 100%;
+    border-radius: .25rem;
 }
 
 #settingsTabs .nav-link.active {
-  /* highlight the active */
-  background: #F25C54 !important;
-  color: #fff !important;
+    background: #F25C54 !important;
+    color: #fff !important;
 }
 
-/* And make sure your content area looks like a card too */
-.tab-content > .tab-pane {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-top: none;
-  padding: 1rem;
-  border-radius: 0 0 .25rem .25rem;
+/* sidebar stickiness */
+.sidebar {
+  position: sticky;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  border-right: none !important;
 }
 
+.sidebar .nav {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding-right: .5rem;
+}
 
+/* Quiz button */
 .btn-determine-goal {
   background-color: transparent;
-  color: #121212; /* adjust if your body text is a different shade */
+  color: #121212;
   border: 2px solid #F25C54;
   border-radius: 6px;
   font-size: 16px;
@@ -751,6 +870,7 @@ body.home-page .testimonial-name {
   border-color: #F4845F;
 }
 
+/* Quiz modal */
 .fitness-goal-overlay {
   position: absolute;
   top: 0;
@@ -830,18 +950,44 @@ body.home-page .testimonial-name {
 
 
 /* MEAL PLAN*/
-
-.meal-plan-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-weight: 600;
-  font-size: 70px;
-  text-align: center;
-  color: #333;
+#mealPlanPills {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: .25rem;
+  padding: .5rem;
 }
 
+#mealPlanPills .nav-link {
+  color: #333 !important;
+  background: #f8f9fa;
+  display: block;
+  width: 100%;
+  border-radius: .25rem;
+}
+
+#mealPlanPills .nav-link.active {
+  background: #F25C54 !important;
+  color: #fff !important;
+}
+
+/* keep the “sticky” sidebar behavior */
+.sidebar {
+  position: sticky;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  border-right: none !important;
+}
+
+.sidebar .nav {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding-right: .5rem;
+}
+
+
+
 /* DASHBOARD PAGE */
-
-
 .dashboard-card {
     border: 1px solid #eee;
     border-radius: 16px;

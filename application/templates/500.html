@@ -1,23 +1,18 @@
 {% extends "layout.html" %}
 
 {% block body_content %}
-<!--min-height makes it take the full height of the screen-->
-<div class="d-flex flex-column" style="min-height: 100vh;">
-
-  <!-- main content area with padding -->
-  <div class="container mt-5 mb-4">
-    <div class="error-title">
-        <p>File Not Found</p>
-    </div>
+<div class="d-flex flex-column" style="min-height: 100vh; justify-content: center;">
+  <div class="container mt-5 mb-4 text-center">
+    <h1>File Not Found</h1>
     <p>There was a problem with your request.</p>
-    <p><a href="{{ url_for('home') }}">Back to home page</a></p>
+    <p>Go back to <a href="{{ url_for('home') }}">Home</a>.</p>
   </div>
 
-    <div class="mt-4">
+
+  <div class="mt-4 text-center">
     <img src="{{ url_for('static', filename='images/error/error.png') }}"
          class="img-fluid"
          style="max-width: 300px;">
-    </div>
+  </div>
 
-</div>
 {% endblock %}

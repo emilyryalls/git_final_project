@@ -1,107 +1,101 @@
 {% extends "layout.html" %}
 
 {% block body_content %}
+<!--<div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSignin">-->
+<!--    <div class="modal-dialog" id="modalLoginDialog" role="document" >-->
+<!--        <div class="modal-content rounded-4 shadow test" id="modal-flex-container">-->
+<!--            <div class="container d-flex flex-column align-items-center justify-content-center text-center p-4" id="container-img">-->
+<!--                 <h1 class="text-center mb-3">Join R.I.S.E. Fitness</h1>-->
+<!--                 <p class="text-center">Start your fitness journey today and unlock exclusive benefits!</p>-->
+<!--                 <img src="{{ url_for('static', filename='images/user/membership.png') }}" alt="Delete Logo" class="img-fluid" >-->
+<!--            </div>-->
+
+<!--            <div class="container" id="container-signup">-->
+<!--                <div class="modal-header p-3 pb-4 border-bottom-0" id="modal-header-signup">-->
+<!--                    <h2 class="mb-0 fs-2" id="signupText">Sign Up For Free</h2>-->
+<!--                </div>-->
+<!--                <div class="modal-body p-5 pt-0">-->
+<!--                    <form class="" action="signup" method="POST">-->
+<!--                        <div class="form-floating mb-2">-->
+<!--                            <input type="text" class="form-control rounded-3 custom-input" id="userName" name="userName" placeholder="First Name" pattern= "[A-Za-zÀ-ÿ\s'-]+" title= "Only letters, spaces, apostrophes (') and hyphens (-) are allowed" required>-->
+<!--                            <label for="userName"> First Name <span class="text-danger"> * </span></label>-->
+<!--                        </div>-->
+<!--                        <div class="form-floating mb-2">-->
+<!--                            <input type="text" class="form-control rounded-3 custom-input" id="userLastname" name="userLastname" placeholder="Last name">-->
+<!--                            <label for="userLastname">Last Name <span class="text-danger"> * </span></label>-->
+<!--                        </div>-->
+<!--                        <div class="form-floating mb-2">-->
+<!--                            <input type="email" class="form-control rounded-3 custom-input" id="userEmail" name="userEmail" placeholder="name@example.com">-->
+<!--                            <label for="userEmail">Email address <span class="text-danger"> * </span></label>-->
+<!--                        </div>-->
+<!--                        {% if message_email_exist %}-->
+<!--                            <div class="alert alert-danger" role="alert">-->
+<!--                                {{ message_email_exist }}-->
+<!--                            </div>-->
+<!--                        {% endif %}-->
+<!--                        <div class="form-floating mb-2">-->
+<!--                            <input type="password" class="form-control rounded-3" id="userPassword" name="userPassword" placeholder="Password">-->
+<!--                            <label for="userPassword">Password <span class="text-danger"> * </span></label>-->
+<!--                        </div>-->
+<!--                        {% if message %}-->
+<!--                            <div class="alert alert-danger" role="alert">-->
+<!--                                {{ message }}-->
+<!--                            </div>-->
+<!--                        {% endif %}-->
+<!--                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn cta-button" type="submit">Sign Up</button>-->
+<!--                        <small class="text-body"> Already have an account? <a href="/signin" style="color:black">Sign in here!</a></small>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
 <div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSignin">
-    <div class="modal-dialog modal-xl" role="document" >
+    <div class="modal-dialog" role="document">
         <div class="modal-content rounded-4 shadow test" id="modal-flex-container">
-            <div class="container" id="container-img">
-                <!-- <div class="modal-header p-5 pb-4 border-bottom-0">
-                    <h1 class="fw-bold mb-0">What's new</h1>
-                </div>
-                <div class="modal-body" id="modal-body-one">
-                    <ul class="d-grid gap-4 my-5 list-unstyled small">
-                        <li class="d-flex gap-4">
-                            <a href="#" class="ms-3 text-body-secondary"><i class="bi bi-speedometer2 text-primary fs-2"></i>
-                            </a>
-                            <div>
-                            <h5 class="mb-0">Personal Dashboard</h5>
-                            Track your progress, preferences, and updates in one place.
-                        </div>
-                        </li>
-                        <li class="d-flex gap-4">
-                            <i class="bi bi-egg-fried text-success fs-2"></i>
-                            <div>
-                            <h5 class="mb-0">Access to Meal Plans</h5>
-                            Tailored nutrition guides to support your fitness journey.
-                            </div>
-                        </li>
-                        <li class="d-flex gap-4">
-                            <i class="bi bi-play-circle text-danger fs-2"></i>
-                            <div>
-                            <h5 class="mb-0">Personalised Video Workouts</h5>
-                            Routines adapted to your fitness level and goals.
-                            </div>
-                        </li>
-                    </ul>
-                    <ul class="d-grid gap-4 my-5 list-unstyled small">
-                        <li class="d-flex gap-4">
-                            <i class="bi bi-phone text-success fs-2"></i>
-                            <div>
-                            <h5 class="mb-0">Mobile-Friendly Experience</h5>
-                            Easy access from any device, anytime.
-                        </div>
-                        </li>
-                        <li class="d-flex gap-4">
-                            <i class="bi bi-journal-richtext text-secondary fs-2"></i>
-                            <div>
-                            <h5 class="mb-0">Health & Wellness Blog</h5>
-                            Access expert tips on healthy living, sleep, mindfulness, and more!
-                        </div>
-                        </li>
-                        <li class="d-flex gap-4">
-                            <i class="bi bi-x-circle text-danger fs-2"></i>
-                            <div>
-                            <h5 class="mb-0">No Ads, Just Content</h5>
-                            A smooth, distraction-free experience focused on your goals.
-                        </div>
-                        </li>
-                    </ul>
-                </div> -->
-                <img src="{{ url_for('static', filename='images/user/membership.png') }}" alt="Delete Logo" class="img-fluid" >
-
+            <!-- Left Side: Image and Text -->
+            <div class="container d-flex flex-column align-items-center justify-content-center text-center p-4" id="container-img">
+                <h1 class="text-center mb-3">Join R.I.S.E. Fitness</h1>
+                <p class="text-center">Start your fitness journey today and unlock exclusive benefits!</p>
+                <img src="{{ url_for('static', filename='images/user/membership.png') }}" alt="Logo" class="img-fluid mt-3" id="signup-image">
             </div>
+            <!-- Right Side: Form -->
             <div class="container" id="container-signup">
                 <div class="modal-header p-3 pb-4 border-bottom-0" id="modal-header-signup">
-                    <h1 class="mb-0 fs-2" id="signupText">Sign Up For Free</h1>
-                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                    <h2 class="mb-0 fs-2" id="signupText">Sign Up For Free</h2>
                 </div>
                 <div class="modal-body p-5 pt-0">
-                    <form class="" action="signup" method="POST">
+                    <form action="signup" method="POST">
                         <div class="form-floating mb-2">
-                            <input type="text" class="form-control form-control rounded-3" id="userName" name="userName" placeholder="First Name" pattern= "[A-Za-zÀ-ÿ\s'-]+" title= "Only letters, spaces, apostrophes (') and hyphens (-) are allowed" required>
-                            <label for="userName"> First Name <span class="text-danger"> * </span></label>
+                            <input type="text" class="form-control rounded-3 custom-input" id="userName" name="userName" placeholder="First Name" required>
+                            <label for="userName">First Name <span class="text-danger"> * </span></label>
                         </div>
                         <div class="form-floating mb-2">
-                            <input type="text" class="form-control rounded-3" id="userLastname" name="userLastname" placeholder="Lastname">
+                            <input type="text" class="form-control rounded-3 custom-input" id="userLastname" name="userLastname" placeholder="Last Name" required>
                             <label for="userLastname">Last Name <span class="text-danger"> * </span></label>
                         </div>
                         <div class="form-floating mb-2">
-                            <input type="email" class="form-control rounded-3" id="userEmail" name="userEmail" placeholder="name@example.com">
-                            <label for="userEmail">Email address <span class="text-danger"> * </span></label>
+                            <input type="email" class="form-control rounded-3 custom-input" id="userEmail" name="userEmail" placeholder="Email" required>
+                            <label for="userEmail">Email Address <span class="text-danger"> * </span></label>
                         </div>
                         {% if message_email_exist %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ message_email_exist }}
-                            </div>
+                            <div class="alert alert-danger" role="alert">{{ message_email_exist }}</div>
                         {% endif %}
                         <div class="form-floating mb-2">
-                            <input type="password" class="form-control rounded-3" id="userPassword" name="userPassword" placeholder="Password">
+                            <input type="password" class="form-control rounded-3" id="userPassword" name="userPassword" placeholder="Password" required>
                             <label for="userPassword">Password <span class="text-danger"> * </span></label>
                         </div>
                         {% if message %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ message }}
-                            </div>
+                            <div class="alert alert-danger" role="alert">{{ message }}</div>
                         {% endif %}
-                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" id="signupButton" type="submit">Sign Up</button>
-                        <small class="text-body"> Already have an account? <a href="/signin" style="color:black">Login here!</a></small>
+                        <button class="w-100 mb-2 btn btn-lg rounded-3 btn cta-button" type="submit">Sign Up</button>
+                        <small class="text-body">Already have an account? <a href="/signin" style="color:black">Sign in here!</a></small>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 
 {% endblock %}
