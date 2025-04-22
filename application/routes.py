@@ -751,7 +751,7 @@ def profile_settings():
         # session['user'] = updated_user
 
         flash("Profile updated successfully!", "success")
-        return redirect(url_for("profile", updated=1))
+        return redirect(url_for("profile_settings", updated=1))
 
     user = get_user_by_id(user_id)
     fitness_goals = get_all_goals()
